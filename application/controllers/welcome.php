@@ -10,7 +10,15 @@ class Welcome extends CI_Controller {
 	function index()
 	{
 		$this->load->helper('url');
-		$this->load->view('welcome_message');
+		
+		$data = array();
+		
+		// See if we have google analytics tracking code
+		if($this->config->item('ganalytics_id')) {
+			$data['ganalytics_id'] = $this->config->item('ganalytics_id');
+		}		
+		
+		$this->load->view('welcome_message', $data);
 	}
 }
 
