@@ -4,6 +4,11 @@ require APPPATH.'/libraries/REST_Controller.php';
 class Geowebdns extends REST_Controller {
 
 
+	public function index_get()
+	{
+		$this->load->view('welcome_message');
+	}
+
 	
 	function endpoints_get()	{
 		
@@ -44,6 +49,13 @@ class Geowebdns extends REST_Controller {
 									      	        		
 		
 			$input 						= $this->input->get('location', TRUE);
+			
+			if(!$input) {
+				
+				$this->response('No location provided', 400);
+
+			}
+			
 			$fullstack 					= $this->input->get('fullstack', TRUE);
 			$location 					= $this->geocode(urlencode($input));
 
