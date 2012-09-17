@@ -68,7 +68,7 @@ code {
 </p>	
 
 <h1>Source and More information</h1>
-<p>You can find a description of <a href="http://wiki.open311.org/GeoWeb_DNS">GeoWeb DNS on the Open311 wiki</a>. The source code for this is <a href="https://github.com/philipashlock/codeigniter-restserver">available on github</a>. This is experimental, don't expect it to stick around</p>
+<p>You can find a description of <a href="http://wiki.open311.org/GeoWeb_DNS">GeoWeb DNS on the Open311 wiki</a>. The source code for this is <a href="https://github.com/philipashlock/democracymap-restserver">available on github</a>. This is experimental, don't expect it to stick around</p>
 
 <h1>Credits</h1>
 <p>
