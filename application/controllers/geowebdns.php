@@ -273,6 +273,15 @@ class Geowebdns extends REST_Controller {
 			}
 			
 			
+			// Better links for municipal data from the SBA (I'm only pulling out the url, but other data might be usefull too)
+			if (!empty($data['city']) && !empty($data['state'])) {
+				$city_data = $this->get_city_links($data['city'], $data['state']);
+				$data['place_url_updated'] = $city_data[0]['url'];
+				
+				if ($fullstack == 'true') $data['city_data'] = $city_data[0];
+			}
+			
+			
 			// See if we have google analytics tracking code
 			if($this->config->item('ganalytics_id')) {
 				//$data['ganalytics_id'] = $this->config->item('ganalytics_id');
@@ -284,7 +293,7 @@ class Geowebdns extends REST_Controller {
 			} else
 			{
 						
-			$endpoint['url'] = $data['place_url'];
+			$endpoint['url'] = $data['place_url_updated'] ? $data['place_url_updated'] : $data['place_url'];
 			
 			// In this case we're just publishing service discovery and geojson
 			$endpoint['service_discovery'] 	= $data['service_discovery'];
@@ -367,6 +376,27 @@ class Geowebdns extends REST_Controller {
 			curl_close($ch);
 
 			return $feature_data;
+
+	}	
+	
+	
+	function get_city_links($city, $state) {	
+			
+			$city = urlencode(strtolower($city));
+			$state = urlencode(strtolower($state));
+		
+			$url = "http://api.sba.gov/geodata/all_links_for_city_of/$city/$state.json";
+	
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+			//curl_setopt($ch, CURLOPT_HEADER, TRUE);		
+
+			$sd_data=curl_exec($ch);			
+			$data = json_decode($sd_data, true);	
+			curl_close($ch);
+
+			return $data;
 
 	}	
 	
