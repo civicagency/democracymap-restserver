@@ -276,9 +276,12 @@ class Geowebdns extends REST_Controller {
 			// Better links for municipal data from the SBA (I'm only pulling out the url, but other data might be usefull too)
 			if (!empty($data['city']) && !empty($data['state'])) {
 				$city_data = $this->get_city_links($data['city'], $data['state']);
-				$data['place_url_updated'] = $city_data[0]['url'];
 				
-				if ($fullstack == 'true') $data['city_data'] = $city_data[0];
+				if(!empty($city_data)) {
+					$data['place_url_updated'] = $city_data[0]['url'];
+				
+					if ($fullstack == 'true') $data['city_data'] = $city_data[0];
+				}
 			}
 			
 			
@@ -293,7 +296,7 @@ class Geowebdns extends REST_Controller {
 			} else
 			{
 						
-			$endpoint['url'] = $data['place_url_updated'] ? $data['place_url_updated'] : $data['place_url'];
+			$endpoint['url'] = (!empty($data['place_url_updated'])) ? $data['place_url_updated'] : $data['place_url'];
 			
 			// In this case we're just publishing service discovery and geojson
 			$endpoint['service_discovery'] 	= $data['service_discovery'];
