@@ -72,7 +72,7 @@ code {
 
 <h1>Credits</h1>
 <p>
-This is built on the same data as the main <a href="http://beta.democracymap.org">DemocracyMap demo</a>, so I'm repeating that here. City data from U.S. Census including the <a href="http://www.census.gov/govs/cog/">2007 Census of Governments</a>. 
+This is built on the same data as the main <a href="http://beta.democracymap.org">DemocracyMap demo</a>, so I'm repeating those credits here. City data from U.S. Census (including the <a href="http://www.census.gov/govs/cog/">2007 Census of Governments</a>) with updated URLs provided by the <a href="http://api.sba.gov/doc/geodata.html">SBA U.S. City &amp; County Web Data API</a>. 
 US Congressional data from the <a href="http://services.sunlightlabs.com/docs/Sunlight_Congress_API/">Sunlight Congress API</a>. 
 Congressional district boundaries from <a href="http://www.govtrack.us/congress/findyourreps.xpd">GovTrack.us</a>. 
 State legislative data from the <a href="http://openstates.org/api/">OpenStates API</a>. 
