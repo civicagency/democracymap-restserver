@@ -294,6 +294,16 @@ class Geowebdns extends REST_Controller {
 				}
 			}			
 			
+			
+			// State data
+			if (!empty($data['state_geocoded'])) {
+				$state = $this->get_state($data['state_geocoded']);
+				
+				if(!empty($state)) {
+					$data['state_data'] = $state[0];				
+				}
+			}			
+			
 
 			// See if we have google analytics tracking code
 			if($this->config->item('ganalytics_id')) {
@@ -459,6 +469,33 @@ class Geowebdns extends REST_Controller {
 		return $mayors;
 
 	}
+
+
+
+	
+	
+	function get_state($state) {
+		
+		$state = ucwords($state);		
+		
+		$query = "select * from `swdata` where state = '$state' limit 1";		
+		$query = urlencode($query);
+		
+		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=50_states_data&query=$query";		
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		$state=curl_exec($ch);
+		curl_close($ch);
+
+		$state = json_decode($state, true);
+
+		return $state;
+
+	}
+
+
 
 
 	function geocode($location) {
@@ -743,9 +780,9 @@ function re_schema($data) {
 
 	
 	$municipal_data['type'] 			= 'government';
-	$municipal_data['type_name'] 		= 'city';	
-	$municipal_data['level'] 			= 'city';	
-	$municipal_data['level_name'] 		= 'municipal';	
+	$municipal_data['type_name'] 		= 'City';	
+	$municipal_data['level'] 			= 'municipal';	
+	$municipal_data['level_name'] 		= 'City';	
 	$municipal_data['name'] 			= $data['city'];		
 	$municipal_data['id'] 				= null;	
 	$municipal_data['url'] 				= $data['place_url_updated'];
@@ -799,8 +836,8 @@ function re_schema($data) {
 	$mayor_data['address_city'] 	= null;
 	$mayor_data['address_state'] 	= null;
 	$mayor_data['address_zip'] 		= null;
-	
-	$mayor_data['last_updated'] 	= '2007-06-22T20:59:09Z';	// FAKE				
+	$mayor_data['current_term_enddate'] 		= date('c', strtotime($data['mayor_data']['next_election']));
+	$mayor_data['last_updated'] 	= null;	// FAKE				
 	
 	if (!empty($data['mayor_twitter'])) {
 
@@ -817,17 +854,93 @@ function re_schema($data) {
 
 	
 	
-	// ####################################
 
 	
 	$municipal_data['elected_office'] = array($mayor_data);
 	
+	$new_data['jurisdictions'][] = $municipal_data;	
 	
 	
+	// ##########################################################################################################
+	
+	
+	
+if (!empty($data['state_data'])) {
+
+
+	
+	$state_data['type'] 			= 'government';
+	$state_data['type_name'] 		= 'State';	
+	$state_data['level'] 			= 'regional';	
+	$state_data['level_name'] 		= 'State';	
+	$state_data['name'] 			= $data['state_geocoded'];		
+	$state_data['id'] 				= $data['state'];	
+	$state_data['url'] 				= $data['state_data']['official_name_url'];	
+	$state_data['url_contact'] 		= $data['state_data']['information_url'];	
+	$state_data['email'] 			= $data['state_data']['email'];	
+	$state_data['phone'] 			= $data['state_data']['phone_primary'];	
+	$state_data['address_name']		= null;
+	$state_data['address_1'] 		= null;
+	$state_data['address_2'] 		= null;
+	$state_data['address_city'] 	= null;
+	$state_data['address_state'] 	= null;
+	$state_data['address_zip'] 		= null; 
+	$state_data['last_updated'] 	= null;
+	
+	// state metadata
+	$state_metadata = array(array("key" => "state_id", "value" => $data['state_id']));										
+	
+	$state_data['metadata']			= $state_metadata;	
+	
+	// social media 
+	$state_data['social_media']		= null;		
+	
+	$state_data['service_discovery'] = null;			
+						
+	// geojson					
+	//if ($data['geojson']) $municipal_data['geojson'] = $data['geojson'];
 
 
 
-	$new_data['jurisdictions'] = array($municipal_data);						
+	// ####################################
+
+	// elected office
+	
+
+	$governor_data['type'] 			= 'executive';
+	$governor_data['title'] 			= 'Governor';	
+	$governor_data['description'] 		= null;	
+	$governor_data['name_given'] 		= null;	
+	$governor_data['name_family'] 		= null;		
+	$governor_data['name_full'] 		= $data['state_data']['governor'];
+	$governor_data['url'] 				= $data['state_data']['governor_url'];
+	$governor_data['url_photo'] 		= null;
+	$governor_data['url_schedule'] 	= null;	
+	$governor_data['url_contact'] 		= null;	
+	$governor_data['email'] 			= null;
+	$governor_data['phone'] 			= null;
+	$governor_data['address_name']		= null;
+	$governor_data['address_1'] 		= null;
+	$governor_data['address_2'] 		= null;
+	$governor_data['address_city'] 		= null;
+	$governor_data['address_state'] 	= null;
+	$governor_data['address_zip'] 		= null;	
+	$governor_data['current_term_enddate']	= null;
+	$governor_data['last_updated'] 	= null;				
+	$governor_data['social_media'] = null;
+
+	$state_data['elected_office'] = array($governor_data);
+
+
+	$new_data['jurisdictions'][] = $state_data;
+
+}
+
+
+
+
+
+	//$new_data['raw_data'] = $data;					
 	
 	return $new_data;
 }
