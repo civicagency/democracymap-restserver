@@ -48,16 +48,16 @@ class Geowebdns extends REST_Controller {
 		$latlong					  = ''; 
 									      	        		
 		
-			$input 						= $this->input->get('location', TRUE);
+			$data['input'] 						= $this->input->get('location', TRUE);
 			
-			if(!$input) {
+			if(!$data['input'] ) {
 				
 				$this->response('No location provided', 400);
 
 			}
 			
 			$fullstack 					= $this->input->get('fullstack', TRUE);
-			$location 					= $this->geocode(urlencode($input));
+			$location 					= $this->geocode(urlencode($data['input']));
 
 			if(!empty($location['ResultSet']['Result'])) {
 			
@@ -71,7 +71,7 @@ class Geowebdns extends REST_Controller {
 			
 			// If we're not using a geocoder, but we have a lat,long directly...
 			// there should be validation here to see if provided latlong is actually valid and well-formed
-			if (!$latlong) $latlong = $input;
+			if (!$latlong) $latlong = $data['input'];
 
 
 
@@ -285,6 +285,16 @@ class Geowebdns extends REST_Controller {
 			}
 			
 			
+			// Mayor data
+			if (!empty($data['city']) && !empty($data['state'])) {
+				$mayor = $this->get_mayors($data['city'], $data['state']);
+				
+				if(!empty($mayor)) {
+					$data['mayor_data'] = $mayor[0];				
+				}
+			}			
+			
+
 			// See if we have google analytics tracking code
 			if($this->config->item('ganalytics_id')) {
 				//$data['ganalytics_id'] = $this->config->item('ganalytics_id');
@@ -292,7 +302,10 @@ class Geowebdns extends REST_Controller {
 			
 			
 			if ($fullstack == 'true') {
-				$this->response($data, 200);
+				
+				$new_data = $this->re_schema($data);
+				
+				$this->response($new_data, 200);
 			} else
 			{
 						
@@ -422,8 +435,30 @@ class Geowebdns extends REST_Controller {
 	}	
 	
 	
-
 	
+	
+	
+	function get_mayors($city, $state) {
+		
+		$city = ucwords($city);
+		$state = strtoupper($state);		
+		
+		$query = "select * from `swdata` where city = '$city' and state = '$state' limit 1";		
+		$query = urlencode($query);
+		
+		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=us_mayors&query=$query";		
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		$mayors=curl_exec($ch);
+		curl_close($ch);
+
+		$mayors = json_decode($mayors, true);
+
+		return $mayors;
+
+	}
 
 
 	function geocode($location) {
@@ -498,6 +533,8 @@ class Geowebdns extends REST_Controller {
 		return $state_boundaries;
 
 	}
+
+	
 	
 	
 	function state_boundary_shape($boundary_id) {
@@ -694,6 +731,106 @@ function process_nat_legislators($representatives) {
 		return $chambers;
 	
 }	
+
+
+function re_schema($data) {
+	
+	
+	
+	$new_data['latitude']			= $data['latitude'];
+	$new_data['longitude']			= $data['longitude'];
+	$new_data['input_location']		= $data['input'];	
+
+	
+	$municipal_data['type'] 			= 'government';
+	$municipal_data['type_name'] 		= 'city';	
+	$municipal_data['level'] 			= 'city';	
+	$municipal_data['level_name'] 		= 'municipal';	
+	$municipal_data['name'] 			= $data['city'];		
+	$municipal_data['id'] 				= null;	
+	$municipal_data['url'] 				= $data['place_url_updated'];
+	$municipal_data['url_contact'] 		= null;	
+	$municipal_data['email'] 			= null;	
+	$municipal_data['phone'] 			= null;	
+	$municipal_data['address_name']		= $data['title'];	
+	$municipal_data['address_1'] 		= $data['address1'];	
+	$municipal_data['address_2'] 		= $data['address2'];	
+	$municipal_data['address_city'] 	= $data['city'];
+	$municipal_data['address_state'] 	= $data['state'];	
+	$municipal_data['address_zip'] 		= ($data['zip4']) ? $data['zip'] . '-' . $data['zip4'] : $data['zip'];	
+	$municipal_data['last_updated'] 	= '2007-06-22T20:59:09Z';	// FAKE				
+	
+	// city metadata
+	$municipal_metadata = array(array("key" => "place_id", "value" => $data['place_id']), 
+								array("key" => "gnis_fid", "value" => $data['gnis_fid']));										
+	
+	$municipal_data['metadata']			= $municipal_metadata;	
+	
+	// social media 
+	$municipal_data['social_media']		= null;		
+	
+	$municipal_data['service_discovery'] = $data['service_discovery'];			
+						
+	// geojson					
+	//if ($data['geojson']) $municipal_data['geojson'] = $data['geojson'];
+
+
+
+	// ####################################
+
+	// elected office
+	
+
+	$mayor_data['type'] 			= 'executive';
+	$mayor_data['title'] 			= 'Mayor';	
+	$mayor_data['description'] 		= null;	
+	$mayor_data['name_given'] 		= null;	
+	$mayor_data['name_family'] 		= null;		
+	$mayor_data['name_full'] 		= isset($data['mayor_data']['name']) ? $data['mayor_data']['name'] : null;
+	$mayor_data['url'] 				= isset($data['mayor_data']['url']) ? $data['mayor_data']['url'] : null;
+	$mayor_data['url_photo'] 		= isset($data['mayor_data']['url_photo']) ? $data['mayor_data']['url_photo'] : null;
+	$mayor_data['url_schedule'] 	= null;	
+	$mayor_data['url_contact'] 		= null;	
+	$mayor_data['email'] 			= isset($data['mayor_data']['email']) ? $data['mayor_data']['email'] : null;
+	$mayor_data['phone'] 			= isset($data['mayor_data']['phone']) ? $data['mayor_data']['phone'] : null;;	
+	$mayor_data['address_name']		= null;
+	$mayor_data['address_1'] 		= null;
+	$mayor_data['address_2'] 		= null;
+	$mayor_data['address_city'] 	= null;
+	$mayor_data['address_state'] 	= null;
+	$mayor_data['address_zip'] 		= null;
+	
+	$mayor_data['last_updated'] 	= '2007-06-22T20:59:09Z';	// FAKE				
+	
+	if (!empty($data['mayor_twitter'])) {
+
+			$mayor_socialmedia = array(array("type" => "twitter",
+							  "description" => "twitter",
+							  "username" => $data['mayor_twitter'],
+						 	  "url" => "http://twitter.com/{$data['mayor_twitter']}",
+							   "last_updated" => '2007-06-22T20:59:09Z'));	
+
+			$mayor_data['social_media']		= $mayor_socialmedia;
+	} else {
+		$mayor_data['social_media'] = null;
+	}
+
+	
+	
+	// ####################################
+
+	
+	$municipal_data['elected_office'] = array($mayor_data);
+	
+	
+	
+
+
+
+	$new_data['jurisdictions'] = array($municipal_data);						
+	
+	return $new_data;
+}
 	
 	
 	
