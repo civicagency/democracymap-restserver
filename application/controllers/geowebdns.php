@@ -836,7 +836,7 @@ function re_schema($data) {
 	$mayor_data['address_city'] 	= null;
 	$mayor_data['address_state'] 	= null;
 	$mayor_data['address_zip'] 		= null;
-	$mayor_data['current_term_enddate'] 		= date('c', strtotime($data['mayor_data']['next_election']));
+	$mayor_data['current_term_enddate'] = isset($data['mayor_data']['current_term_enddate']) ? date('c', strtotime($data['mayor_data']['next_election'])) : null;
 	$mayor_data['last_updated'] 	= null;	// FAKE				
 	
 	if (!empty($data['mayor_twitter'])) {
