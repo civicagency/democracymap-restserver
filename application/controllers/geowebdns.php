@@ -133,6 +133,7 @@ class Geowebdns extends REST_Controller {
 					$data['community_district_fid'] = (!empty($community_d['features'])) ? "community_district." . $community_d['features'][0]['properties']['gid'] : '';
 
 				}
+				
 
 				if (!empty($census['features'])) {
 					
@@ -194,6 +195,60 @@ class Geowebdns extends REST_Controller {
 					   }
 					}
 				}	
+				
+				
+			
+				// Better links for municipal data from the SBA (I'm only pulling out the url, but other data might be usefull too)
+				if (!empty($data['city']) && !empty($data['state'])) {
+					$city_data = $this->get_city_links($data['city'], $data['state']);
+
+					if(!empty($city_data)) {
+						$data['place_url_updated'] = $city_data[0]['url'];
+
+						if ($fullstack == 'true') $data['city_data'] = $city_data[0];
+					}
+				}			
+			
+			
+				// County lookup - this should be based on a geospatial query, but just faking it until the layers are available
+				if (!empty($data['city_data']['county_name'])) {
+				
+				
+				$county_name = strtoupper($data['city_data']['county_name']);
+				
+					$sql = "SELECT * FROM counties
+							WHERE name = '$county_name' and state = '{$data['state']}'";
+							
+				
+					$query = $this->db->query($sql);				
+						
+					if ($query->num_rows() > 0) {
+					   foreach ($query->result() as $rows)  {	
+							$data['counties']['county_id']					=  $rows->county_id; 	
+							$data['counties']['name']							=  ucwords(strtolower($rows->name));			
+							$data['counties']['political_description']		=  $rows->political_description;
+							$data['counties']['title']						=  ucwords(strtolower($rows->title)); 			
+							$data['counties']['address1']						=  ucwords(strtolower($rows->address1)); 	    
+							$data['counties']['address2']						=  ucwords(strtolower($rows->address2)); 	
+							$data['counties']['city']							=  ucwords(strtolower($rows->city));   
+							$data['counties']['state']						=  $rows->state;  
+							$data['counties']['zip']							=  $rows->zip;    
+							$data['counties']['zip4']							=  $rows->zip4;   
+							$data['counties']['website_url']					=  $rows->website_url; 
+							$data['counties']['population_2006']				=  $rows->population_2006;
+							$data['counties']['fips_state']					=  $rows->fips_state; 
+							$data['counties']['fips_county']					=  $rows->fips_county; 	        			      			      	                               
+					   }
+					}				
+
+
+				
+				}				
+				
+
+
+
+				
 				
 			
 				if (is_numeric($data['community_district']) && $fullstack == 'true') {
@@ -272,17 +327,7 @@ class Geowebdns extends REST_Controller {
 				$data['service_discovery'] = $this->get_servicediscovery($data['service_discovery']);
 			}
 			
-			
-			// Better links for municipal data from the SBA (I'm only pulling out the url, but other data might be usefull too)
-			if (!empty($data['city']) && !empty($data['state'])) {
-				$city_data = $this->get_city_links($data['city'], $data['state']);
-				
-				if(!empty($city_data)) {
-					$data['place_url_updated'] = $city_data[0]['url'];
-				
-					if ($fullstack == 'true') $data['city_data'] = $city_data[0];
-				}
-			}
+		
 			
 			
 			// Mayor data
@@ -862,6 +907,56 @@ function re_schema($data) {
 	
 	
 	// ##########################################################################################################
+	
+	
+		
+
+if (!empty($data['counties'])) {
+
+
+	
+	$county_data['type'] 			= 'government';
+	$county_data['type_name'] 		= 'County';	
+	$county_data['level'] 			= 'sub_regional';	
+	$county_data['level_name'] 		= 'County';	
+	$county_data['name'] 			= $data['counties']['name'];		
+	$county_data['id'] 				= $data['counties']['county_id'];	
+	$county_data['url'] 				= $data['counties']['website_url'];	
+	$county_data['url_contact'] 		= null;	
+	$county_data['email'] 			= null;	
+	$county_data['phone'] 			= null;	
+	$county_data['address_name']	= $data['counties']['title'];
+	$county_data['address_1'] 		= $data['counties']['address1'];
+	$county_data['address_2'] 		= $data['counties']['address2'];
+	$county_data['address_city'] 	= $data['counties']['city'];
+	$county_data['address_state'] 	= $data['counties']['state'];
+	$county_data['address_zip'] 		=  ($data['counties']['zip4']) ? $data['counties']['zip'] . '-' . $data['counties']['zip4'] : $data['counties']['zip'];	; 
+	$county_data['last_updated'] 	= null;
+	
+	// state metadata
+	$county_metadata = array(array("key" => "fips_id", "value" => $data['counties']['fips_county']), 
+							array("key" => 'county_id', "value" => $data['counties']['county_id']), 
+							array("key" => 'population', "value" => $data['counties']['population_2006']));										
+	
+	$county_data['metadata']			= $county_metadata;	
+	
+	// social media 
+	$county_data['social_media']		= null;		
+	
+	$county_data['service_discovery'] = null;			
+						
+
+
+	$county_data['elected_office'] = null;
+
+
+	$new_data['jurisdictions'][] = $county_data;
+
+}
+
+
+	
+	
 	
 	
 	
