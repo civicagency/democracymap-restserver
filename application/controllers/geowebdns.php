@@ -968,6 +968,278 @@ if (!empty($data['counties'])) {
 }
 
 
+// ##########################################################################################################
+
+
+if (!empty($data['state_chambers']['lower'])) {
+
+$rep_id = key($data['state_chambers']['lower']);
+	
+	$slc_data['type'] 			= 'legislative';
+	$slc_data['type_name'] 		= 'State Legislature';	
+	$slc_data['level'] 			= 'regional_lower_chamber';	
+	$slc_data['level_name'] 	= 'House of Representatives';	
+	$slc_data['name'] 			= 'District ' . $rep_id;		
+	$slc_data['id'] 				= $rep_id;
+	$slc_data['url'] 				= null;	
+	$slc_data['url_contact'] 		= null;	
+	$slc_data['email'] 			= null;	
+	$slc_data['phone'] 			= null;	
+	$slc_data['address_name']	= null;
+	$slc_data['address_1'] 		= null;
+	$slc_data['address_2'] 		= null;
+	$slc_data['address_city'] 	= null;
+	$slc_data['address_state'] 	= null;
+	$slc_data['address_zip'] 	= null; 
+	$slc_data['last_updated'] 	= null;
+	
+
+	$slc_data['metadata']			= null;	
+	
+	// social media 
+	$slc_data['social_media']		= null;		
+	
+	$slc_data['service_discovery'] = null;			
+						
+
+
+	// ####################################
+
+	// elected office
+	
+	$slc_reps = $data['state_chambers']['lower'][$rep_id]['reps'];
+	
+	foreach($slc_reps as $slc_rep) {
+
+		$slc_rep_data['type'] 			= 'legislative';
+		$slc_rep_data['title'] 			= 'Representative';	
+		$slc_rep_data['description'] 		= null;	
+		$slc_rep_data['name_given'] 		= null;	
+		$slc_rep_data['name_family'] 		= null;		
+		$slc_rep_data['name_full'] 		= $slc_rep['full_name'];
+		$slc_rep_data['url'] 				= $slc_rep['url'];
+		$slc_rep_data['url_photo'] 		= $slc_rep['photo_url'];
+		$slc_rep_data['url_schedule'] 	= null;	
+		$slc_rep_data['url_contact'] 		= null;	
+		$slc_rep_data['email'] 			= null;
+		$slc_rep_data['phone'] 			= null;
+		$slc_rep_data['address_name']		= null;
+		$slc_rep_data['address_1'] 		= null;
+		$slc_rep_data['address_2'] 		= null;
+		$slc_rep_data['address_city'] 		= null;
+		$slc_rep_data['address_state'] 	= null;
+		$slc_rep_data['address_zip'] 		= null;	
+		$slc_rep_data['current_term_enddate']	= null;
+		$slc_rep_data['last_updated'] 	= null;				
+		$slc_rep_data['social_media'] = null;
+
+		$slc_data['elected_office'][] = $slc_rep_data;
+	
+	}
+
+
+	$new_data['jurisdictions'][] = $slc_data;
+
+}
+	
+
+
+// ##########################################################################################################
+
+	
+	
+	
+if (!empty($data['state_chambers']['upper'])) {
+
+$rep_id = key($data['state_chambers']['upper']);
+	
+	$slc_data = null;
+	
+	$slc_data['type'] 			= 'legislative';
+	$slc_data['type_name'] 		= 'State Legislature';	
+	$slc_data['level'] 			= 'regional_upper_chamber';	
+	$slc_data['level_name'] 	= 'Senate';	
+	$slc_data['name'] 			= 'District ' . $rep_id;		
+	$slc_data['id'] 				= $rep_id;
+	$slc_data['url'] 				= null;	
+	$slc_data['url_contact'] 		= null;	
+	$slc_data['email'] 			= null;	
+	$slc_data['phone'] 			= null;	
+	$slc_data['address_name']	= null;
+	$slc_data['address_1'] 		= null;
+	$slc_data['address_2'] 		= null;
+	$slc_data['address_city'] 	= null;
+	$slc_data['address_state'] 	= null;
+	$slc_data['address_zip'] 	= null; 
+	$slc_data['last_updated'] 	= null;
+	
+
+	$slc_data['metadata']			= null;	
+	
+	// social media 
+	$slc_data['social_media']		= null;		
+	
+	$slc_data['service_discovery'] = null;			
+						
+
+
+	// ####################################
+
+	// elected office
+	
+	$slc_reps = null;
+	$slc_reps = $data['state_chambers']['upper'][$rep_id]['reps'];
+	
+	foreach($slc_reps as $slc_rep) {
+
+		$slc_rep_data['type'] 			= 'legislative';
+		$slc_rep_data['title'] 			= 'Senator';	
+		$slc_rep_data['description'] 		= null;	
+		$slc_rep_data['name_given'] 		= null;	
+		$slc_rep_data['name_family'] 		= null;		
+		$slc_rep_data['name_full'] 		= $slc_rep['full_name'];
+		$slc_rep_data['url'] 				= $slc_rep['url'];
+		$slc_rep_data['url_photo'] 		= $slc_rep['photo_url'];
+		$slc_rep_data['url_schedule'] 	= null;	
+		$slc_rep_data['url_contact'] 		= null;	
+		$slc_rep_data['email'] 			= null;
+		$slc_rep_data['phone'] 			= null;
+		$slc_rep_data['address_name']		= null;
+		$slc_rep_data['address_1'] 		= null;
+		$slc_rep_data['address_2'] 		= null;
+		$slc_rep_data['address_city'] 		= null;
+		$slc_rep_data['address_state'] 	= null;
+		$slc_rep_data['address_zip'] 		= null;	
+		$slc_rep_data['current_term_enddate']	= null;
+		$slc_rep_data['last_updated'] 	= null;				
+		$slc_rep_data['social_media'] = null;
+
+		$slc_data['elected_office'][] = $slc_rep_data;
+	
+	}
+
+
+	$new_data['jurisdictions'][] = $slc_data;
+
+}	
+	
+	
+	
+	
+	
+	
+	
+// ##########################################################################################################
+	
+// US House of Reps
+
+	
+	
+	
+if (!empty($data['national_chambers']['house']['reps'])) {
+
+
+$nhr = $data['national_chambers']['house']['reps'][0];
+
+$slc_data = null;	
+
+	$slc_data['type'] 			= 'legislative';
+	$slc_data['type_name'] 		= 'US Congress';	
+	$slc_data['level'] 			= 'national_lower_chamber';	
+	$slc_data['level_name'] 	= 'House of Representatives';	
+	$slc_data['name'] 			= 'District ' . $nhr['district'];		
+	$slc_data['id'] 				= $nhr['district'];
+	$slc_data['url'] 				= null;	
+	$slc_data['url_contact'] 		= null;	
+	$slc_data['email'] 			= null;	
+	$slc_data['phone'] 			= null;	
+	$slc_data['address_name']	= null;
+	$slc_data['address_1'] 		= null;
+	$slc_data['address_2'] 		= null;
+	$slc_data['address_city'] 	= null;
+	$slc_data['address_state'] 	= null;
+	$slc_data['address_zip'] 	= null; 
+	$slc_data['last_updated'] 	= null;
+	
+
+	$slc_data['metadata']			= null;	
+	
+	// social media 
+	$slc_data['social_media']		= null;		
+	
+	$slc_data['service_discovery'] = null;			
+						
+
+
+	// ####################################
+
+	// elected office
+	
+$slc_rep_data = null;
+
+		$slc_rep_data['type'] 			= 'legislative';
+		$slc_rep_data['title'] 			= $nhr['title'];	
+		$slc_rep_data['description'] 		= null;	
+		$slc_rep_data['name_given'] 		= null;	
+		$slc_rep_data['name_family'] 		= null;		
+		$slc_rep_data['name_full'] 		= $nhr['full_name'];
+		$slc_rep_data['url'] 				= $nhr['website'];
+		$slc_rep_data['url_photo'] 		= null;
+		$slc_rep_data['url_schedule'] 	= null;	
+		$slc_rep_data['url_contact'] 		= null;	
+		$slc_rep_data['email'] 			= null;
+		$slc_rep_data['phone'] 			= $nhr['phone'];
+		$slc_rep_data['address_name']		= null;
+		$slc_rep_data['address_1'] 		= null;
+		$slc_rep_data['address_2'] 		= null;
+		$slc_rep_data['address_city'] 		= null;
+		$slc_rep_data['address_state'] 	= null;
+		$slc_rep_data['address_zip'] 		= null;	
+		$slc_rep_data['current_term_enddate']	= null;
+		$slc_rep_data['last_updated'] 	= null;				
+
+		if(!empty($nhr['twitter_id']) || !empty($nhr['facebook_id'])) {
+			$slc_rep_data['social_media'] = array();			
+		} else {
+			$slc_rep_data['social_media'] = null;
+		}
+
+		if(!empty($nhr['twitter_id'])) {
+			$slc_rep_data['social_media'][] = array("type" => "twitter",
+							  							"description" => "Twitter",
+							  							"username" => $nhr['twitter_id'],
+						 	  							"url" => "http://twitter.com/{$nhr['twitter_id']}",
+							  							 "last_updated" => null);
+		}
+		
+
+		if(!empty($nhr['facebook_id'])) {
+			$slc_rep_data['social_media'][] = array("type" => "facebook",
+			 	  									"description" => "Facebook",
+			 	  									"username" => $nhr['facebook_id'],
+			 	  									"url" => "http://facebook.com/{$nhr['facebook_id']}",
+			 	  									 "last_updated" => null);
+		}
+
+
+
+	$slc_data['elected_office'][] = $slc_rep_data;
+	
+
+	$new_data['jurisdictions'][] = $slc_data;
+
+}
+
+
+
+
+
+
+
+// ##########################################################################################################
+
+
+	
 	
 	
 	
@@ -1037,7 +1309,69 @@ if (!empty($data['state_data'])) {
 	$governor_data['last_updated'] 	= null;				
 	$governor_data['social_media'] = null;
 
-	$state_data['elected_office'] = array($governor_data);
+	$state_data['elected_office'][] = $governor_data;
+
+
+if (!empty($data['national_chambers']['senate'])) {
+
+
+	$slc_rep = null;
+
+	foreach($data['national_chambers']['senate']['reps'] as $slc_rep) {
+
+		$slc_rep_data['type'] 			= 'legislative';
+		$slc_rep_data['title'] 			= $slc_rep['title'];	
+		$slc_rep_data['description'] 		= $slc_rep['district'];	
+		$slc_rep_data['name_given'] 		= null;	
+		$slc_rep_data['name_family'] 		= null;		
+		$slc_rep_data['name_full'] 		= $slc_rep['full_name'];
+		$slc_rep_data['url'] 				= $slc_rep['website'];
+		$slc_rep_data['url_photo'] 		= null;
+		$slc_rep_data['url_schedule'] 	= null;	
+		$slc_rep_data['url_contact'] 		= null;	
+		$slc_rep_data['email'] 			= $slc_rep['email'];
+		$slc_rep_data['phone'] 			= $slc_rep['phone'];
+		$slc_rep_data['address_name']		= null;
+		$slc_rep_data['address_1'] 		= $slc_rep['congress_office'];
+		$slc_rep_data['address_2'] 		= null;
+		$slc_rep_data['address_city'] 		= null;
+		$slc_rep_data['address_state'] 	= null;
+		$slc_rep_data['address_zip'] 		= null;	
+		$slc_rep_data['current_term_enddate']	= null;
+		$slc_rep_data['last_updated'] 	= null;				
+
+		if(!empty($slc_rep['twitter_id']) || !empty($slc_rep['facebook_id'])) {
+			$slc_rep_data['social_media'] = array();			
+		} else {
+			$slc_rep_data['social_media'] = null;
+		}
+
+		if(!empty($slc_rep['twitter_id'])) {
+			$slc_rep_data['social_media'][] = array("type" => "twitter",
+							  							"description" => "Twitter",
+							  							"username" => $slc_rep['twitter_id'],
+						 	  							"url" => "http://twitter.com/{$slc_rep['twitter_id']}",
+							  							 "last_updated" => null);
+		}
+		
+
+		if(!empty($slc_rep['facebook_id'])) {
+			$slc_rep_data['social_media'][] = array("type" => "facebook",
+			 	  									"description" => "Facebook",
+			 	  									"username" => $slc_rep['facebook_id'],
+			 	  									"url" => "http://facebook.com/{$slc_rep['facebook_id']}",
+			 	  									 "last_updated" => null);
+		}		
+
+		$state_data['elected_office'][] = $slc_rep_data;
+		
+		$slc_rep = null;
+	
+	}
+
+}
+
+
 
 
 	$new_data['jurisdictions'][] = $state_data;
