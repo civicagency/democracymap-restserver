@@ -422,6 +422,8 @@ class Geowebdns extends REST_Controller {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $gid_url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);		
+		
 		//curl_setopt($ch, CURLOPT_HEADER, TRUE);		
 		
 		$gid_data=curl_exec($ch);			
@@ -440,6 +442,7 @@ class Geowebdns extends REST_Controller {
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $fid_url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
 			//curl_setopt($ch, CURLOPT_HEADER, TRUE);		
 
 			$fid_data=curl_exec($ch);			
@@ -461,6 +464,7 @@ class Geowebdns extends REST_Controller {
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
 			//curl_setopt($ch, CURLOPT_HEADER, TRUE);		
 
 			$sd_data=curl_exec($ch);			
@@ -479,6 +483,7 @@ class Geowebdns extends REST_Controller {
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
 			//curl_setopt($ch, CURLOPT_HEADER, TRUE);		
 
 			$sd_data=curl_exec($ch);			
@@ -506,6 +511,7 @@ class Geowebdns extends REST_Controller {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
 		$mayors=curl_exec($ch);
 		curl_close($ch);
 
@@ -531,6 +537,7 @@ class Geowebdns extends REST_Controller {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
 		$state=curl_exec($ch);
 		curl_close($ch);
 
@@ -550,6 +557,7 @@ class Geowebdns extends REST_Controller {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
 		$locations=curl_exec($ch);
 		curl_close($ch);
 
@@ -569,6 +577,7 @@ class Geowebdns extends REST_Controller {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
 		$districts=curl_exec($ch);
 		curl_close($ch);
 
@@ -587,6 +596,7 @@ class Geowebdns extends REST_Controller {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
 		$state_legislators=curl_exec($ch);
 		curl_close($ch);
 
@@ -606,6 +616,7 @@ class Geowebdns extends REST_Controller {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
 		$state_boundaries=curl_exec($ch);
 		curl_close($ch);
 
@@ -626,6 +637,7 @@ class Geowebdns extends REST_Controller {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
 		$shape_data=curl_exec($ch);
 		curl_close($ch);
 
@@ -755,6 +767,7 @@ function national_legislators($lat, $long) {
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
 	$legislators=curl_exec($ch);
 	curl_close($ch);
 
