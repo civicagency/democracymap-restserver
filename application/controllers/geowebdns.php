@@ -356,6 +356,17 @@ class Geowebdns extends REST_Controller {
 			}
 			
 			
+			// Use the best city url we can get
+			if(empty($data['place_url_updated'])) {
+				if (!empty($data['mayor_data']['url'])) {
+					$data['place_url_updated'] = $data['mayor_data']['url'];
+				}
+				else {
+					$data['place_url_updated'] = $data['place_url'];
+				}				
+			}
+			
+			
 			if ($fullstack == 'true') {
 				
 				$new_data = $this->re_schema($data);
@@ -843,29 +854,34 @@ function re_schema($data) {
 
 // Elected
 	
-if (!empty($data['mayor_twitter'])) {
+if (!empty($data['mayor_data'])) {	
+	if (!empty($data['mayor_twitter'])) {
 
-		$mayor_socialmedia = array(array("type" => "twitter",
-						  "description" => "twitter",
-						  "username" => $data['mayor_twitter'],
-					 	  "url" => "http://twitter.com/{$data['mayor_twitter']}",
-						   "last_updated" => '2007-06-22T20:59:09Z'));	
+			$mayor_socialmedia = array(array("type" => "twitter",
+							  "description" => "twitter",
+							  "username" => $data['mayor_twitter'],
+						 	  "url" => "http://twitter.com/{$data['mayor_twitter']}",
+							   "last_updated" => '2007-06-22T20:59:09Z'));	
+
+	} else {
+			$mayor_socialmedia = null;
+	}
+	
+	$mayor_name_full 			= isset($data['mayor_data']['name']) ? $data['mayor_data']['name'] : null;	
+	$mayor_url 					= isset($data['mayor_data']['url']) ? $data['mayor_data']['url'] : null;
+	$mayor_url_photo 			= isset($data['mayor_data']['url_photo']) ? $data['mayor_data']['url_photo'] : null;
+	$mayor_email 				= isset($data['mayor_data']['email']) ? $data['mayor_data']['email'] : null;
+	$mayor_phone 				= isset($data['mayor_data']['phone']) ? $data['mayor_data']['phone'] : null;	
+	$mayor_current_term_enddate = isset($data['mayor_data']['current_term_enddate']) ? date('c', strtotime($data['mayor_data']['next_election'])) : null;	
+	
+
+	$elected = array(
+			$this->elected_official_model('executive', 'Mayor', null, null, null, $mayor_name_full, $mayor_url, $mayor_url_photo, null, null, $mayor_email, $mayor_phone, $data['title'], null, null, null, null, null, $mayor_current_term_enddate, null, $mayor_socialmedia)		
+	);
 
 } else {
-		$mayor_socialmedia = null;
+	$elected = null;	
 }
-	
-$mayor_name_full 			= isset($data['mayor_data']['name']) ? $data['mayor_data']['name'] : null;	
-$mayor_url 					= isset($data['mayor_data']['url']) ? $data['mayor_data']['url'] : null;
-$mayor_url_photo 			= isset($data['mayor_data']['url_photo']) ? $data['mayor_data']['url_photo'] : null;
-$mayor_email 				= isset($data['mayor_data']['email']) ? $data['mayor_data']['email'] : null;
-$mayor_phone 				= isset($data['mayor_data']['phone']) ? $data['mayor_data']['phone'] : null;	
-$mayor_current_term_enddate = isset($data['mayor_data']['current_term_enddate']) ? date('c', strtotime($data['mayor_data']['next_election'])) : null;	
-	
-
-$elected = array(
-		$this->elected_official_model('executive', 'Mayor', null, null, null, $mayor_name_full, $mayor_url, $mayor_url_photo, null, null, $mayor_email, $mayor_phone, $data['title'], null, null, null, null, null, $mayor_current_term_enddate, null, $mayor_socialmedia)		
-);
 
 
 
@@ -945,6 +961,9 @@ if (!empty($data['state_chambers']['upper'])) {
 	}			
 			
 	// Jurisdiction						
+
+
+	$district = 'District ' . $rep_id;
 
 		$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Senate', 'regional', 'State', $district, $rep_id, null, null, null, null, null, null, null, null, null, null, null, null, null, $reps, null);
 
