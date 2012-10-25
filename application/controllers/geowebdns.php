@@ -836,304 +836,142 @@ function re_schema($data) {
 	$new_data['longitude']			= $data['longitude'];
 	$new_data['input_location']		= $data['input'];	
 
+			
+
+// ############################################################################################################
+// Municipal 
+
+// Elected
 	
-	$municipal_data['type'] 			= 'government';
-	$municipal_data['type_name'] 		= 'City';	
-	$municipal_data['level'] 			= 'municipal';	
-	$municipal_data['level_name'] 		= 'City';	
-	$municipal_data['name'] 			= $data['city'];		
-	$municipal_data['id'] 				= null;	
-	$municipal_data['url'] 				= $data['place_url_updated'];
-	$municipal_data['url_contact'] 		= null;	
-	$municipal_data['email'] 			= null;	
-	$municipal_data['phone'] 			= null;	
-	$municipal_data['address_name']		= $data['title'];	
-	$municipal_data['address_1'] 		= $data['address1'];	
-	$municipal_data['address_2'] 		= $data['address2'];	
-	$municipal_data['address_city'] 	= $data['city'];
-	$municipal_data['address_state'] 	= $data['state'];	
-	$municipal_data['address_zip'] 		= ($data['zip4']) ? $data['zip'] . '-' . $data['zip4'] : $data['zip'];	
-	$municipal_data['last_updated'] 	= '2007-06-22T20:59:09Z';	// FAKE				
+if (!empty($data['mayor_twitter'])) {
+
+		$mayor_socialmedia = array(array("type" => "twitter",
+						  "description" => "twitter",
+						  "username" => $data['mayor_twitter'],
+					 	  "url" => "http://twitter.com/{$data['mayor_twitter']}",
+						   "last_updated" => '2007-06-22T20:59:09Z'));	
+
+} else {
+		$mayor_socialmedia = null;
+}
 	
-	// city metadata
-	$municipal_metadata = array(array("key" => "place_id", "value" => $data['place_id']), 
-								array("key" => "gnis_fid", "value" => $data['gnis_fid']));										
+$mayor_name_full 			= isset($data['mayor_data']['name']) ? $data['mayor_data']['name'] : null;	
+$mayor_url 					= isset($data['mayor_data']['url']) ? $data['mayor_data']['url'] : null;
+$mayor_url_photo 			= isset($data['mayor_data']['url_photo']) ? $data['mayor_data']['url_photo'] : null;
+$mayor_email 				= isset($data['mayor_data']['email']) ? $data['mayor_data']['email'] : null;
+$mayor_phone 				= isset($data['mayor_data']['phone']) ? $data['mayor_data']['phone'] : null;	
+$mayor_current_term_enddate = isset($data['mayor_data']['current_term_enddate']) ? date('c', strtotime($data['mayor_data']['next_election'])) : null;	
 	
-	$municipal_data['metadata']			= $municipal_metadata;	
-	
-	// social media 
-	$municipal_data['social_media']		= null;		
-	
-	$municipal_data['service_discovery'] = $data['service_discovery'];			
-						
-	// geojson					
-	//if ($data['geojson']) $municipal_data['geojson'] = $data['geojson'];
+
+$elected = array(
+		$this->elected_official_model('executive', 'Mayor', null, null, null, $mayor_name_full, $mayor_url, $mayor_url_photo, null, null, $mayor_email, $mayor_phone, $data['title'], null, null, null, null, null, $mayor_current_term_enddate, null, $mayor_socialmedia)		
+);
 
 
 
-	// ####################################
+// Jurisdiction
 
-	// elected office
+
+$municipal_zip 		= ($data['zip4']) ? $data['zip'] . '-' . $data['zip4'] : $data['zip'];	
+
+$municipal_metadata = array(array("key" => "place_id", "value" => $data['place_id']), 
+								array("key" => "gnis_fid", "value" => $data['gnis_fid']));											
 	
 
-	$mayor_data['type'] 			= 'executive';
-	$mayor_data['title'] 			= 'Mayor';	
-	$mayor_data['description'] 		= null;	
-	$mayor_data['name_given'] 		= null;	
-	$mayor_data['name_family'] 		= null;		
-	$mayor_data['name_full'] 		= isset($data['mayor_data']['name']) ? $data['mayor_data']['name'] : null;
-	$mayor_data['url'] 				= isset($data['mayor_data']['url']) ? $data['mayor_data']['url'] : null;
-	$mayor_data['url_photo'] 		= isset($data['mayor_data']['url_photo']) ? $data['mayor_data']['url_photo'] : null;
-	$mayor_data['url_schedule'] 	= null;	
-	$mayor_data['url_contact'] 		= null;	
-	$mayor_data['email'] 			= isset($data['mayor_data']['email']) ? $data['mayor_data']['email'] : null;
-	$mayor_data['phone'] 			= isset($data['mayor_data']['phone']) ? $data['mayor_data']['phone'] : null;;	
-	$mayor_data['address_name']		= null;
-	$mayor_data['address_1'] 		= null;
-	$mayor_data['address_2'] 		= null;
-	$mayor_data['address_city'] 	= null;
-	$mayor_data['address_state'] 	= null;
-	$mayor_data['address_zip'] 		= null;
-	$mayor_data['current_term_enddate'] = isset($data['mayor_data']['current_term_enddate']) ? date('c', strtotime($data['mayor_data']['next_election'])) : null;
-	$mayor_data['last_updated'] 	= null;	// FAKE				
-	
-	if (!empty($data['mayor_twitter'])) {
-
-			$mayor_socialmedia = array(array("type" => "twitter",
-							  "description" => "twitter",
-							  "username" => $data['mayor_twitter'],
-						 	  "url" => "http://twitter.com/{$data['mayor_twitter']}",
-							   "last_updated" => '2007-06-22T20:59:09Z'));	
-
-			$mayor_data['social_media']		= $mayor_socialmedia;
-	} else {
-		$mayor_data['social_media'] = null;
-	}
+$new_data['jurisdictions'][] = $this->jurisdiction_model('government', 'City', 'municipal', 'City', $data['city'], null, $data['place_url_updated'], null, null, null, $data['title'], $data['address1'], $data['address2'], $data['city'], $data['state'], $municipal_zip, null, $municipal_metadata, null, $elected, $data['service_discovery']);
 
 	
 	
-
-	
-	$municipal_data['elected_office'] = array($mayor_data);
-	
-	$new_data['jurisdictions'][] = $municipal_data;	
-	
-	
-	// ##########################################################################################################
-	
-	
-		
+// ##########################################################################################################
+// Counties Jurisdictions
 
 if (!empty($data['counties'])) {
 
+	$county_zip 		=  ($data['counties']['zip4']) ? $data['counties']['zip'] . '-' . $data['counties']['zip4'] : $data['counties']['zip'];		
 
-	
-	$county_data['type'] 			= 'government';
-	$county_data['type_name'] 		= 'County';	
-	$county_data['level'] 			= 'sub_regional';	
-	$county_data['level_name'] 		= 'County';	
-	$county_data['name'] 			= $data['counties']['name'];		
-	$county_data['id'] 				= $data['counties']['county_id'];	
-	$county_data['url'] 				= $data['counties']['website_url'];	
-	$county_data['url_contact'] 		= null;	
-	$county_data['email'] 			= null;	
-	$county_data['phone'] 			= null;	
-	$county_data['address_name']	= $data['counties']['title'];
-	$county_data['address_1'] 		= $data['counties']['address1'];
-	$county_data['address_2'] 		= $data['counties']['address2'];
-	$county_data['address_city'] 	= $data['counties']['city'];
-	$county_data['address_state'] 	= $data['counties']['state'];
-	$county_data['address_zip'] 		=  ($data['counties']['zip4']) ? $data['counties']['zip'] . '-' . $data['counties']['zip4'] : $data['counties']['zip'];	; 
-	$county_data['last_updated'] 	= null;
-	
-	// state metadata
 	$county_metadata = array(array("key" => "fips_id", "value" => $data['counties']['fips_county']), 
 							array("key" => 'county_id', "value" => $data['counties']['county_id']), 
 							array("key" => 'population', "value" => $data['counties']['population_2006']));										
 	
-	$county_data['metadata']			= $county_metadata;	
-	
-	// social media 
-	$county_data['social_media']		= null;		
-	
-	$county_data['service_discovery'] = null;			
-						
 
-
-	$county_data['elected_office'] = null;
-
-
-	$new_data['jurisdictions'][] = $county_data;
+	$new_data['jurisdictions'][] = 	$this->jurisdiction_model('government', 'County', 'sub_regional', 'county', $data['counties']['name'], $data['counties']['county_id'], $data['counties']['website_url'], null, null, null, $data['counties']['title'], $data['counties']['address1'], $data['counties']['address2'], $data['counties']['city'], $data['counties']['state'], $county_zip, null, $county_metadata, null, null, null);
 
 }
 
 
 // ##########################################################################################################
-
+// State Chambers Lower
 
 if (!empty($data['state_chambers']['lower'])) {
 
-$rep_id = key($data['state_chambers']['lower']);
-	
-	$slc_data['type'] 			= 'legislative';
-	$slc_data['type_name'] 		= 'State Legislature';	
-	$slc_data['level'] 			= 'regional_lower_chamber';	
-	$slc_data['level_name'] 	= 'House of Representatives';	
-	$slc_data['name'] 			= 'District ' . $rep_id;		
-	$slc_data['id'] 				= $rep_id;
-	$slc_data['url'] 				= null;	
-	$slc_data['url_contact'] 		= null;	
-	$slc_data['email'] 			= null;	
-	$slc_data['phone'] 			= null;	
-	$slc_data['address_name']	= null;
-	$slc_data['address_1'] 		= null;
-	$slc_data['address_2'] 		= null;
-	$slc_data['address_city'] 	= null;
-	$slc_data['address_state'] 	= null;
-	$slc_data['address_zip'] 	= null; 
-	$slc_data['last_updated'] 	= null;
-	
+	$rep_id = key($data['state_chambers']['lower']);
 
-	$slc_data['metadata']			= null;	
-	
-	// social media 
-	$slc_data['social_media']		= null;		
-	
-	$slc_data['service_discovery'] = null;			
-						
-
-
-	// ####################################
 
 	// elected office
-	
-	$slc_reps = $data['state_chambers']['lower'][$rep_id]['reps'];
-	
-	foreach($slc_reps as $slc_rep) {
 
-		$slc_rep_data['type'] 			= 'legislative';
-		$slc_rep_data['title'] 			= 'Representative';	
-		$slc_rep_data['description'] 		= null;	
-		$slc_rep_data['name_given'] 		= null;	
-		$slc_rep_data['name_family'] 		= null;		
-		$slc_rep_data['name_full'] 		= $slc_rep['full_name'];
-		$slc_rep_data['url'] 				= $slc_rep['url'];
-		$slc_rep_data['url_photo'] 		= $slc_rep['photo_url'];
-		$slc_rep_data['url_schedule'] 	= null;	
-		$slc_rep_data['url_contact'] 		= null;	
-		$slc_rep_data['email'] 			= null;
-		$slc_rep_data['phone'] 			= null;
-		$slc_rep_data['address_name']		= null;
-		$slc_rep_data['address_1'] 		= null;
-		$slc_rep_data['address_2'] 		= null;
-		$slc_rep_data['address_city'] 		= null;
-		$slc_rep_data['address_state'] 	= null;
-		$slc_rep_data['address_zip'] 		= null;	
-		$slc_rep_data['current_term_enddate']	= null;
-		$slc_rep_data['last_updated'] 	= null;				
-		$slc_rep_data['social_media'] = null;
-
-		$slc_data['elected_office'][] = $slc_rep_data;
-	
+	$slc_reps = $data['state_chambers']['lower'][$rep_id]['reps'];	
+	foreach($slc_reps as $slc_rep) {		
+		$reps[] = $this->elected_official_model('legislative', 'Representative', null, null, null, $slc_rep['full_name'], $slc_rep['url'], $slc_rep['photo_url'], null, null, null, null, null, null, null, null, null, null, null, null, null);		
 	}
 
 
-	$new_data['jurisdictions'][] = $slc_data;
+	// jurisdiction 
+
+	$district = 'District ' . $rep_id;		
+	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'House of Representatives', 'regional', 'State', $district, $rep_id, null, null, null, null, null, null, null, null, null, null, null, null, null, $reps, null);
+	
 
 }
 	
 
-
 // ##########################################################################################################
-
-	
-	
-	
+// State Chambers Upper							
+		
 if (!empty($data['state_chambers']['upper'])) {
 
-$rep_id = key($data['state_chambers']['upper']);
-	
-	$slc_data = null;
-	
-	$slc_data['type'] 			= 'legislative';
-	$slc_data['type_name'] 		= 'State Legislature';	
-	$slc_data['level'] 			= 'regional_upper_chamber';	
-	$slc_data['level_name'] 	= 'Senate';	
-	$slc_data['name'] 			= 'District ' . $rep_id;		
-	$slc_data['id'] 				= $rep_id;
-	$slc_data['url'] 				= null;	
-	$slc_data['url_contact'] 		= null;	
-	$slc_data['email'] 			= null;	
-	$slc_data['phone'] 			= null;	
-	$slc_data['address_name']	= null;
-	$slc_data['address_1'] 		= null;
-	$slc_data['address_2'] 		= null;
-	$slc_data['address_city'] 	= null;
-	$slc_data['address_state'] 	= null;
-	$slc_data['address_zip'] 	= null; 
-	$slc_data['last_updated'] 	= null;
-	
-
-	$slc_data['metadata']			= null;	
-	
-	// social media 
-	$slc_data['social_media']		= null;		
-	
-	$slc_data['service_discovery'] = null;			
-						
+	$rep_id = key($data['state_chambers']['upper']);
 
 
-	// ####################################
+	// Elected Office						
 
-	// elected office
-	
 	$slc_reps = null;
 	$slc_reps = $data['state_chambers']['upper'][$rep_id]['reps'];
-	
+	$reps = null;
+
 	foreach($slc_reps as $slc_rep) {
-
-		$slc_rep_data['type'] 			= 'legislative';
-		$slc_rep_data['title'] 			= 'Senator';	
-		$slc_rep_data['description'] 		= null;	
-		$slc_rep_data['name_given'] 		= null;	
-		$slc_rep_data['name_family'] 		= null;		
-		$slc_rep_data['name_full'] 		= $slc_rep['full_name'];
-		$slc_rep_data['url'] 				= $slc_rep['url'];
-		$slc_rep_data['url_photo'] 		= $slc_rep['photo_url'];
-		$slc_rep_data['url_schedule'] 	= null;	
-		$slc_rep_data['url_contact'] 		= null;	
-		$slc_rep_data['email'] 			= null;
-		$slc_rep_data['phone'] 			= null;
-		$slc_rep_data['address_name']		= null;
-		$slc_rep_data['address_1'] 		= null;
-		$slc_rep_data['address_2'] 		= null;
-		$slc_rep_data['address_city'] 		= null;
-		$slc_rep_data['address_state'] 	= null;
-		$slc_rep_data['address_zip'] 		= null;	
-		$slc_rep_data['current_term_enddate']	= null;
-		$slc_rep_data['last_updated'] 	= null;				
-		$slc_rep_data['social_media'] = null;
-
-		$slc_data['elected_office'][] = $slc_rep_data;
 	
-	}
+		$reps[] = $this->elected_official_model('legislative', 'Senator', null, null, null, $slc_rep['full_name'], $slc_rep['url'], $slc_rep['photo_url'], null, null, null, null, null, null, null, null, null, null, null, null, null);
 
+	}			
+			
+	// Jurisdiction						
 
-	$new_data['jurisdictions'][] = $slc_data;
+		$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Senate', 'regional', 'State', $district, $rep_id, null, null, null, null, null, null, null, null, null, null, null, null, null, $reps, null);
 
 }	
-	
-	
-	
-	
-	
-	
-	
-// ##########################################################################################################
-	
-// US House of Reps
 
+
+
+// ##########################################################################################################
+// State
+
+		
+if (!empty($data['state_data'])) {
+
+	$state_metadata = array(array("key" => "state_id", "value" => $data['state_id']));										
 	
+
+	$elected = array($this->elected_official_model('executive', 'Governor', null, null, null, $data['state_data']['governor'], $data['state_data']['governor_url'], null, null, null, null, null, null, null, null, null, null, null, null, null, null));
+
+	$new_data['jurisdictions'][] = $this->jurisdiction_model('government', 'State', 'regional', 'State', $data['state_geocoded'], $data['state'], $data['state_data']['official_name_url'], $data['state_data']['information_url'], $data['state_data']['email'], $data['state_data']['phone_primary'], null, null, null, null, null, null, null, $state_metadata, null, $elected, null);
+	
+
+}
+
+
+
+// ##########################################################################################################	
+// US House of Reps
 	
 	
 if (!empty($data['national_chambers']['house']['reps'])) {
@@ -1141,92 +979,30 @@ if (!empty($data['national_chambers']['house']['reps'])) {
 
 $nhr = $data['national_chambers']['house']['reps'][0];
 
-$slc_data = null;	
-
-	$slc_data['type'] 			= 'legislative';
-	$slc_data['type_name'] 		= 'US Congress';	
-	$slc_data['level'] 			= 'national_lower_chamber';	
-	$slc_data['level_name'] 	= 'House of Representatives';	
-	$slc_data['name'] 			= 'District ' . $nhr['district'];		
-	$slc_data['id'] 				= $nhr['district'];
-	$slc_data['url'] 				= null;	
-	$slc_data['url_contact'] 		= null;	
-	$slc_data['email'] 			= null;	
-	$slc_data['phone'] 			= null;	
-	$slc_data['address_name']	= null;
-	$slc_data['address_1'] 		= null;
-	$slc_data['address_2'] 		= null;
-	$slc_data['address_city'] 	= null;
-	$slc_data['address_state'] 	= null;
-	$slc_data['address_zip'] 	= null; 
-	$slc_data['last_updated'] 	= null;
-	
-
-	$slc_data['metadata']			= null;	
-	
-	// social media 
-	$slc_data['social_media']		= null;		
-	
-	$slc_data['service_discovery'] = null;			
-						
-
-
-	// ####################################
 
 	// elected office
 	
-$slc_rep_data = null;
-
-		$slc_rep_data['type'] 			= 'legislative';
-		$slc_rep_data['title'] 			= $nhr['title'];	
-		$slc_rep_data['description'] 		= null;	
-		$slc_rep_data['name_given'] 		= null;	
-		$slc_rep_data['name_family'] 		= null;		
-		$slc_rep_data['name_full'] 		= $nhr['full_name'];
-		$slc_rep_data['url'] 				= $nhr['website'];
-		$slc_rep_data['url_photo'] 		= null;
-		$slc_rep_data['url_schedule'] 	= null;	
-		$slc_rep_data['url_contact'] 		= null;	
-		$slc_rep_data['email'] 			= null;
-		$slc_rep_data['phone'] 			= $nhr['phone'];
-		$slc_rep_data['address_name']		= null;
-		$slc_rep_data['address_1'] 		= null;
-		$slc_rep_data['address_2'] 		= null;
-		$slc_rep_data['address_city'] 		= null;
-		$slc_rep_data['address_state'] 	= null;
-		$slc_rep_data['address_zip'] 		= null;	
-		$slc_rep_data['current_term_enddate']	= null;
-		$slc_rep_data['last_updated'] 	= null;				
+		$social_media = null;
 
 		if(!empty($nhr['twitter_id']) || !empty($nhr['facebook_id'])) {
-			$slc_rep_data['social_media'] = array();			
+			$social_media = array();			
 		} else {
-			$slc_rep_data['social_media'] = null;
+			$social_media = null;
 		}
 
 		if(!empty($nhr['twitter_id'])) {
-			$slc_rep_data['social_media'][] = array("type" => "twitter",
-							  							"description" => "Twitter",
-							  							"username" => $nhr['twitter_id'],
-						 	  							"url" => "http://twitter.com/{$nhr['twitter_id']}",
-							  							 "last_updated" => null);
+			$social_media[] = array("type" => "twitter","description" => "Twitter","username" => $nhr['twitter_id'],"url" => "http://twitter.com/{$nhr['twitter_id']}","last_updated" => null);
 		}
 		
-
 		if(!empty($nhr['facebook_id'])) {
-			$slc_rep_data['social_media'][] = array("type" => "facebook",
-			 	  									"description" => "Facebook",
-			 	  									"username" => $nhr['facebook_id'],
-			 	  									"url" => "http://facebook.com/{$nhr['facebook_id']}",
-			 	  									 "last_updated" => null);
+			$social_media[] = array("type" => "facebook","description" => "Facebook","username" => $nhr['facebook_id'],"url" => "http://facebook.com/{$nhr['facebook_id']}","last_updated" => null);
 		}
 
 
-
-	$slc_data['elected_office'][] = $slc_rep_data;
+	$elected = 	array($this->elected_official_model('legislative', $nhr['title'], null, null, null, $nhr['full_name'], $nhr['website'], null, null, null, null, $nhr['phone'], null, null, null, null, null, null, null, null, $social_media));
 	
 
-	$new_data['jurisdictions'][] = $slc_data;
+	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'House of Representatives', 'national', 'United States', $district, $nhr['district'], null, null, null, null, null, null, null, null, null, null, null, null, null, $elected, null);
 
 }
 
@@ -1234,120 +1010,31 @@ $slc_rep_data = null;
 
 
 
+// ############################################################################################################
 
-
-// ##########################################################################################################
-
-
-	
-	
-	
-	
-	
-	
-if (!empty($data['state_data'])) {
-
-
-	
-	$state_data['type'] 			= 'government';
-	$state_data['type_name'] 		= 'State';	
-	$state_data['level'] 			= 'regional';	
-	$state_data['level_name'] 		= 'State';	
-	$state_data['name'] 			= $data['state_geocoded'];		
-	$state_data['id'] 				= $data['state'];	
-	$state_data['url'] 				= $data['state_data']['official_name_url'];	
-	$state_data['url_contact'] 		= $data['state_data']['information_url'];	
-	$state_data['email'] 			= $data['state_data']['email'];	
-	$state_data['phone'] 			= $data['state_data']['phone_primary'];	
-	$state_data['address_name']		= null;
-	$state_data['address_1'] 		= null;
-	$state_data['address_2'] 		= null;
-	$state_data['address_city'] 	= null;
-	$state_data['address_state'] 	= null;
-	$state_data['address_zip'] 		= null; 
-	$state_data['last_updated'] 	= null;
-	
-	// state metadata
-	$state_metadata = array(array("key" => "state_id", "value" => $data['state_id']));										
-	
-	$state_data['metadata']			= $state_metadata;	
-	
-	// social media 
-	$state_data['social_media']		= null;		
-	
-	$state_data['service_discovery'] = null;			
-						
-	// geojson					
-	//if ($data['geojson']) $municipal_data['geojson'] = $data['geojson'];
-
-
-
-	// ####################################
-
-	// elected office
-	
-
-	$governor_data['type'] 			= 'executive';
-	$governor_data['title'] 			= 'Governor';	
-	$governor_data['description'] 		= null;	
-	$governor_data['name_given'] 		= null;	
-	$governor_data['name_family'] 		= null;		
-	$governor_data['name_full'] 		= $data['state_data']['governor'];
-	$governor_data['url'] 				= $data['state_data']['governor_url'];
-	$governor_data['url_photo'] 		= null;
-	$governor_data['url_schedule'] 	= null;	
-	$governor_data['url_contact'] 		= null;	
-	$governor_data['email'] 			= null;
-	$governor_data['phone'] 			= null;
-	$governor_data['address_name']		= null;
-	$governor_data['address_1'] 		= null;
-	$governor_data['address_2'] 		= null;
-	$governor_data['address_city'] 		= null;
-	$governor_data['address_state'] 	= null;
-	$governor_data['address_zip'] 		= null;	
-	$governor_data['current_term_enddate']	= null;
-	$governor_data['last_updated'] 	= null;				
-	$governor_data['social_media'] = null;
-
-	$state_data['elected_office'][] = $governor_data;
+// US Senators
 
 
 if (!empty($data['national_chambers']['senate'])) {
 
+	// Make sure these are empty
+	$elected = null;
+	$social_media = null;
 
-	$slc_rep = null;
+
+	// Elected Office
 
 	foreach($data['national_chambers']['senate']['reps'] as $slc_rep) {
-
-		$slc_rep_data['type'] 			= 'legislative';
-		$slc_rep_data['title'] 			= $slc_rep['title'];	
-		$slc_rep_data['description'] 		= $slc_rep['district'];	
-		$slc_rep_data['name_given'] 		= null;	
-		$slc_rep_data['name_family'] 		= null;		
-		$slc_rep_data['name_full'] 		= $slc_rep['full_name'];
-		$slc_rep_data['url'] 				= $slc_rep['website'];
-		$slc_rep_data['url_photo'] 		= null;
-		$slc_rep_data['url_schedule'] 	= null;	
-		$slc_rep_data['url_contact'] 		= null;	
-		$slc_rep_data['email'] 			= $slc_rep['email'];
-		$slc_rep_data['phone'] 			= $slc_rep['phone'];
-		$slc_rep_data['address_name']		= null;
-		$slc_rep_data['address_1'] 		= $slc_rep['congress_office'];
-		$slc_rep_data['address_2'] 		= null;
-		$slc_rep_data['address_city'] 		= null;
-		$slc_rep_data['address_state'] 	= null;
-		$slc_rep_data['address_zip'] 		= null;	
-		$slc_rep_data['current_term_enddate']	= null;
-		$slc_rep_data['last_updated'] 	= null;				
+		
 
 		if(!empty($slc_rep['twitter_id']) || !empty($slc_rep['facebook_id'])) {
-			$slc_rep_data['social_media'] = array();			
+			$social_media = array();			
 		} else {
-			$slc_rep_data['social_media'] = null;
+			$social_media = null;
 		}
 
 		if(!empty($slc_rep['twitter_id'])) {
-			$slc_rep_data['social_media'][] = array("type" => "twitter",
+			$social_media[] = array("type" => "twitter",
 							  							"description" => "Twitter",
 							  							"username" => $slc_rep['twitter_id'],
 						 	  							"url" => "http://twitter.com/{$slc_rep['twitter_id']}",
@@ -1356,30 +1043,25 @@ if (!empty($data['national_chambers']['senate'])) {
 		
 
 		if(!empty($slc_rep['facebook_id'])) {
-			$slc_rep_data['social_media'][] = array("type" => "facebook",
+			$social_media[] = array("type" => "facebook",
 			 	  									"description" => "Facebook",
 			 	  									"username" => $slc_rep['facebook_id'],
 			 	  									"url" => "http://facebook.com/{$slc_rep['facebook_id']}",
 			 	  									 "last_updated" => null);
 		}		
-
-		$state_data['elected_office'][] = $slc_rep_data;
 		
-		$slc_rep = null;
+		
+		$elected[] = $this->elected_official_model('legislative', $slc_rep['title'], $slc_rep['district'], null, null, $slc_rep['full_name'], $slc_rep['website'], null, null, null, $slc_rep['email'], $slc_rep['phone'], null, $slc_rep['congress_office'], null, null, null, null, null, null, null);					
+
+}
 	
-	}
+	
+// Jurisdiction 
+	
+$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Senate', 'national', 'United States', $data['state_geocoded'], $data['state'], null, null, null, null, null, null, null, null, null, null, null, null, null, $elected, null);	
+	
 
 }
-
-
-
-
-	$new_data['jurisdictions'][] = $state_data;
-
-}
-
-
-
 
 
 	//$new_data['raw_data'] = $data;					
@@ -1388,16 +1070,72 @@ if (!empty($data['national_chambers']['senate'])) {
 }
 	
 	
-	
-	
-	
-	
 
 	
+// TODO: Consider doing a dynamic data model instantiation by just naming the object/array key names based on the name of the variable through a foreach loop. 		
+	
+function jurisdiction_model($type, $type_name, $level, $level_name, $name, $id, $url, $url_contact, $email, $phone, $address_name, $address_1, $address_2, $address_city, $address_state, $address_zip, $last_updated, $metadata, $social_media, $elected_office, $service_discovery) {
 	
 	
-	
+$data['type'] 		  			= $type;		  	
+$data['type_name'] 	  			= $type_name; 	    		  
+$data['level'] 		  			= $level; 		    		  	
+$data['level_name'] 			= $level_name;     		  	  	
+$data['name'] 		  			= $name; 		    		  	
+$data['id'] 					= $id; 		    		  	  	
+$data['url'] 		  			= $url; 		    		  	
+$data['url_contact']   			= $url_contact;    		  	
+$data['email'] 		  			= $email; 		    		  	
+$data['phone'] 		  			= $phone; 		    		  	
+$data['address_name']   		= $address_name;   		  	
+$data['address_1'] 	  			= $address_1; 	    		  	
+$data['address_2'] 	  			= $address_2; 	    		  	
+$data['address_city']  			= $address_city;  		  	
+$data['address_state'] 			= $address_state;  		  	
+$data['address_zip']    		= $address_zip;    		  	
+$data['last_updated']   		= $last_updated;   		  	
+$data['metadata']				= $metadata;		
+$data['social_media']           = $social_media;		
+$data['elected_office']         = $elected_office;		
+$data['service_discovery']      = $service_discovery;
 
+return $data;
 
 }
+
+
+function elected_official_model($type, $title, $description, $name_given, $name_family, $name_full, $url, $url_photo, $url_schedule, $url_contact, $email, $phone, $address_name, $address_1, $address_2, $address_city, $address_state, $address_zip, $current_term_enddate, $last_updated, $social_media) {
+	
+$data['type'] 					=  $type; 				  
+$data['title'] 					=  $title; 			   		
+$data['description'] 			=  $description; 		   		
+$data['name_given'] 			=  $name_given;		   		
+$data['name_family'] 			=  $name_family; 		   		
+$data['name_full'] 				=  $name_full; 		   		
+$data['url'] 					=  $url; 				   		
+$data['url_photo'] 				=  $url_photo; 		   		
+$data['url_schedule'] 			=  $url_schedule; 		   		
+$data['url_contact'] 			=  $url_contact; 		   		
+$data['email'] 					=  $email; 			   		
+$data['phone'] 					=  $phone; 			   		
+$data['address_name']			=  $address_name;		   		
+$data['address_1'] 				=  $address_1; 		   		
+$data['address_2'] 				=  $address_2; 		   		
+$data['address_city'] 			=  $address_city; 		   		
+$data['address_state'] 			=  $address_state; 	   		
+$data['address_zip'] 			=  $address_zip; 		   		
+$data['current_term_enddate']	=  $current_term_enddate;		
+$data['last_updated'] 			=  $last_updated; 		   		
+$data['social_media'] 			=  $social_media; 		   		
+
+return $data;
+
+}
+
+}
+
+# $this->elected_official_model($type, $title, $description, $name_given, $name_family, $name_full, $url, $url_photo, $url_schedule, $url_contact, $email, $phone, $address_name, $address_1, $address_2, $address_city, $address_state, $address_zip, $current_term_enddate, $last_updated, $social_media);
+# $this->jurisdiction_model($type, $type_name, $level, $level_name, $name, $id, $url, $url_contact, $email, $phone, $address_name, $address_1, $address_2, $address_city, $address_state, $address_zip, $last_updated, $metadata, $social_media, $elected_office, $service_discovery);
+
+
 ?>
