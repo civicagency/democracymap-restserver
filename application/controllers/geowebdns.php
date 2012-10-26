@@ -340,6 +340,18 @@ class Geowebdns extends REST_Controller {
 			}			
 			
 			
+			// Hyperlocal data - this should be totally decoupled, but including it here as a proof of concept
+			if (($data['state_id'] == '11') && ($data['place_id'] == '50000')) {
+			
+				$data['city_ward'] = $this->get_dc_ward($data['latitude'], $data['longitude']); 
+			
+				if(!empty($data['city_ward']['LABEL'])) {
+					$data['council_reps'] = $this->get_dc_councilmembers($data['city_ward']['LABEL']);
+				}
+			
+			}
+					
+
 			// State data
 			if (!empty($data['state_geocoded'])) {
 				$state = $this->get_state($data['state_geocoded']);
@@ -531,6 +543,63 @@ class Geowebdns extends REST_Controller {
 		return $mayors;
 
 	}
+	
+	
+	
+// DC Specific 	
+
+function get_dc_ward($lat, $long)	{
+	
+
+	$url ="http://maps.dcgis.dc.gov/DCGIS/rest/services/DCGIS_DATA/Administrative_Other_Boundaries_WebMercator/MapServer/26/query?text=&geometry=$long%2C+$lat&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&where=&returnGeometry=false&outSR=4326&outFields=NAME%2C+WARD_ID%2C+LABEL&f=json";		
+
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+	$data=curl_exec($ch);
+	curl_close($ch);
+
+	$data = json_decode($data, true);
+
+	$data = $data['features'][0]['attributes'];
+
+	return $data;
+	
+}
+
+
+
+function get_dc_councilmembers($ward)	{
+	
+	$ward = urlencode($ward);
+	
+	$url ="https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=washington_dc_wards_and_councilmembers&query=select%20*%20from%20%60swdata%60%20where%20ward_name%20%3D%20%22$ward%22%3B";		
+
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+	$data=curl_exec($ch);
+	curl_close($ch);
+
+	$response['my_rep'] = json_decode($data, true);
+	
+	
+	$url ="https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=washington_dc_wards_and_councilmembers&query=select%20*%20from%20%60swdata%60%20where%20member_type%20!%3D%20%22Ward%20Members%22%3B";		
+
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+	$data=curl_exec($ch);
+	curl_close($ch);	
+	
+	$response['at_large'] = json_decode($data, true);
+
+	return $response;	
+	
+}
 
 
 
@@ -849,11 +918,35 @@ function re_schema($data) {
 
 			
 
+
+ // ############################################################################################################
+ // City Council  
+ 
+ // Elected
+ 
+ if (!empty($data['council_reps']['my_rep'])) {	
+ 
+	$myrep = $data['council_reps']['my_rep'][0];
+ 
+ 	$elected = array(
+ 			$this->elected_official_model('legislative', 'Councilmember', null, null, null, $myrep['name'], $myrep['website'], $myrep['url_photo'], null, null, $myrep['email'], $myrep['phone'], null, $myrep['address'], null, null, null, null, $myrep['term_end'], null, null)		
+ 	);
+
+ 
+ // Jurisdiction
+
+ 	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'City Council', 'municipal', 'City', $myrep['ward_name'], $data['city_ward']['WARD_ID'], $myrep['ward_url'], null, null, null, null, null, null, null, null, null, null, null, null, $elected, null);
+ }
+ 
+ 
+
 // ############################################################################################################
 // Municipal 
 
 // Elected
 	
+$elected = null;
+
 if (!empty($data['mayor_data'])) {	
 	if (!empty($data['mayor_twitter'])) {
 
@@ -885,17 +978,32 @@ if (!empty($data['mayor_data'])) {
 
 
 
+
+ if (!empty($data['council_reps']['at_large'])) {
+	
+	foreach ($data['council_reps']['at_large'] as $at_large) {
+
+	$elected[] = $this->elected_official_model('legislative', 'Councilmember', $at_large['member_type'], null, null, $at_large['name'], $at_large['website'], $at_large['url_photo'], null, null, $at_large['email'], $at_large['phone'], null, $at_large['address'], null, null, null, null, $at_large['term_end'], null, null);
+	
+	}
+	
+}
+
+
+
+
+
 // Jurisdiction
+if(!empty($data['zip'])) {
+	
+	$municipal_zip 		= ($data['zip4']) ? $data['zip'] . '-' . $data['zip4'] : $data['zip'];	
 
-
-$municipal_zip 		= ($data['zip4']) ? $data['zip'] . '-' . $data['zip4'] : $data['zip'];	
-
-$municipal_metadata = array(array("key" => "place_id", "value" => $data['place_id']), 
-								array("key" => "gnis_fid", "value" => $data['gnis_fid']));											
+	$municipal_metadata = array(array("key" => "place_id", "value" => $data['place_id']), 
+									array("key" => "gnis_fid", "value" => $data['gnis_fid']));											
 	
 
-$new_data['jurisdictions'][] = $this->jurisdiction_model('government', 'City', 'municipal', 'City', $data['city'], null, $data['place_url_updated'], null, null, null, $data['title'], $data['address1'], $data['address2'], $data['city'], $data['state'], $municipal_zip, null, $municipal_metadata, null, $elected, $data['service_discovery']);
-
+	$new_data['jurisdictions'][] = $this->jurisdiction_model('government', 'City', 'municipal', 'City', $data['city'], null, $data['place_url_updated'], null, null, null, $data['title'], $data['address1'], $data['address2'], $data['city'], $data['state'], $municipal_zip, null, $municipal_metadata, null, $elected, $data['service_discovery']);
+}
 	
 	
 // ##########################################################################################################
@@ -935,7 +1043,6 @@ if (!empty($data['state_chambers']['lower'])) {
 
 	$district = 'District ' . $rep_id;		
 	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'House of Representatives', 'regional', 'State', $district, $rep_id, null, null, null, null, null, null, null, null, null, null, null, null, null, $reps, null);
-	
 
 }
 	
@@ -943,7 +1050,8 @@ if (!empty($data['state_chambers']['lower'])) {
 // ##########################################################################################################
 // State Chambers Upper							
 		
-if (!empty($data['state_chambers']['upper'])) {
+// filtering for DC here
+if (!empty($data['state_chambers']['upper']) && ($data['national_chambers']['house']['reps'][0]['district'] !== "0")) {
 
 	$rep_id = key($data['state_chambers']['upper']);
 
@@ -1020,6 +1128,7 @@ $nhr = $data['national_chambers']['house']['reps'][0];
 
 	$elected = 	array($this->elected_official_model('legislative', $nhr['title'], null, null, null, $nhr['full_name'], $nhr['website'], null, null, null, null, $nhr['phone'], null, null, null, null, null, null, null, null, $social_media));
 	
+	$district = "District " . $nhr['district'];
 
 	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'House of Representatives', 'national', 'United States', $district, $nhr['district'], null, null, null, null, null, null, null, null, null, null, null, null, null, $elected, null);
 
@@ -1033,7 +1142,7 @@ $nhr = $data['national_chambers']['house']['reps'][0];
 
 // US Senators
 
-
+// filtering out DC here
 if (!empty($data['national_chambers']['senate'])) {
 
 	// Make sure these are empty
