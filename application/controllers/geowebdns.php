@@ -118,28 +118,32 @@ class Geowebdns extends REST_Controller {
 			if ($latlong) {
 				
 							
-				$census 					= $this->layer_data('census:municipal', 'placefp,state,uid', $latlong);
+				$data['census_city']			= $this->get_city($data['latitude'], $data['longitude']);
 				
-				if ($fullstack == 'true') {
-					
-					$council 					= $this->layer_data('census:city_council', 'coundist,gid', $latlong);
-					$community_d 				= $this->layer_data('census:community_district', 'borocd,gid', $latlong);
-
-					$data['council_district'] 	= (!empty($council['features'])) ? $council['features'][0]['properties']['coundist'] : '';
-					$data['council_district_fid'] 	= (!empty($council['features'])) ? $council['features'][0]['properties']['gid'] : '';			
-		
-			
-					$data['community_district'] = (!empty($community_d['features'])) ? $community_d['features'][0]['properties']['borocd'] : '';
-					$data['community_district_fid'] = (!empty($community_d['features'])) ? "community_district." . $community_d['features'][0]['properties']['gid'] : '';
-
-				}
+				// currently this is only getting local nyc data
+				// 
+				// if ($fullstack == 'true') {
+				// 	
+				// 	$council 					= $this->layer_data('census:city_council', 'coundist,gid', $latlong);
+				// 	$community_d 				= $this->layer_data('census:community_district', 'borocd,gid', $latlong);
+                // 
+				// 	$data['council_district'] 	= (!empty($council['features'])) ? $council['features'][0]['properties']['coundist'] : '';
+				// 	$data['council_district_fid'] 	= (!empty($council['features'])) ? $council['features'][0]['properties']['gid'] : '';			
+		        // 
+			    // 
+				// 	$data['community_district'] = (!empty($community_d['features'])) ? $community_d['features'][0]['properties']['borocd'] : '';
+				// 	$data['community_district_fid'] = (!empty($community_d['features'])) ? "community_district." . $community_d['features'][0]['properties']['gid'] : '';
+                // 
+				// }
 				
 
-				if (!empty($census['features'])) {
+				if (!empty($data['census_city'])) {
 					
-					$data['fid'] 				= 'municipal.' . $census['features'][0]['properties']['uid'];
-					$data['state_id'] 	   		= $census['features'][0]['properties']['state'];    
-					$data['place_id'] 	   		= $census['features'][0]['properties']['placefp'];   
+					
+						$data['state_id'] 	   		= 	$data['census_city']['STATE'];				
+ 						$data['place_id'] 	   		= 	$data['census_city']['PLACE'];									
+						
+
 
 
 					$sql = "SELECT municipalities.GOVERNMENT_NAME, 
@@ -323,7 +327,7 @@ class Geowebdns extends REST_Controller {
 			}
 			
 			// Service Discovery
-			if (strlen($data['service_discovery']) > 0) {
+			if (!empty($data['service_discovery'])) {
 				$data['service_discovery'] = $this->get_servicediscovery($data['service_discovery']);
 			}
 			
@@ -359,6 +363,13 @@ class Geowebdns extends REST_Controller {
 				if(!empty($state)) {
 					$data['state_data'] = $state[0];				
 				}
+				
+				$governor = $this->get_governor($data['state_geocoded']);
+				
+				if(!empty($governor)) {
+					$data['governor_data'] = $governor[0];				
+				}				
+				
 			}			
 			
 
@@ -433,7 +444,7 @@ class Geowebdns extends REST_Controller {
 	function layer_data($layer, $properties, $latlong) {
 
 
-		$gid_url = $this->config->item('geoserver_root') . 
+		$url = $this->config->item('geoserver_root') . 
 			"/wfs?request=GetFeature&service=WFS&typename=" . 
 			rawurlencode($layer) . 
 			"&propertyname=" . 
@@ -442,35 +453,34 @@ class Geowebdns extends REST_Controller {
 			rawurlencode("INTERSECT(the_geom, POINT (" . $latlong . "))") . 
 			"&outputformat=JSON";
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $gid_url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);		
 		
-		//curl_setopt($ch, CURLOPT_HEADER, TRUE);		
-		
-		$gid_data=curl_exec($ch);			
-		$feature_data = json_decode($gid_data, true);	
-		curl_close($ch);
+		$feature_data = $this->curl_to_json($url);
 
 		return $feature_data;
 
 	}
 	
 	
+	
+	function get_city($lat, $long) {	
+		
+		$url = "http://tigerweb.geo.census.gov/ArcGIS/rest/services/Census2010/tigerWMS/MapServer/58/query?text=&geometry=$long%2C$lat&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&objectIds=&where=&time=&returnCountOnly=false&returnIdsOnly=false&returnGeometry=false&maxAllowableOffset=&outSR=&outFields=*&f=json";
+
+			$feature_data = $this->curl_to_json($url);
+
+			return $feature_data['features'][0]['attributes'];
+
+	}	
+	
+	
+	
+	
 	function get_geojson($feature_id) {	
 		
-		$fid_url = $this->config->item('geoserver_root') . '/wfs?request=getFeature&outputFormat=json&layers=census:municipal&featureid=' . $feature_id; 
+		$url = $this->config->item('geoserver_root') . '/wfs?request=getFeature&outputFormat=json&layers=census:municipal&featureid=' . $feature_id; 
 		
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $fid_url);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-			//curl_setopt($ch, CURLOPT_HEADER, TRUE);		
-
-			$fid_data=curl_exec($ch);			
-			$feature_data = json_decode($fid_data, true);	
-			curl_close($ch);
+		
+			$feature_data = $this->curl_to_json($url);
 
 			return $feature_data;
 
@@ -484,15 +494,7 @@ class Geowebdns extends REST_Controller {
 		
 			$url = "http://api.sba.gov/geodata/all_links_for_city_of/$city/$state.json";
 	
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $url);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-			//curl_setopt($ch, CURLOPT_HEADER, TRUE);		
-
-			$sd_data=curl_exec($ch);			
-			$data = json_decode($sd_data, true);	
-			curl_close($ch);
+			$data = $this->curl_to_json($url);	
 
 			return $data;
 
@@ -502,16 +504,7 @@ class Geowebdns extends REST_Controller {
 	
 	function get_servicediscovery($url) {	
 		
-	
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $url);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-			//curl_setopt($ch, CURLOPT_HEADER, TRUE);		
-
-			$sd_data=curl_exec($ch);			
-			$data = json_decode($sd_data, true);	
-			curl_close($ch);
+			$data = $this->curl_to_json($url);
 
 			return $data;
 
@@ -531,14 +524,7 @@ class Geowebdns extends REST_Controller {
 		
 		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=us_mayors&query=$query";		
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-		$mayors=curl_exec($ch);
-		curl_close($ch);
-
-		$mayors = json_decode($mayors, true);
+		$mayors = $this->curl_to_json($url);
 
 		return $mayors;
 
@@ -553,14 +539,7 @@ function get_dc_ward($lat, $long)	{
 
 	$url ="http://maps.dcgis.dc.gov/DCGIS/rest/services/DCGIS_DATA/Administrative_Other_Boundaries_WebMercator/MapServer/26/query?text=&geometry=$long%2C+$lat&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&where=&returnGeometry=false&outSR=4326&outFields=NAME%2C+WARD_ID%2C+LABEL&f=json";		
 
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $url);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-	$data=curl_exec($ch);
-	curl_close($ch);
-
-	$data = json_decode($data, true);
+	$data = $this->curl_to_json($url);
 
 	$data = $data['features'][0]['attributes'];
 
@@ -569,6 +548,7 @@ function get_dc_ward($lat, $long)	{
 }
 
 
+// DC Specific 	
 
 function get_dc_councilmembers($ward)	{
 	
@@ -576,26 +556,13 @@ function get_dc_councilmembers($ward)	{
 	
 	$url ="https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=washington_dc_wards_and_councilmembers&query=select%20*%20from%20%60swdata%60%20where%20ward_name%20%3D%20%22$ward%22%3B";		
 
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $url);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-	$data=curl_exec($ch);
-	curl_close($ch);
-
-	$response['my_rep'] = json_decode($data, true);
+	$response['my_rep'] = $this->curl_to_json($url);
 	
 	
 	$url ="https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=washington_dc_wards_and_councilmembers&query=select%20*%20from%20%60swdata%60%20where%20member_type%20!%3D%20%22Ward%20Members%22%3B";		
 
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $url);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-	$data=curl_exec($ch);
-	curl_close($ch);	
-	
-	$response['at_large'] = json_decode($data, true);
+
+	$response['at_large'] = $this->curl_to_json($url);
 
 	return $response;	
 	
@@ -614,18 +581,28 @@ function get_dc_councilmembers($ward)	{
 		
 		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=50_states_data&query=$query";		
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-		$state=curl_exec($ch);
-		curl_close($ch);
-
-		$state = json_decode($state, true);
+		$state = $this->curl_to_json($url);
 
 		return $state;
 
 	}
+	
+	
+	function get_governor($state) {
+		
+		$state = ucwords($state);		
+		
+		$query = "select * from `swdata` where state = '$state' limit 1";		
+		$query = urlencode($query);
+		
+				
+		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=us_governors&query=$query";		
+
+		$state = $this->curl_to_json($url);
+
+		return $state;
+
+	}	
 
 
 
@@ -654,15 +631,7 @@ function get_dc_councilmembers($ward)	{
 		
 		$url = "http://api.nytimes.com/svc/politics/v2/districts.json?&lat=" . $lat . "&lng=" . $long . "&api-key=" . $this->config->item('nytimes_api_key');
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-		$districts=curl_exec($ch);
-		curl_close($ch);
-
-
-		$districts = json_decode($districts, true);
+		$districts = $this->curl_to_json($url);
 
 		return $districts;
 
@@ -673,15 +642,7 @@ function get_dc_councilmembers($ward)	{
 		
 		$url = "http://openstates.org/api/v1/legislators/geo/?long=" . $long . "&lat=" . $lat . "&fields=state,chamber,district,full_name,url,photo_url&apikey=" . $this->config->item('sunlight_api_key');
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-		$state_legislators=curl_exec($ch);
-		curl_close($ch);
-
-
-		$state_legislators = json_decode($state_legislators, true);
+		$state_legislators = $this->curl_to_json($url);
 
 		return $state_legislators;				
 		
@@ -693,14 +654,7 @@ function get_dc_councilmembers($ward)	{
 		
 		$url = "http://openstates.org/api/v1/districts/" . $state . "/" . $chamber . "/?fields=name,boundary_id&apikey=" . $this->config->item('sunlight_api_key');
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-		$state_boundaries=curl_exec($ch);
-		curl_close($ch);
-
-		$state_boundaries = json_decode($state_boundaries, true);
+		$state_boundaries = $this->curl_to_json($url);
 		$state_boundaries = $this->process_boundaries($state_boundaries);
 
 		return $state_boundaries;
@@ -714,14 +668,8 @@ function get_dc_councilmembers($ward)	{
 		
 		$url = "http://openstates.org/api/v1/districts/boundary/" . $boundary_id . "/?apikey=" . $this->config->item('sunlight_api_key');
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-		$shape_data=curl_exec($ch);
-		curl_close($ch);
 
-		$geojson = json_decode($shape_data, true);	
+		$geojson = $this->curl_to_json($url);	
 
 		$boundary_shape['coordinates'] = $geojson['shape'];
 		$boundary_shape = json_encode($boundary_shape);
@@ -844,15 +792,8 @@ function national_legislators($lat, $long) {
 	
 	$url = "http://services.sunlightlabs.com/api/legislators.allForLatLong.json?latitude=" . $lat . "&longitude=" . $long . "&apikey=" . $this->config->item('sunlight_api_key');
 
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $url);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-	$legislators=curl_exec($ch);
-	curl_close($ch);
 
-
-	$legislators = json_decode($legislators, true);
+	$legislators = $this->curl_to_json($url);
 	$legislators = $legislators['response']['legislators'];
 
 	return $legislators;				
@@ -906,6 +847,21 @@ function process_nat_legislators($representatives) {
 		return $chambers;
 	
 }	
+
+
+function curl_to_json($url) {
+	
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+	$data=curl_exec($ch);
+	curl_close($ch);
+
+
+	return json_decode($data, true);	
+	
+}
 
 
 function re_schema($data) {
@@ -1087,8 +1043,20 @@ if (!empty($data['state_data'])) {
 
 	$state_metadata = array(array("key" => "state_id", "value" => $data['state_id']));										
 	
-
+// Governor
 	$elected = array($this->elected_official_model('executive', 'Governor', null, null, null, $data['state_data']['governor'], $data['state_data']['governor_url'], null, null, null, null, null, null, null, null, null, null, null, null, null, null));
+
+if (!empty($data['governor_data'])) {
+	$elected[0]['url_photo'] = $data['governor_data']['url_photo'];
+	$elected[0]['phone'] = $data['governor_data']['phone'];
+	$elected[0]['address_1'] = $data['governor_data']['address_1'];	
+	$elected[0]['address_2'] = $data['governor_data']['address_2'];	
+	$elected[0]['address_city'] = $data['governor_data']['address_city'];	
+	$elected[0]['address_state'] = $data['governor_data']['address_state'];	
+	$elected[0]['address_zip'] = $data['governor_data']['address_zip'];							
+	$elected[0]['url'] = (empty($elected[0]['url'])) ? $data['governor_data']['url_governor'] : $elected[0]['url'];
+}
+
 
 	$new_data['jurisdictions'][] = $this->jurisdiction_model('government', 'State', 'regional', 'State', $data['state_geocoded'], $data['state'], $data['state_data']['official_name_url'], $data['state_data']['information_url'], $data['state_data']['email'], $data['state_data']['phone_primary'], null, null, null, null, null, null, null, $state_metadata, null, $elected, null);
 	
@@ -1192,7 +1160,7 @@ $new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Senate'
 }
 
 
-	//$new_data['raw_data'] = $data;					
+	$new_data['raw_data'] = $data;					
 	
 	return $new_data;
 }
