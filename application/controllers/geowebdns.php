@@ -74,29 +74,6 @@ class Geowebdns extends REST_Controller {
 			if (!$latlong) $latlong = $data['input'];
 
 
-
-			// nytimes district API 
-			/*
-			if($latlong) {
-				$districts = $this->districts($data['latitude'], $data['longitude']);
-				
-				
-				if(!empty($districts['results'][1])) {
-					
-					$data['state_senate_id'] = $districts['results'][1]['district'];
-					$data['state_senate_kml'] = $districts['results'][1]['kml_url'];
-				
-					$data['state_assembly_id'] = $districts['results'][2]['district'];
-					$data['state_assembly_kml'] = $districts['results'][2]['kml_url'];
-				
-					$data['us_house_id'] = $districts['results'][4]['district'];
-					$data['us_house_kml'] = $districts['results'][4]['kml_url'];				
-				}
-				
-			}
-			*/
-
-
 			if($latlong && $fullstack == 'true') {
 				$state_legislators = $this->state_legislators($data['latitude'], $data['longitude']);
 				$state_chambers = $this->process_state_legislators($state_legislators);
@@ -624,18 +601,7 @@ function get_dc_councilmembers($ward)	{
 		return $location;
 
 	}	
-	
-	
-	
-	function districts($lat, $long) {
 		
-		$url = "http://api.nytimes.com/svc/politics/v2/districts.json?&lat=" . $lat . "&lng=" . $long . "&api-key=" . $this->config->item('nytimes_api_key');
-
-		$districts = $this->curl_to_json($url);
-
-		return $districts;
-
-	}	
 	
 	
 	function state_legislators($lat, $long) {
