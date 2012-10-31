@@ -1019,6 +1019,7 @@ if (!empty($data['state_chambers']['lower'])) {
 
 	$slc_reps = $data['state_chambers']['lower'][$rep_id]['reps'];	
 	foreach($slc_reps as $slc_rep) {		
+		$slc_rep['photo_url'] = (!empty($slc_rep['photo_url'])) ? $slc_rep['photo_url'] : null;
 		$reps[] = $this->elected_official_model('legislative', 'Representative', null, null, null, $slc_rep['full_name'], $slc_rep['url'], $slc_rep['photo_url'], null, null, null, null, null, null, null, null, null, null, null, null, null);		
 	}
 
@@ -1047,7 +1048,7 @@ if (!empty($data['state_chambers']['upper']) && ($data['national_chambers']['hou
 	$reps = null;
 
 	foreach($slc_reps as $slc_rep) {
-	
+		$slc_rep['photo_url'] = (!empty($slc_rep['photo_url'])) ? $slc_rep['photo_url'] : null;	
 		$reps[] = $this->elected_official_model('legislative', 'Senator', null, null, null, $slc_rep['full_name'], $slc_rep['url'], $slc_rep['photo_url'], null, null, null, null, null, null, null, null, null, null, null, null, null);
 
 	}			
