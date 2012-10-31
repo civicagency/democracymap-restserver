@@ -316,7 +316,13 @@ class Geowebdns extends REST_Controller {
 				$mayor = $this->get_mayors($data['city'], $data['state']);
 				
 				if(!empty($mayor)) {
-					$data['mayor_data'] = $mayor[0];				
+					$data['mayor_data'] = $mayor;	
+					
+					// See if we can get social media channels for this mayors
+					$mayor_sm = $this->get_mayor_sm($data['city']);					
+					if(!empty($mayor_sm)) $data['mayor_sm'] = $mayor_sm;
+					
+								
 				}
 			}			
 			
@@ -338,13 +344,19 @@ class Geowebdns extends REST_Controller {
 				$state = $this->get_state($data['state_geocoded']);
 				
 				if(!empty($state)) {
-					$data['state_data'] = $state[0];				
+					$data['state_data'] = $state;				
 				}
 				
 				$governor = $this->get_governor($data['state_geocoded']);
 				
 				if(!empty($governor)) {
-					$data['governor_data'] = $governor[0];				
+					$data['governor_data'] = $governor;				
+				}	
+				
+				$governor_socialmedia = $this->get_governor_sm($data['state_geocoded']);			
+				
+				if(!empty($governor_socialmedia)) {
+					$data['governor_sm'] = $governor_socialmedia;				
 				}				
 				
 			}			
@@ -385,8 +397,7 @@ class Geowebdns extends REST_Controller {
 			
 			$this->response($endpoint, 200);
 			}
-			
-			
+		
 	}
 	
 
@@ -445,7 +456,7 @@ class Geowebdns extends REST_Controller {
 
 			$feature_data = $this->curl_to_json($url);
 
-			return $feature_data['features'][0]['attributes'];
+			if(!empty($feature_data['features'])) return $feature_data['features'][0]['attributes'];			
 
 	}	
 	
@@ -503,9 +514,28 @@ class Geowebdns extends REST_Controller {
 
 		$mayors = $this->curl_to_json($url);
 
-		return $mayors;
+		if(!empty($mayors)) return $mayors[0];
 
 	}
+	
+	
+	
+	
+	function get_mayor_sm($city) {
+		
+		$city = ucwords($city);		
+		
+		$query = "select * from `swdata` where city = '$city' limit 1";		
+		$query = urlencode($query);
+		
+				
+		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=us_mayors_-_social_media_accounts&query=$query";		
+
+		$mayor = $this->curl_to_json($url);
+		
+		if(!empty($mayor)) return $mayor[0];		
+		
+	}	
 	
 	
 	
@@ -560,7 +590,7 @@ function get_dc_councilmembers($ward)	{
 
 		$state = $this->curl_to_json($url);
 
-		return $state;
+		return $state[0];
 
 	}
 	
@@ -577,9 +607,26 @@ function get_dc_councilmembers($ward)	{
 
 		$state = $this->curl_to_json($url);
 
-		return $state;
+		return $state[0];
 
 	}	
+	
+	
+	function get_governor_sm($state) {
+		
+		$state = ucwords($state);		
+		
+		$query = "select * from `swdata` where state = '$state' limit 1";		
+		$query = urlencode($query);
+		
+				
+		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=us_governors_-_social_media_accounts&query=$query";		
+
+		$state = $this->curl_to_json($url);
+
+		return $state[0];		
+		
+	}
 
 
 
@@ -870,18 +917,33 @@ function re_schema($data) {
 $elected = null;
 
 if (!empty($data['mayor_data'])) {	
-	if (!empty($data['mayor_twitter'])) {
 
-			$mayor_socialmedia = array(array("type" => "twitter",
-							  "description" => "twitter",
-							  "username" => $data['mayor_twitter'],
-						 	  "url" => "http://twitter.com/{$data['mayor_twitter']}",
-							   "last_updated" => '2007-06-22T20:59:09Z'));	
+	if (!empty($data['mayor_sm'])) {
 
-	} else {
-			$mayor_socialmedia = null;
+		$social_media = null;
+
+		if(!empty($data['mayor_sm']['twitter'])) {
+		
+			$twitter_username = substr($data['mayor_sm']['twitter'], strrpos($data['mayor_sm']['twitter'], '/')+1);
+			$social_media[] = array("type" => "twitter","description" => "Twitter","username" => $twitter_username,"url" => $data['mayor_sm']['twitter'],"last_updated" => null);
+		}
+
+		if(!empty($data['mayor_sm']['facebook'])) {
+			$social_media[] = array("type" => "facebook","description" => "Facebook","username" => null,"url" => $data['mayor_sm']['facebook'],"last_updated" => null);
+		}
+
+		if(!empty($data['mayor_sm']['youtube'])) {
+			$social_media[] = array("type" => "youtube","description" => "Youtube","username" => null,"url" => $data['mayor_sm']['youtube'],"last_updated" => null);
+		}	
+
+		if(!empty($data['mayor_sm']['flickr'])) {
+			$social_media[] = array("type" => "flickr","description" => "Flickr","username" => null,"url" => $data['mayor_sm']['flickr'],"last_updated" => null);
+		}	
 	}
-	
+	else {
+		$social_media = null;
+	}
+
 	$mayor_name_full 			= isset($data['mayor_data']['name']) ? $data['mayor_data']['name'] : null;	
 	$mayor_url 					= isset($data['mayor_data']['url']) ? $data['mayor_data']['url'] : null;
 	$mayor_url_photo 			= isset($data['mayor_data']['url_photo']) ? $data['mayor_data']['url_photo'] : null;
@@ -891,7 +953,7 @@ if (!empty($data['mayor_data'])) {
 	
 
 	$elected = array(
-			$this->elected_official_model('executive', 'Mayor', null, null, null, $mayor_name_full, $mayor_url, $mayor_url_photo, null, null, $mayor_email, $mayor_phone, $data['title'], null, null, null, null, null, $mayor_current_term_enddate, null, $mayor_socialmedia)		
+			$this->elected_official_model('executive', 'Mayor', null, null, null, $mayor_name_full, $mayor_url, $mayor_url_photo, null, null, $mayor_email, $mayor_phone, null, null, null, null, null, null, $mayor_current_term_enddate, null, $social_media)		
 	);
 
 } else {
@@ -1021,6 +1083,31 @@ if (!empty($data['governor_data'])) {
 	$elected[0]['address_state'] = $data['governor_data']['address_state'];	
 	$elected[0]['address_zip'] = $data['governor_data']['address_zip'];							
 	$elected[0]['url'] = (empty($elected[0]['url'])) ? $data['governor_data']['url_governor'] : $elected[0]['url'];
+}
+
+if (!empty($data['governor_sm'])) {
+
+	$social_media = null;
+
+	if(!empty($data['governor_sm']['twitter'])) {
+		$twitter_username = substr($data['governor_sm']['twitter'], strrpos($data['governor_sm']['twitter'], '/')+1);
+		$social_media[] = array("type" => "twitter","description" => "Twitter","username" => $twitter_username,"url" => $data['governor_sm']['twitter'],"last_updated" => null);
+	}
+	
+	if(!empty($data['governor_sm']['facebook'])) {
+		$social_media[] = array("type" => "facebook","description" => "Facebook","username" => null,"url" => $data['governor_sm']['facebook'],"last_updated" => null);
+	}
+	
+	if(!empty($data['governor_sm']['youtube'])) {
+		$social_media[] = array("type" => "youtube","description" => "Youtube","username" => null,"url" => $data['governor_sm']['youtube'],"last_updated" => null);
+	}	
+	
+	if(!empty($data['governor_sm']['flickr'])) {
+		$social_media[] = array("type" => "flickr","description" => "Flickr","username" => null,"url" => $data['governor_sm']['flickr'],"last_updated" => null);
+	}	
+
+
+	$elected[0]['social_media'] = $social_media;
 }
 
 
