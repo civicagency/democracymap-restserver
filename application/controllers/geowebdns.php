@@ -75,18 +75,24 @@ class Geowebdns extends REST_Controller {
 
 
 			if($latlong && $fullstack == 'true') {
+				
+				
 				$state_legislators = $this->state_legislators($data['latitude'], $data['longitude']);
 				$state_chambers = $this->process_state_legislators($state_legislators);
+				
 
 				$data['state_chambers'] = $state_chambers;
 
 				
-				$national_legislators = $this->national_legislators($data['latitude'], $data['longitude']);		
-				$national_chambers = $this->process_nat_legislators($national_legislators); 		
+				$national_legislators = $this->national_legislators($data['latitude'], $data['longitude']);	
 				
-				ksort($national_chambers);
+				if (!empty($national_legislators)) {	
+					$national_chambers = $this->process_nat_legislators($national_legislators); 		
 				
-				$data['national_chambers'] = $national_chambers;				
+					ksort($national_chambers);
+				
+					$data['national_chambers'] = $national_chambers;				
+				}
 				
 			}
 
@@ -1037,7 +1043,7 @@ if (!empty($data['state_chambers']['lower'])) {
 // State Chambers Upper							
 		
 // filtering for DC here
-if (!empty($data['state_chambers']['upper']) && ($data['national_chambers']['house']['reps'][0]['district'] !== "0")) {
+if (!empty($data['state_chambers']['upper']) && (!empty($data['national_chambers']['house']['reps'][0]['district'])) && ($data['national_chambers']['house']['reps'][0]['district'] !== "0")) {
 
 	$rep_id = key($data['state_chambers']['upper']);
 
