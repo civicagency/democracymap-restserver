@@ -589,8 +589,8 @@ function get_dc_councilmembers($ward)	{
 		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=50_states_data&query=$query";		
 
 		$state = $this->curl_to_json($url);
-
-		return $state[0];
+		
+		if(!empty($state[0])) return $state[0];		
 
 	}
 	
@@ -607,7 +607,8 @@ function get_dc_councilmembers($ward)	{
 
 		$state = $this->curl_to_json($url);
 
-		return $state[0];
+		if(!empty($state[0])) return $state[0];
+
 
 	}	
 	
@@ -623,9 +624,9 @@ function get_dc_councilmembers($ward)	{
 		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=us_governors_-_social_media_accounts&query=$query";		
 
 		$state = $this->curl_to_json($url);
-
-		return $state[0];		
 		
+		if(!empty($state[0])) 	return $state[0];		
+
 	}
 
 
