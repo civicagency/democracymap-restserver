@@ -1226,7 +1226,7 @@ $new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Senate'
 }
 
 
-	$new_data['raw_data'] = $data;					
+	//$new_data['raw_data'] = $data;					
 	
 	return $new_data;
 }
