@@ -39,7 +39,7 @@ class Demo extends CI_Controller {
 
 		$location = urlencode($location);
 
-		$url = "http://api.democracymap.dev/geowebdns/endpoints?location=" . $location . "&fullstack=true";
+		$url = $this->config->item('democracymap_root') . "/geowebdns/endpoints?location=" . $location . "&fullstack=true";
 		
 		$jurisdictions = $this->curl_to_json($url);
 
