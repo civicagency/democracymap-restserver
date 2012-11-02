@@ -837,8 +837,11 @@ function process_nat_legislators($representatives) {
 				$rep = array(
 							'district' 		=> $repdata['district'], 
 							'full_name' 	=> $full_name, 
+							'name_given' 	=> $repdata['firstname'], 
+							'name_family' 	=> 	$repdata['lastname'], 
 							'bioguide_id' 	=> $repdata['bioguide_id'], 
 							'website' 		=> $repdata['website'], 
+							'url_contact' 		=> $repdata['webform'], 							
 							'title' 	=> $repdata['title'],								
 							'phone' 	=> $repdata['phone'], 
 							'twitter_id' 	=> $repdata['twitter_id'],														
@@ -1189,7 +1192,7 @@ if (!empty($data['state_chambers']['upper']) && (!empty($data['national_chambers
 		if(!empty($slc_rep['twitter_id']) || !empty($slc_rep['facebook_id'])) {
 			$social_media = array();			
 		} else {
-			$social_media = null;
+			//$social_media = null;
 		}
 
 		if(!empty($slc_rep['twitter_id'])) {
@@ -1210,7 +1213,7 @@ if (!empty($data['state_chambers']['upper']) && (!empty($data['national_chambers
 		}		
 		
 		
-		$elected[] = $this->elected_official_model('legislative', $slc_rep['title'], $slc_rep['district'], null, null, $slc_rep['full_name'], $slc_rep['website'], $img_url, null, null, $slc_rep['email'], $slc_rep['phone'], null, $slc_rep['congress_office'], null, null, null, null, null, null, null);					
+		$elected[] = $this->elected_official_model('legislative', $slc_rep['title'], $slc_rep['district'], $slc_rep['name_given'], $slc_rep['name_family'], $slc_rep['full_name'], $slc_rep['website'], $img_url, null, $slc_rep['url_contact'], $slc_rep['email'], $slc_rep['phone'], null, $slc_rep['congress_office'], null, null, null, null, null, null, $social_media);					
 
 }
 	
@@ -1223,7 +1226,7 @@ $new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Senate'
 }
 
 
-	//$new_data['raw_data'] = $data;					
+	$new_data['raw_data'] = $data;					
 	
 	return $new_data;
 }
