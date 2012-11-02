@@ -88,9 +88,9 @@ class Geowebdns extends REST_Controller {
 				
 				if (!empty($national_legislators)) {	
 					$national_chambers = $this->process_nat_legislators($national_legislators); 		
-				
+			  
 					ksort($national_chambers);
-				
+			  
 					$data['national_chambers'] = $national_chambers;				
 				}
 				
@@ -809,15 +809,15 @@ function process_state_legislators($representatives) {
 	
 	
 function national_legislators($lat, $long) {
-	
+
 	$url = "http://services.sunlightlabs.com/api/legislators.allForLatLong.json?latitude=" . $lat . "&longitude=" . $long . "&apikey=" . $this->config->item('sunlight_api_key');
 
 
 	$legislators = $this->curl_to_json($url);
 	$legislators = $legislators['response']['legislators'];
 
-	return $legislators;				
-	
+	return $legislators;	
+
 }
 	
 	
@@ -1171,9 +1171,8 @@ $nhr = $data['national_chambers']['house']['reps'][0];
 
 // US Senators
 
-// filtering out DC here
-if (!empty($data['national_chambers']['senate'])) {
-
+// filtering out DC here (removed this for a moment, but it's  if lower district != 0)
+if (!empty($data['state_chambers']['upper']) && (!empty($data['national_chambers']['house']['reps'][0]['district'])) && ($data['national_chambers']['house']['reps'][0]['district'] !== "0")) {
 	// Make sure these are empty
 	$elected = null;
 	$social_media = null;
@@ -1183,6 +1182,9 @@ if (!empty($data['national_chambers']['senate'])) {
 
 	foreach($data['national_chambers']['senate']['reps'] as $slc_rep) {
 		
+		
+		$img_url = $this->config->item('democracymap_root') . '/img/headshot/us-congress/' . $slc_rep['bioguide_id'] . '.jpg';
+
 
 		if(!empty($slc_rep['twitter_id']) || !empty($slc_rep['facebook_id'])) {
 			$social_media = array();			
@@ -1208,7 +1210,7 @@ if (!empty($data['national_chambers']['senate'])) {
 		}		
 		
 		
-		$elected[] = $this->elected_official_model('legislative', $slc_rep['title'], $slc_rep['district'], null, null, $slc_rep['full_name'], $slc_rep['website'], null, null, null, $slc_rep['email'], $slc_rep['phone'], null, $slc_rep['congress_office'], null, null, null, null, null, null, null);					
+		$elected[] = $this->elected_official_model('legislative', $slc_rep['title'], $slc_rep['district'], null, null, $slc_rep['full_name'], $slc_rep['website'], $img_url, null, null, $slc_rep['email'], $slc_rep['phone'], null, $slc_rep['congress_office'], null, null, null, null, null, null, null);					
 
 }
 	

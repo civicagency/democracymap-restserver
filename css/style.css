@@ -1,0 +1,51 @@
+.jurisdictions {
+width : 100%;
+clear : both;
+float : left;
+}
+
+/* List reset */
+.jurisdictions ul, .jurisdictions li {
+list-style-type : none;
+padding : 0;
+margin : 0;
+}
+
+.jurisdictions .jurisdiction {
+font-size : .75em;
+margin-bottom : 1.5em;
+padding-bottom : 2em;
+border-bottom : 1px solid #e8edf2;
+float : left;
+width : 100%;
+clear : both;
+}
+
+
+
+.jurisdictions .jurisdiction h2 {
+font-size : 2em;
+margin-bottom : 0;
+clear : both;
+}
+
+.jurisdictions .elected-list li {
+clear : both;
+padding-top : .5em;
+margin-top : 1em;
+}
+
+.jurisdictions .elected-list h3 {
+margin-bottom : 0;
+}
+
+.jurisdictions .elected-list img {
+float : right;
+max-width : 100px;
+margin-bottom : 0;
+}
+
+.jurisdictions .elected-list .text-box {
+float : left;
+}
+

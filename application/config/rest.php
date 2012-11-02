@@ -186,7 +186,7 @@ $config['rest_key_length'] = 40;
 | Default: X-API-KEY
 |
 */
-$config['rest_key_name'] = 'X-API-KEY';
+$config['rest_key_name'] = 'apikey';
 
 /*
 |--------------------------------------------------------------------------
