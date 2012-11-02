@@ -844,7 +844,8 @@ function process_nat_legislators($representatives) {
 							'url_contact' 		=> $repdata['webform'], 							
 							'title' 	=> $repdata['title'],								
 							'phone' 	=> $repdata['phone'], 
-							'twitter_id' 	=> $repdata['twitter_id'],														
+							'twitter_id' 	=> $repdata['twitter_id'],
+							'youtube_url' 	=> $repdata['youtube_url'],																					
 							'congress_office' 		=> $repdata['congress_office'], 
 							'facebook_id' 	=> $repdata['facebook_id'], 
 							'email' 	=> $repdata['email']														
@@ -1156,6 +1157,12 @@ $nhr = $data['national_chambers']['house']['reps'][0];
 		if(!empty($nhr['facebook_id'])) {
 			$social_media[] = array("type" => "facebook","description" => "Facebook","username" => $nhr['facebook_id'],"url" => "http://facebook.com/{$nhr['facebook_id']}","last_updated" => null);
 		}
+		
+		if(!empty($nhr['youtube_url'])) {
+			$social_media[] = array("type" => "youtube","description" => "Youtube","username" => null,"url" => $nhr['youtube_url'],"last_updated" => null);
+		}		
+		
+		
 
 
 	$elected = 	array($this->elected_official_model('legislative', $nhr['title'], null, null, null, $nhr['full_name'], $nhr['website'], null, null, null, null, $nhr['phone'], null, null, null, null, null, null, null, null, $social_media));
@@ -1210,6 +1217,10 @@ if (!empty($data['state_chambers']['upper']) && (!empty($data['national_chambers
 			 	  									"username" => $slc_rep['facebook_id'],
 			 	  									"url" => "http://facebook.com/{$slc_rep['facebook_id']}",
 			 	  									 "last_updated" => null);
+		}		
+		
+		if(!empty($slc_rep['youtube_url'])) {
+			$social_media[] = array("type" => "youtube","description" => "Youtube","username" => null,"url" => $slc_rep['youtube_url'],"last_updated" => null);
 		}		
 		
 		
