@@ -1237,6 +1237,39 @@ $new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Senate'
 }
 
 
+// Hard coding national data for now
+
+if (!empty($new_data['jurisdictions'])) {
+	
+	$elected = null;
+	$social_media = null;
+	
+	$social_media[] = array("type" => "twitter",
+	 	  									"description" => "Twitter",
+	 	  									"username" => "whitehouse",
+	 	  									"url" => "http://twitter.com/whitehouse",
+	 	  									 "last_updated" => null);	
+	
+	$elected[] = $this->elected_official_model('executive', 'President', null, 'Barack', 'Obama', 'Barack Obama', 'http://www.whitehouse.gov/administration/president-obama', 'http://www.whitehouse.gov/sites/default/files/imagecache/admin_official_lowres/administration-official/ao_image/President_Official_Portrait_HiRes.jpg', 'http://www.whitehouse.gov/schedule', 'http://www.whitehouse.gov/contact/submit-questions-and-comments', null, '202-456-1111', 'The White House', '1600 Pennsylvania Avenue NW', null, 'Washington', 'DC', '20500', null, null, $social_media);
+
+
+	$social_media = null;
+	$social_media[] = array("type" => "twitter",
+	 	  									"description" => "Twitter",
+	 	  									"username" => "USAgov",
+	 	  									"url" => "http://twitter.com/USAgov",
+	 	  									 "last_updated" => null);
+	
+	$new_data['jurisdictions'][] = $this->jurisdiction_model('government', 'Country', 'national', 'Country', 'United States of America', 'US', 'http://usa.gov', 'http://answers.usa.gov/system/selfservice.controller?CONFIGURATION=1000&PARTITION_ID=1&CMD=STARTPAGE&SUBCMD=EMAIL&USERTYPE=1&LANGUAGE=en&COUNTRY=us', null, '800-333-4636', 'USA.gov, U.S. General Services Administration', '1275 First Street, NE', null, 'Washington', 'DC', '20417',	null, null, $social_media, $elected, null);
+								//$this->jurisdiction_model($type, $type_name, 		$level, 		$level_name, $name, $id, $url, $url_contact, $email, $phone, $address_name, $address_1, $address_2, $address_city, $address_state, $address_zip, $last_updated, $metadata, $social_media, $elected_office, $service_discovery);	
+	# $this->elected_official_model($type, $title, $description, $name_given, $name_family, $name_full, $url, $url_photo, $url_schedule, $url_contact, $email, $phone, $address_name, $address_1, $address_2, $address_city, $address_state, $address_zip, $current_term_enddate, $last_updated, $social_media);	
+	# $this->jurisdiction_model($type, $type_name, $level, $level_name, $name, $id, $url, $url_contact, $email, $phone, $address_name, $address_1, $address_2, $address_city, $address_state, $address_zip, $last_updated, $metadata, $social_media, $elected_office, $service_discovery);
+	
+	
+}
+
+
+
 	//$new_data['raw_data'] = $data;					
 	
 	return $new_data;
