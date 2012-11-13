@@ -1013,7 +1013,7 @@ if (!empty($data['counties'])) {
 							array("key" => 'population', "value" => $data['counties']['population_2006']));										
 	
 
-	$new_data['jurisdictions'][] = 	$this->jurisdiction_model('government', 'County', 'sub_regional', 'county', $data['counties']['name'], $data['counties']['county_id'], $data['counties']['website_url'], null, null, null, $data['counties']['title'], $data['counties']['address1'], $data['counties']['address2'], $data['counties']['city'], $data['counties']['state'], $county_zip, null, $county_metadata, null, null, null);
+	$new_data['jurisdictions'][] = 	$this->jurisdiction_model('government', 'County', 'sub_regional', 'County', $data['counties']['name'], $data['counties']['county_id'], $data['counties']['website_url'], null, null, null, $data['counties']['title'], $data['counties']['address1'], $data['counties']['address2'], $data['counties']['city'], $data['counties']['state'], $county_zip, null, $county_metadata, null, null, null);
 
 }
 
