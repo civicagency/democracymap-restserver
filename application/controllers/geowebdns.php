@@ -395,7 +395,8 @@ class Geowebdns extends REST_Controller {
 				
 				$new_data = $this->re_schema($data);
 				
-				if(!empty($data_errors)) $new_data['errors'] = $data_errors;
+				// basic error reporting
+				//if(!empty($data_errors)) $new_data['errors'] = $data_errors;
 				
 				$this->response($new_data, 200);
 			} else
