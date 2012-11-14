@@ -78,22 +78,28 @@ class Geowebdns extends REST_Controller {
 				
 				
 				$state_legislators = $this->state_legislators($data['latitude'], $data['longitude']);
-				$state_chambers = $this->process_state_legislators($state_legislators);
-				
 
-				$data['state_chambers'] = $state_chambers;
-
+				if(!empty($state_legislators)) {
+					$state_chambers = $this->process_state_legislators($state_legislators);				
+					$data['state_chambers'] = $state_chambers;
+				}
+				else {
+					$data_errors[] = 'State Legislators API (OpenStates) did not respond (perhaps a timeout)';
+				}
 				
 				$national_legislators = $this->national_legislators($data['latitude'], $data['longitude']);	
 				
 				if (!empty($national_legislators)) {	
 					$national_chambers = $this->process_nat_legislators($national_legislators); 		
-			  
+		  
 					ksort($national_chambers);
-			  
+		  
 					$data['national_chambers'] = $national_chambers;				
 				}
-				
+				else {
+					$data_errors[] = 'National Legislators API (Sunlight) did not respond (perhaps a timeout)';
+				}				
+
 			}
 
 
@@ -376,18 +382,20 @@ class Geowebdns extends REST_Controller {
 			
 			// Use the best city url we can get
 			if(empty($data['place_url_updated'])) {
-				if (!empty($data['mayor_data']['url'])) {
-					$data['place_url_updated'] = $data['mayor_data']['url'];
-				}
-				else {
 					$data['place_url_updated'] = $data['place_url'];
-				}				
 			}
+			
+			// Sometimes mayor data has better city url data, but not always, commenting out for now
+			// if (!empty($data['mayor_data']['url'])) {
+			// 	$data['place_url_updated'] = $data['mayor_data']['url'];
+			// }
 			
 			
 			if ($fullstack == 'true') {
 				
 				$new_data = $this->re_schema($data);
+				
+				if(!empty($data_errors)) $new_data['errors'] = $data_errors;
 				
 				$this->response($new_data, 200);
 			} else
@@ -663,8 +671,9 @@ function get_dc_councilmembers($ward)	{
 		$url = "http://openstates.org/api/v1/legislators/geo/?long=" . $long . "&lat=" . $lat . "&fields=state,chamber,district,full_name,url,photo_url&apikey=" . $this->config->item('sunlight_api_key');
 
 		$state_legislators = $this->curl_to_json($url);
-
-		return $state_legislators;				
+				
+		if(!empty($state_legislators)) return $state_legislators;				
+		else return false;
 		
 	}
 	
