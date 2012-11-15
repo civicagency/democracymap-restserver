@@ -199,11 +199,14 @@ class Geowebdns extends REST_Controller {
 						$data['place_url_updated'] = $city_data[0]['url'];
 
 						if ($fullstack == 'true') $data['city_data'] = $city_data[0];
+						
+					} else {
+						$data['place_url_updated'] = $data['place_url'];
 					}
 				}			
 			
 			
-				// County lookup - this should be based on a geospatial query, but just faking it until the layers are available
+				// County lookup - this should be based on a geospatial query, but just faking it using county name associated with city from SBA api until the GIS layers are available. Not sure why I'm using SBA's county name rather than Census GID county name. 
 				if (!empty($data['city_data']['county_name'])) {
 				
 				
@@ -243,7 +246,7 @@ class Geowebdns extends REST_Controller {
 
 				
 				
-			
+				// Currently unused hyperlocal data for NYC			
 				if (is_numeric($data['community_district']) && $fullstack == 'true') {
 				
 				
@@ -274,7 +277,7 @@ class Geowebdns extends REST_Controller {
 				}
 
 
-
+				// Currently unused hyperlocal data for NYC
 				if (is_numeric($data['council_district']) && $fullstack == 'true') {
 				
 				
@@ -339,7 +342,7 @@ class Geowebdns extends REST_Controller {
 			}			
 			
 			
-			// Hyperlocal data - this should be totally decoupled, but including it here as a proof of concept
+			// DC Hyperlocal data - this should be totally decoupled, but including it here as a proof of concept
 			if (($data['state_id'] == '11') && ($data['place_id'] == '50000')) {
 			
 				$data['city_ward'] = $this->get_dc_ward($data['latitude'], $data['longitude']); 
@@ -379,16 +382,6 @@ class Geowebdns extends REST_Controller {
 				//$data['ganalytics_id'] = $this->config->item('ganalytics_id');
 			}
 			
-			
-			// Use the best city url we can get
-			if(empty($data['place_url_updated'])) {
-					$data['place_url_updated'] = $data['place_url'];
-			}
-			
-			// Sometimes mayor data has better city url data, but not always, commenting out for now
-			// if (!empty($data['mayor_data']['url'])) {
-			// 	$data['place_url_updated'] = $data['mayor_data']['url'];
-			// }
 			
 			
 			if ($fullstack == 'true') {
@@ -966,12 +959,15 @@ if (!empty($data['mayor_data'])) {
 	}
 
 	$mayor_name_full 			= isset($data['mayor_data']['name']) ? $data['mayor_data']['name'] : null;	
-	$mayor_url 					= isset($data['mayor_data']['url']) ? $data['mayor_data']['url'] : null;
+	$mayor_url 					= isset($data['mayor_data']['bio_url']) ? $data['mayor_data']['bio_url'] : $data['place_url_updated']; // the bio url isn't exactly what we want here, but it's close enough. Usually the bio is one page of the mayor's section of the website. Really we just want the main mayor section
+	//$mayor_url 					= $data['place_url_updated']; 	// We're assuming that the place_url_updated will always match the mayor url, but be more updated. Hopefully this is a safe assumption. 	
 	$mayor_url_photo 			= isset($data['mayor_data']['url_photo']) ? $data['mayor_data']['url_photo'] : null;
 	$mayor_email 				= isset($data['mayor_data']['email']) ? $data['mayor_data']['email'] : null;
 	$mayor_phone 				= isset($data['mayor_data']['phone']) ? $data['mayor_data']['phone'] : null;	
 	$mayor_current_term_enddate = isset($data['mayor_data']['current_term_enddate']) ? date('c', strtotime($data['mayor_data']['next_election'])) : null;	
 	
+
+
 
 	$elected = array(
 			$this->elected_official_model('executive', 'Mayor', null, null, null, $mayor_name_full, $mayor_url, $mayor_url_photo, null, null, $mayor_email, $mayor_phone, null, null, null, null, null, null, $mayor_current_term_enddate, null, $social_media)		
