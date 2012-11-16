@@ -1169,9 +1169,10 @@ $nhr = $data['national_chambers']['house']['reps'][0];
 		}		
 		
 		
+		$img_url = $this->config->item('democracymap_root') . '/img/headshot/us-congress/' . $nhr['bioguide_id'] . '.jpg';
 
 
-	$elected = 	array($this->elected_official_model('legislative', $nhr['title'], null, null, null, $nhr['full_name'], $nhr['website'], null, null, null, null, $nhr['phone'], null, null, null, null, null, null, null, null, $social_media));
+	$elected = 	array($this->elected_official_model('legislative', $nhr['title'], null, null, null, $nhr['full_name'], $nhr['website'], $img_url, null, null, null, $nhr['phone'], null, null, null, null, null, null, null, null, $social_media));
 	
 	$district = "District " . $nhr['district'];
 
