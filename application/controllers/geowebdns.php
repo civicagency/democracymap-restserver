@@ -190,21 +190,10 @@ class Geowebdns extends REST_Controller {
 				}	
 				
 				
-			
-				// Better links for municipal data from the SBA (I'm only pulling out the url, but other data might be usefull too)
+				// Get City/County data from SBA
 				if (!empty($data['city']) && !empty($data['state'])) {
-					$city_data = $this->get_city_links($data['city'], $data['state']);
-
-					if(!empty($city_data)) {
-						$data['place_url_updated'] = $city_data[0]['url'];
-
-						if ($fullstack == 'true') $data['city_data'] = $city_data[0];
-						
-					} else {
-						$data['place_url_updated'] = $data['place_url'];
-					}
-				}			
-			
+					$city_data = $this->get_city_links($data['city'], $data['state']);			
+				}
 			
 				// County lookup - this should be based on a geospatial query, but just faking it using county name associated with city from SBA api until the GIS layers are available. Not sure why I'm using SBA's county name rather than Census GID county name. 
 				if (!empty($data['city_data']['county_name'])) {
@@ -339,7 +328,25 @@ class Geowebdns extends REST_Controller {
 					
 								
 				}
-			}			
+			}		
+			
+			
+			// Better links for municipal data from the SBA (I'm only pulling out the url, but other data might be usefull too)
+
+			if(!empty($city_data)) {
+				$data['place_url_updated'] = $city_data[0]['url'];
+
+				if ($fullstack == 'true') $data['city_data'] = $city_data[0];
+				
+			} else {
+				
+				if(!empty($data['mayor_data']['url'])) {
+					$data['place_url_updated'] = $data['mayor_data']['url'];	
+				} else {
+					$data['place_url_updated'] = $data['place_url'];	
+				}
+			}
+		
 			
 			
 			// DC Hyperlocal data - this should be totally decoupled, but including it here as a proof of concept
