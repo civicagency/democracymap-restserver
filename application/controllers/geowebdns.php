@@ -196,13 +196,14 @@ class Geowebdns extends REST_Controller {
 				}
 			
 				// County lookup - this should be based on a geospatial query, but just faking it using county name associated with city from SBA api until the GIS layers are available. Not sure why I'm using SBA's county name rather than Census GID county name. 
-				if (!empty($data['city_data']['county_name'])) {
+				if ($latlong) {
 				
 				
-				$county_name = strtoupper($data['city_data']['county_name']);
+					$data['county_data']			= $this->get_county($data['latitude'], $data['longitude']);
+				
 				
 					$sql = "SELECT * FROM counties
-							WHERE name = '$county_name' and state = '{$data['state']}'";
+							WHERE fips_county = '{$data['county_data']['COUNTY']}' and fips_state = '{$data['county_data']['STATE']}'";
 							
 				
 					$query = $this->db->query($sql);				
@@ -592,6 +593,16 @@ function get_dc_councilmembers($ward)	{
 
 
 
+function get_county($lat, $long) {	
+	
+	
+	$url = "http://tigerweb.geo.census.gov/ArcGIS/rest/services/Census2010/tigerWMS/MapServer/115/query?text=&geometry=$long%2C$lat&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&objectIds=&where=&time=&returnCountOnly=false&returnIdsOnly=false&returnGeometry=false&maxAllowableOffset=&outSR=&outFields=COUNTY,BASENAME,NAME,STATE&f=json";	
+
+		$feature_data = $this->curl_to_json($url);
+
+		if(!empty($feature_data['features'])) return $feature_data['features'][0]['attributes'];			
+
+}
 	
 	
 	function get_state($state) {
