@@ -49,6 +49,13 @@ code {
 
 <p>Currently this demo is limited to the United States</p>
 
+<h1>Formats</h1>
+
+<p>
+	The default format returned is <strong>json</strong>, but <strong>xml</strong> and <strong>csv</strong> are also supported. You can specify the format by 
+	appending the format extension after the resource, eg getting xml would be "/geowebdns/endpoints.xml" 
+	or you can specify format as another query parameter, eg "/geowebdns/endpoints?format=xml"
+</p>
 
 <h1>GeoWeb DNS Endpoints</h1>
 
@@ -59,12 +66,12 @@ code {
 <ul>
 	<li><strong>location</strong> <em>(options: location string or lat, long).</em> This is any string that can be geocoded</li>
 	<li><strong>format</strong> <em>(options: json, xml).</em> This specifies the format of the response.</li>
-	<li><strong>geojson</strong> <em>(options: true, false).</em> This specifies whether you want a geojson representation of the boundary returned</li>
+	<li><del><strong>geojson</strong> <em>(options: true, false).</em> This specifies whether you want a geojson representation of the boundary returned</del></li>
 </ul>
 
 <h3>Example Call</h3>
 <p>
-	<a href="http://api.democracymap.org/geowebdns/endpoints?location=chicago&format=json&geojson=true">http://api.democracymap.org/geowebdns/endpoints?location=chicago&amp;format=json&amp;geojson=true</a>
+	<a href="http://api.democracymap.org/geowebdns/endpoints?location=chicago&format=json">http://api.democracymap.org/geowebdns/endpoints?location=chicago&amp;format=json</a>
 </p>	
 
 <h1>Source and More information</h1>
