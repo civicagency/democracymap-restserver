@@ -79,15 +79,25 @@ code {
 
 <h1>Credits</h1>
 <p>
-This is built on the same data as the main <a href="http://beta.democracymap.org">DemocracyMap demo</a>, so I'm repeating those credits here. City data from U.S. Census (including the <a href="http://www.census.gov/govs/cog/">2007 Census of Governments</a>) with updated URLs provided by the <a href="http://api.sba.gov/doc/geodata.html">SBA U.S. City &amp; County Web Data API</a>. 
+This is built on the same data as the main <a href="http://beta.democracymap.org">DemocracyMap demo</a>, so I'm repeating those credits here. 
+City and County data from U.S. Census (including the <a href="http://www.census.gov/govs/cog/">2007 Census of Governments</a> and <a href="http://tigerweb.geo.census.gov/tigerwebmain/TIGERweb_restmapservice.html">TigerWeb</a>) with updated URLs 
+provided by the <a href="http://api.sba.gov/doc/geodata.html">SBA U.S. City &amp; County Web Data API</a>. City mayor and contact data from the 
+<a href="http://www.usmayors.org/meetmayors/mayorsatglance.asp">US Conference of Mayors</a>.  
+State data from the <a href="http://www.nga.org/cms/governors/bios">National Governors Association</a> and <a href="http://answers.usa.gov/system/selfservice.controller?CONFIGURATION=1000&PARTITION_ID=1&CMD=VIEW_ARTICLE&ARTICLE_ID=9902&USERTYPE=1&LANGUAGE=en&COUNTRY=US">USA.gov</a>. 
 US Congressional data from the <a href="http://services.sunlightlabs.com/docs/Sunlight_Congress_API/">Sunlight Congress API</a>. 
 Congressional district boundaries from <a href="http://www.govtrack.us/congress/findyourreps.xpd">GovTrack.us</a>. 
 State legislative data from the <a href="http://openstates.org/api/">OpenStates API</a>. 
-NYC data <em>scraped</em> from <a href="http://nyc.gov">nyc.gov</a>. NYC boundary data from <a href="http://www.nyc.gov/data">NYC OpenData</a>. 
-City-level geospatial data served by <a href="http://geoserver.org">GeoServer</a>. 
 All geocoding courtesy of <a href="http://developer.yahoo.com/geo/placefinder/">Yahoo! PlaceFinder</a>. 
 Tweet stream uses the <a href="http://tweet.seaofclouds.com/">Tweet! jQuery plugin from seaofclouds</a>. 
 </p>
+
+<!--
+Either not in use or deprecated:
+
+NYC data <em>scraped</em> from <a href="http://nyc.gov">nyc.gov</a>. NYC boundary data from <a href="http://www.nyc.gov/data">NYC OpenData</a>. 
+City-level geospatial data served by <a href="http://geoserver.org">GeoServer</a>. 
+
+ -->
 
 <p> 
 	Please check out the  <a href="http://lists.open311.org/groups/discuss/">Open311 mailing list</a> and the <a href="http://forums.e-democracy.org/groups/democracymap">DemocracyMap mailing list</a>.
