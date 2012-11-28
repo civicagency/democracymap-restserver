@@ -6,6 +6,8 @@
 
 <style type="text/css">
 
+
+
 body {
  background-color: #fff;
  margin: 40px;
@@ -24,10 +26,19 @@ h1 {
  color: #444;
  background-color: transparent;
  border-bottom: 1px solid #D0D0D0;
- font-size: 16px;
+ font-size: 1.5em;
  font-weight: bold;
  margin: 24px 0 2px 0;
  padding: 5px 0 6px 0;
+}
+
+h2 {
+font-size : 1.25em;
+margin-top : 2em;
+}
+
+h3 {
+font-size : 1em;
 }
 
 code {
@@ -41,6 +52,8 @@ code {
  padding: 12px 10px 12px 10px;
 }
 
+
+
 </style>
 </head>
 <body>
@@ -49,17 +62,19 @@ code {
 
 <p>Currently this demo is limited to the United States</p>
 
-<h1>Formats</h1>
+<h2>Formats</h2>
 
 <p>
 	The default format returned is <strong>json</strong>, but <strong>xml</strong> and <strong>csv</strong> are also supported. You can specify the format by 
-	appending the format extension after the resource, eg getting xml would be "/geowebdns/endpoints.xml" 
-	or you can specify format as another query parameter, eg "/geowebdns/endpoints?format=xml"
+	appending the format extension after the resource, eg getting xml would be "/context.xml" 
+	or you can specify format as another query parameter, eg "/context?format=xml"
 </p>
 
-<h1>GeoWeb DNS Endpoints</h1>
+<h2>Resources</h2>
 
-<pre>URL: http://api.democracymap.org/geowebdns/endpoints</pre>
+<h3>Context</h3>
+
+<pre>URL: http://api.democracymap.org/context</pre>
 
 <p>There are just a few parameters</p>
 
@@ -69,15 +84,15 @@ code {
 	<li><del><strong>geojson</strong> <em>(options: true, false).</em> This specifies whether you want a geojson representation of the boundary returned</del></li>
 </ul>
 
-<h3>Example Call</h3>
+<h4>Example Call</h4>
 <p>
-	<a href="http://api.democracymap.org/geowebdns/endpoints?location=chicago&format=json">http://api.democracymap.org/geowebdns/endpoints?location=chicago&amp;format=json</a>
+	<a href="http://api.democracymap.org/context?location=chicago">http://api.democracymap.org/context?location=chicago</a>
 </p>	
 
 <h1>Source and More information</h1>
 <p>You can find a description of <a href="http://wiki.open311.org/GeoWeb_DNS">GeoWeb DNS on the Open311 wiki</a>. The source code for this is <a href="https://github.com/GSA-OCSIT/democracymap-restserver">available on github</a>. This is experimental, don't expect it to be accurate or to stick around</p>
 
-<h1>Credits</h1>
+<h2>Credits</h2>
 <p>
 This is built on the same data as the main <a href="http://beta.democracymap.org">DemocracyMap demo</a>, so I'm repeating those credits here. 
 City and County data from U.S. Census (including the <a href="http://www.census.gov/govs/cog/">2007 Census of Governments</a> and <a href="http://tigerweb.geo.census.gov/tigerwebmain/TIGERweb_restmapservice.html">TigerWeb</a>) with updated URLs 
