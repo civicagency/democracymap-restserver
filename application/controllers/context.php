@@ -1,16 +1,10 @@
 <?php
 require APPPATH.'/libraries/REST_Controller.php';
 
-class Geowebdns extends REST_Controller {
+class Context extends REST_Controller {
 
 
-	public function index_get()
-	{
-		$this->load->view('welcome_message');
-	}
-
-	
-	function endpoints_get()	{
+	public function index_get()	{
 		
 		
 		$data['latitude'] 			  = '';

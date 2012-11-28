@@ -40,6 +40,10 @@
 
 $route['default_controller'] = "welcome";
 $route['404_override'] = '';
+$route['geowebdns/endpoints'] = "context";
+
+
+
 
 
 /* End of file routes.php */
