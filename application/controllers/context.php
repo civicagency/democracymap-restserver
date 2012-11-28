@@ -6,6 +6,11 @@ class Context extends REST_Controller {
 
 	public function index_get()	{
 		
+		if (empty($_GET)) {
+			$this->load->helper('url');			
+			redirect('welcome');	
+		}
+		
 		
 		$data['latitude'] 			  = '';
 		$data['longitude'] 			  = '';
