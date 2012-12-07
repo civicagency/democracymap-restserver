@@ -58,12 +58,14 @@ class Context extends REST_Controller {
 			$fullstack 					= $this->input->get('fullstack', TRUE);
 			$location 					= $this->geocode(urlencode($data['input']));
 
-			if(!empty($location['ResultSet']['Result'])) {
+			if(!empty($location->query->results->Result)) {
 			
-				$data['latitude'] 			= $location['ResultSet']['Result'][0]['latitude'];
-				$data['longitude'] 			= $location['ResultSet']['Result'][0]['longitude'];
-				$data['city_geocoded'] 		= $location['ResultSet']['Result'][0]['city'];
-				$data['state_geocoded'] 	= $location['ResultSet']['Result'][0]['state'];
+				$location = $location->query->results->Result;
+			
+				$data['latitude'] 			= $location->latitude;
+				$data['longitude'] 			= $location->longitude;
+				$data['city_geocoded'] 		= $location->city;
+				$data['state_geocoded'] 	= $location->state;
 
 				$latlong 					= $data['latitude'] . " " . $data['longitude'];									
 			}
@@ -658,18 +660,25 @@ function get_county($lat, $long) {
 
 
 	function geocode($location) {
+		
+		$this->load->helper('oauth.php');
+		
+		$url = "http://query.yahooapis.com/v1/yql/";
+		$args = array();
+		$args["q"] = 'select * from geo.placefinder where text="' . $location . '"';
+		$args["format"] = "json";
 
-		$url = "http://where.yahooapis.com/geocode?q=" . $location . "&appid=" . $this->config->item('yahoo_api_key') . "&flags=p&count=1";
-
+		$consumer = new OAuthConsumer($this->config->item('yahoo_oauth_key'), $this->config->item('yahoo_oauth_secret'));
+		$request = OAuthRequest::from_consumer_and_token($consumer, NULL,"GET", $url, $args);
+		$request->sign_request(new OAuthSignatureMethod_HMAC_SHA1(), $consumer, NULL);
+		$url = sprintf("%s?%s", $url, OAuthUtil::build_http_query($args));
 		$ch = curl_init();
+		$headers = array($request->to_header());
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-		$locations=curl_exec($ch);
-		curl_close($ch);
-
-
-		$location = unserialize($locations);
+		$rsp = curl_exec($ch);
+		$location = json_decode($rsp);
 
 		return $location;
 

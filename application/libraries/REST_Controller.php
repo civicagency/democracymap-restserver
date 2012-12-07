@@ -1093,6 +1093,27 @@ abstract class REST_Controller extends CI_Controller
 	// FORMATING FUNCTIONS ---------------------------------------------------------
 	// Many of these have been moved to the Format class for better separation, but these methods will be checked too
 
+
+	/**
+	 * Encode as Formatted HTML
+	 *
+	 * @param array $data The input data.
+	 * @return string The HTML data string
+	 */
+	protected function _format_html($data = array())
+	{
+		
+		$output = $this->format->factory($data)->{'to_'.$this->response->format}();
+		
+		$output = '<html>' . $output . '</html>';
+		
+		return 	$output;
+
+	}
+
+
+
+
 	/**
 	 * Encode as JSONP
 	 *
