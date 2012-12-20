@@ -1285,6 +1285,17 @@ if (!empty($new_data['jurisdictions'])) {
 	
 	$elected[] = $this->elected_official_model('executive', 'President', null, 'Barack', 'Obama', 'Barack Obama', 'http://www.whitehouse.gov/administration/president-obama', 'http://www.whitehouse.gov/sites/default/files/imagecache/admin_official_lowres/administration-official/ao_image/President_Official_Portrait_HiRes.jpg', 'http://www.whitehouse.gov/schedule', 'http://www.whitehouse.gov/contact/submit-questions-and-comments', null, '202-456-1111', 'The White House', '1600 Pennsylvania Avenue NW', null, 'Washington', 'DC', '20500', null, null, $social_media);
 
+	$social_media = null;
+	$social_media[] = array("type" => "twitter",
+	 	  									"description" => "Twitter",
+	 	  									"username" => "VP",
+	 	  									"url" => "https://twitter.com/VP",
+	 	  									 "last_updated" => null);
+
+
+	$elected[] = $this->elected_official_model('executive', 'Vice-President', null, 'Joseph', 'Biden', 'Joe Biden', 'http://www.whitehouse.gov/administration/vice-president-biden', 'http://www.whitehouse.gov/sites/default/files/imagecache/admin_official_lowres/administration-official/ao_image/vp_portrait_hi-res.jpg', null, 'http://www.whitehouse.gov/contact-vp', null, null, 'The White House', '1600 Pennsylvania Avenue NW', null, 'Washington', 'DC', '20500', null, null, $social_media);
+
+
 
 	$social_media = null;
 	$social_media[] = array("type" => "twitter",
