@@ -57,7 +57,15 @@ class Context extends REST_Controller {
 
 			}
 			
-			$fullstack 					= $this->input->get('fullstack', TRUE);
+			$fullstack 					= $this->input->get('fullstack', TRUE);			
+			$key 						= $data['input'] . '_context_' . $fullstack;
+
+			// Check in cache
+			if ( $cache = $this->cache_get( $key ) ) {
+				$this->response($cache, 200);
+			}			
+			
+			// Geocode our address
 			$location 					= $this->geocode(urlencode($data['input']));
 
 			if(!empty($location->query->results->Result)) {
@@ -78,14 +86,7 @@ class Context extends REST_Controller {
 
 
 			if($latlong && $fullstack == 'true') {
-				
-				$key = $latlong . '_context_fulstack';
-
-				// Check in cache
-				if ( $cache = $this->cache_get( $key ) ) {
-					$this->response($cache, 200);
-				}
-				
+								
 				$state_legislators = $this->state_legislators($data['latitude'], $data['longitude']);
 
 				if(!empty($state_legislators)) {
@@ -422,6 +423,9 @@ class Context extends REST_Controller {
 			
 			// only return geojson if requested
 			if (isset($data['geojson'])) $endpoint['geojson'] = $data['geojson'];
+			
+			// Save to cache
+			$this->cache_set( $key, $endpoint);			
 			
 			$this->response($endpoint, 200);
 			}
