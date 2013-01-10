@@ -60,6 +60,7 @@ class Context extends REST_Controller {
 			$fullstack 					= $this->input->get('fullstack', TRUE);			
 			$key 						= $data['input'] . '_context_' . $fullstack;
 
+
 			// Check in cache
 			if ( $cache = $this->cache_get( $key ) ) {
 				$this->response($cache, 200);
@@ -68,16 +69,19 @@ class Context extends REST_Controller {
 			// Geocode our address
 			$location 					= $this->geocode(urlencode($data['input']));
 
-			if(!empty($location->query->results->Result)) {
+			if(!empty($location->query->results->Result->latitude)) {
 			
 				$location = $location->query->results->Result;
-			
+				
 				$data['latitude'] 			= $location->latitude;
 				$data['longitude'] 			= $location->longitude;
 				$data['city_geocoded'] 		= $location->city;
 				$data['state_geocoded'] 	= $location->state;
 
 				$latlong 					= $data['latitude'] . " " . $data['longitude'];									
+			} 
+			else {
+				$data_errors[] = 'The location could not be geocoded';
 			}
 			
 			// If we're not using a geocoder, but we have a lat,long directly...
@@ -407,7 +411,7 @@ class Context extends REST_Controller {
 				$new_data = $this->re_schema($data);
 				
 				// basic error reporting
-				//if(!empty($data_errors)) $new_data['errors'] = $data_errors;
+				if(!empty($data_errors)) $new_data['errors'] = $data_errors;
 				
 				// Save to cache
 				$this->cache_set( $key, $new_data);
@@ -419,7 +423,9 @@ class Context extends REST_Controller {
 			$endpoint['url'] = (!empty($data['place_url_updated'])) ? $data['place_url_updated'] : $data['place_url'];
 			
 			// In this case we're just publishing service discovery and geojson
-			$endpoint['service_discovery'] 	= $data['service_discovery'];
+			if (!empty($data['service_discovery'])) {
+				$endpoint['service_discovery'] 	= $data['service_discovery'];
+			}
 			
 			// only return geojson if requested
 			if (isset($data['geojson'])) $endpoint['geojson'] = $data['geojson'];
