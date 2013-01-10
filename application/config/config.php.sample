@@ -13,6 +13,7 @@ $config['sunlight_api_key'] = '';
 
 $config['ganalytics_id'] = '';
 
+$config['cache_ttl'] = '86400'; // 86400 = 24 hours
 
 
 /*

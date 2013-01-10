@@ -3,6 +3,8 @@ require APPPATH.'/libraries/REST_Controller.php';
 
 class Context extends REST_Controller {
 
+	protected $ttl = $this->config->item('cache_ttl'); 
+	protected $cache = array();
 
 	public function index_get()	{
 		
@@ -492,16 +494,27 @@ class Context extends REST_Controller {
 	}	
 	
 	
-	function get_city_links($city, $state) {	
-			
-			$city = urlencode(strtolower($city));
-			$state = urlencode(strtolower($state));
+	function get_city_links($city, $state) {
 		
-			$url = "http://api.sba.gov/geodata/all_links_for_city_of/$city/$state.json";
+		$key = md5( serialize( "$city, $state" )) . '_city_links';
+		
+		// Check in cache
+		if ( $cache = $this->cache_get( $key ) ) {
+			return $cache;
+		}		
+			
+			
+		$city = urlencode(strtolower($city));
+		$state = urlencode(strtolower($state));
 	
-			$data = $this->curl_to_json($url);	
+		$url = "http://api.sba.gov/geodata/all_links_for_city_of/$city/$state.json";
 
-			return $data;
+		$data = $this->curl_to_json($url);	
+		
+		// Save to cache
+		$this->cache_set( $key, $data, $this->ttl );
+
+		return $data;
 
 	}	
 	
@@ -521,6 +534,13 @@ class Context extends REST_Controller {
 	
 	function get_mayors($city, $state) {
 		
+		$key = md5( serialize( "$city, $state" )) . '_city_mayor';
+		
+		// Check in cache
+		if ( $cache = $this->cache_get( $key ) ) {
+			return $cache;
+		}		
+		
 		$city = ucwords($city);
 		$state = strtoupper($state);		
 		
@@ -531,7 +551,13 @@ class Context extends REST_Controller {
 
 		$mayors = $this->curl_to_json($url);
 
-		if(!empty($mayors)) return $mayors[0];
+		if(!empty($mayors)) {
+			
+			// Save to cache
+			$this->cache_set( $key, $mayors[0], $this->ttl );
+			
+			return $mayors[0];			
+		}
 
 	}
 	
@@ -539,6 +565,13 @@ class Context extends REST_Controller {
 	
 	
 	function get_mayor_sm($city) {
+		
+		$key = md5( serialize( $city )) . '_city_mayor_sm';
+		
+		// Check in cache
+		if ( $cache = $this->cache_get( $key ) ) {
+			return $cache;
+		}		
 		
 		$city = ucwords($city);		
 		
@@ -549,8 +582,15 @@ class Context extends REST_Controller {
 		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=us_mayors_-_social_media_accounts&query=$query";		
 
 		$mayor = $this->curl_to_json($url);
-		
-		if(!empty($mayor)) return $mayor[0];		
+				
+		if(!empty($mayor)) {
+			
+			// Save to cache
+			$this->cache_set( $key, $mayor[0], $this->ttl );
+			
+			return $mayor[0];			
+		}		
+				
 		
 	}	
 	
@@ -576,6 +616,13 @@ function get_dc_ward($lat, $long)	{
 
 function get_dc_councilmembers($ward)	{
 	
+	$key = md5( serialize( $ward )) . '_dc_ward_members';
+	
+	// Check in cache
+	if ( $cache = $this->cache_get( $key ) ) {
+		return $cache;
+	}	
+	
 	$ward = urlencode($ward);
 	
 	$url ="https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=washington_dc_wards_and_councilmembers&query=select%20*%20from%20%60swdata%60%20where%20ward_name%20%3D%20%22$ward%22%3B";		
@@ -587,6 +634,9 @@ function get_dc_councilmembers($ward)	{
 
 
 	$response['at_large'] = $this->curl_to_json($url);
+
+	// Save to cache
+	$this->cache_set( $key, $response, $this->ttl );
 
 	return $response;	
 	
@@ -608,6 +658,13 @@ function get_county($lat, $long) {
 	
 	function get_state($state) {
 		
+		$key = $state . '_state_data';
+
+		// Check in cache
+		if ( $cache = $this->cache_get( $key ) ) {
+			return $cache;
+		}		
+		
 		$state = ucwords($state);		
 		
 		$query = "select * from `swdata` where state = '$state' limit 1";		
@@ -617,14 +674,27 @@ function get_county($lat, $long) {
 
 		$state = $this->curl_to_json($url);
 		
-		if(!empty($state[0])) return $state[0];		
+		if(!empty($state[0])) {
+		
+			// Save to cache
+			$this->cache_set( $key, $state[0], $this->ttl );
+			
+			return $state[0];		
+		}
 
 	}
 	
 	
 	function get_governor($state) {
-		
+				
 		$state = ucwords($state);		
+		
+		$key = $state . '_state_governor';		
+		
+		// Check in cache
+		if ( $cache = $this->cache_get( $key ) ) {
+			return $cache;
+		}		
 		
 		$query = "select * from `swdata` where state = '$state' limit 1";		
 		$query = urlencode($query);
@@ -634,7 +704,13 @@ function get_county($lat, $long) {
 
 		$state = $this->curl_to_json($url);
 
-		if(!empty($state[0])) return $state[0];
+		if(!empty($state[0])) {
+
+			// Save to cache
+			$this->cache_set( $key, $state[0], $this->ttl );		
+		
+			return $state[0];
+		}
 
 
 	}	
@@ -644,6 +720,13 @@ function get_county($lat, $long) {
 		
 		$state = ucwords($state);		
 		
+		$key = $state . '_state_governor_sm';				
+		
+		// Check in cache
+		if ( $cache = $this->cache_get( $key ) ) {
+			return $cache;
+		}		
+		
 		$query = "select * from `swdata` where state = '$state' limit 1";		
 		$query = urlencode($query);
 		
@@ -652,7 +735,13 @@ function get_county($lat, $long) {
 
 		$state = $this->curl_to_json($url);
 		
-		if(!empty($state[0])) 	return $state[0];		
+		if(!empty($state[0])) {
+			
+			// Save to cache
+			$this->cache_set( $key, $state[0], $this->ttl );
+			
+			return $state[0];		
+		}	
 
 	}
 
@@ -701,10 +790,19 @@ function get_county($lat, $long) {
 	
 	function state_boundaries($state, $chamber) {
 		
+		$key = $state . '_' . $chamber . '_state_boundaries';
+		
+		// Check in cache
+		if ( $cache = $this->cache_get( $key ) ) {
+			return $cache;
+		}		
+		
 		$url = "http://openstates.org/api/v1/districts/" . $state . "/" . $chamber . "/?fields=name,boundary_id&apikey=" . $this->config->item('sunlight_api_key');
 
 		$state_boundaries = $this->curl_to_json($url);
 		$state_boundaries = $this->process_boundaries($state_boundaries);
+
+		$this->cache_set( $key, $state_boundaries, $this->ttl );
 
 		return $state_boundaries;
 
@@ -914,6 +1012,45 @@ function curl_to_json($url) {
 
 	return json_decode($data, true);	
 	
+}
+
+
+/**
+ * Retrieve data from Alternative PHP Cache (APC).
+ */
+protected function cache_get( $key ) {
+	
+	if ( !extension_loaded('apc') || (ini_get('apc.enabled') != 1) ) {
+		if ( isset( $this->cache[ $key ] ) ) {
+			return $this->cache[ $key ];
+		}
+	}
+	else {
+		return apc_fetch( $key );
+	}
+
+	return false;
+
+}
+
+/**
+ * Store data in Alternative PHP Cache (APC).
+ */
+protected function cache_set( $key, $value, $ttl = null ) {
+
+	if ( $ttl == null ) {
+		$ttl = $this->ttl;
+	}
+
+	$key = 'db_api_' . $key;
+
+	if ( extension_loaded('apc') && (ini_get('apc.enabled') == 1) ) {
+		return apc_store( $key, $value, $ttl );
+	}
+
+	$this->cache[$key] = $value;
+
+
 }
 
 
