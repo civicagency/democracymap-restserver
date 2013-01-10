@@ -3,8 +3,8 @@ require APPPATH.'/libraries/REST_Controller.php';
 
 class Context extends REST_Controller {
 
-	protected $ttl = $this->config->item('cache_ttl'); 
-	protected $cache = array();
+	protected $cache 	= array();
+	protected $ttl 		= '86400'; 
 
 	public function index_get()	{
 		
@@ -79,6 +79,12 @@ class Context extends REST_Controller {
 
 			if($latlong && $fullstack == 'true') {
 				
+				$key = $latlong . '_context_fulstack';
+
+				// Check in cache
+				if ( $cache = $this->cache_get( $key ) ) {
+					$this->response($cache, 200);
+				}
 				
 				$state_legislators = $this->state_legislators($data['latitude'], $data['longitude']);
 
@@ -402,6 +408,9 @@ class Context extends REST_Controller {
 				// basic error reporting
 				//if(!empty($data_errors)) $new_data['errors'] = $data_errors;
 				
+				// Save to cache
+				$this->cache_set( $key, $new_data);
+				
 				$this->response($new_data, 200);
 			} else
 			{
@@ -512,7 +521,7 @@ class Context extends REST_Controller {
 		$data = $this->curl_to_json($url);	
 		
 		// Save to cache
-		$this->cache_set( $key, $data, $this->ttl );
+		$this->cache_set( $key, $data);
 
 		return $data;
 
@@ -554,7 +563,7 @@ class Context extends REST_Controller {
 		if(!empty($mayors)) {
 			
 			// Save to cache
-			$this->cache_set( $key, $mayors[0], $this->ttl );
+			$this->cache_set( $key, $mayors[0]);
 			
 			return $mayors[0];			
 		}
@@ -586,7 +595,7 @@ class Context extends REST_Controller {
 		if(!empty($mayor)) {
 			
 			// Save to cache
-			$this->cache_set( $key, $mayor[0], $this->ttl );
+			$this->cache_set( $key, $mayor[0]);
 			
 			return $mayor[0];			
 		}		
@@ -636,7 +645,7 @@ function get_dc_councilmembers($ward)	{
 	$response['at_large'] = $this->curl_to_json($url);
 
 	// Save to cache
-	$this->cache_set( $key, $response, $this->ttl );
+	$this->cache_set( $key, $response);
 
 	return $response;	
 	
@@ -677,7 +686,7 @@ function get_county($lat, $long) {
 		if(!empty($state[0])) {
 		
 			// Save to cache
-			$this->cache_set( $key, $state[0], $this->ttl );
+			$this->cache_set( $key, $state[0]);
 			
 			return $state[0];		
 		}
@@ -707,7 +716,7 @@ function get_county($lat, $long) {
 		if(!empty($state[0])) {
 
 			// Save to cache
-			$this->cache_set( $key, $state[0], $this->ttl );		
+			$this->cache_set( $key, $state[0]);		
 		
 			return $state[0];
 		}
@@ -738,7 +747,7 @@ function get_county($lat, $long) {
 		if(!empty($state[0])) {
 			
 			// Save to cache
-			$this->cache_set( $key, $state[0], $this->ttl );
+			$this->cache_set( $key, $state[0]);
 			
 			return $state[0];		
 		}	
@@ -802,7 +811,7 @@ function get_county($lat, $long) {
 		$state_boundaries = $this->curl_to_json($url);
 		$state_boundaries = $this->process_boundaries($state_boundaries);
 
-		$this->cache_set( $key, $state_boundaries, $this->ttl );
+		$this->cache_set( $key, $state_boundaries);
 
 		return $state_boundaries;
 
@@ -885,48 +894,52 @@ function process_state_legislators($representatives) {
 			
 		}	
 		
-		// Get the boundary_ids for this state
-		$boundary_ids['upper'] = $this->state_boundaries($current_state, 'upper'); 
-		$boundary_ids['lower'] = $this->state_boundaries($current_state, 'lower'); 	
+		// Only do this if we want geospatial data in the response
+		if ($this->input->get('geojson', TRUE) == 'true') {
+			
+			// Get the boundary_ids for this state
+			$boundary_ids['upper'] = $this->state_boundaries($current_state, 'upper'); 
+			$boundary_ids['lower'] = $this->state_boundaries($current_state, 'lower'); 	
 		
 			
-		// Get shapes for each of the boundary ids we care about		
-		while($districts = current($chambers)) {
+			// Get shapes for each of the boundary ids we care about		
+			while($districts = current($chambers)) {
 
-			$this_chamber = key($chambers);
-			if (!isset($current_chamber)) $current_chamber = '';
+				$this_chamber = key($chambers);
+				if (!isset($current_chamber)) $current_chamber = '';
 			
-			// reset current district in case district ids are reused across chambers
-			$current_district = '';			
-			if ($current_chamber !== $this_chamber){
+				// reset current district in case district ids are reused across chambers
+				$current_district = '';			
+				if ($current_chamber !== $this_chamber){
 				
-				while($district = current($districts)) {
+					while($district = current($districts)) {
 
-					$this_district = key($districts);
-					if (!isset($current_district)) $current_district = '';
+						$this_district = key($districts);
+						if (!isset($current_district)) $current_district = '';
 					
-					if ($current_district !== $this_district) {
+						if ($current_district !== $this_district) {
 
-						// get shape for this boundary id
-						$boundary_id = $boundary_ids["$this_chamber"][$this_district]['boundary_id'];
+							// get shape for this boundary id
+							$boundary_id = $boundary_ids["$this_chamber"][$this_district]['boundary_id'];
 											
-						$shape = $this->state_boundary_shape($boundary_id);
+							$shape = $this->state_boundary_shape($boundary_id);
 						
-						$chambers[$this_chamber][$this_district]['shape'] = $shape['shape'];
-						$chambers[$this_chamber][$this_district]['centerpoint_latlong'] = $shape['shape_center_lat'] . ',' . $shape['shape_center_long'];					
+							$chambers[$this_chamber][$this_district]['shape'] = $shape['shape'];
+							$chambers[$this_chamber][$this_district]['centerpoint_latlong'] = $shape['shape_center_lat'] . ',' . $shape['shape_center_long'];					
 
-					}	
+						}	
 
-				    $current_district = $this_district;
-					next($districts);
+					    $current_district = $this_district;
+						next($districts);
+					}
+
 				}
 
+			    $current_chamber = $this_chamber;
+				next($chambers);
 			}
-
-		    $current_chamber = $this_chamber;
-			next($chambers);
-		}		
-		
+					
+		}
 		
 	
 		return $chambers;
@@ -1039,7 +1052,7 @@ protected function cache_get( $key ) {
 protected function cache_set( $key, $value, $ttl = null ) {
 
 	if ( $ttl == null ) {
-		$ttl = $this->ttl;
+		$ttl = ($this->config->item('cache_ttl')) ? $this->config->item('cache_ttl') : $this->ttl;
 	}
 
 	$key = 'db_api_' . $key;
