@@ -209,7 +209,7 @@ class Context extends REST_Controller {
 					$city_data = $this->get_city_links($data['city'], $data['state']);			
 				}
 			
-				// County lookup - this should be based on a geospatial query, but just faking it using county name associated with city from SBA api until the GIS layers are available. Not sure why I'm using SBA's county name rather than Census GID county name. 
+				// County lookup 
 				if ($latlong) {
 				
 				
@@ -246,6 +246,13 @@ class Context extends REST_Controller {
 				}				
 				
 
+				// County Representatives
+				if ($data['counties']['name'] && $data['counties']['state']) {
+					
+					$data['county_reps'] = $this->get_county_reps($data['counties']['state'], $data['counties']['name']);
+					
+				}
+				
 
 
 				
@@ -613,6 +620,38 @@ class Context extends REST_Controller {
 		
 	}	
 	
+	
+	
+	function get_county_reps($state, $county) {
+		
+		$key = md5( serialize( "$state$county" )) . '_county_rep';
+		
+		// Check in cache
+		if ( $cache = $this->cache_get( $key ) ) {
+			return $cache;
+		}		
+		
+		$county = ucwords($county);	
+		$state = strtoupper($state);	
+				
+		$query = "select rep, rep_email, rep_position from `swdata` where county = '$county' and state = '$state'";		
+		$query = urlencode($query);
+							
+		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=us_county_representatives&query=$query";		
+
+		$county_reps = $this->curl_to_json($url);
+				
+		if(!empty($county_reps)) {
+			
+			// Save to cache
+			$this->cache_set( $key, $county_reps);
+			
+			return $county_reps;			
+		}		
+				
+		
+	}	
+		
 	
 	
 // DC Specific 	
@@ -1197,6 +1236,21 @@ if(!empty($data['zip'])) {
 // Counties Jurisdictions
 
 if (!empty($data['counties'])) {
+	
+	if (!empty($data['county_reps'])) {
+		
+		foreach ($data['county_reps'] as $co_rep) {
+
+			$elected[] = $this->elected_official_model('administrative', $co_rep['rep_position'], null, null, null, $co_rep['rep'], null, null, null, null, $co_rep['rep_email'], null, null, null, null, null, null, null, null, null, null);
+
+		}		
+		
+	} else {
+		$elected = null;
+	}
+		
+		
+	
 
 	$county_zip 		=  ($data['counties']['zip4']) ? $data['counties']['zip'] . '-' . $data['counties']['zip4'] : $data['counties']['zip'];		
 
@@ -1205,8 +1259,9 @@ if (!empty($data['counties'])) {
 							array("key" => 'population', "value" => $data['counties']['population_2006']));										
 	
 
-	$new_data['jurisdictions'][] = 	$this->jurisdiction_model('government', 'County', 'sub_regional', 'County', $data['counties']['name'], $data['counties']['county_id'], $data['counties']['website_url'], null, null, null, $data['counties']['title'], $data['counties']['address1'], $data['counties']['address2'], $data['counties']['city'], $data['counties']['state'], $county_zip, null, $county_metadata, null, null, null);
+	$new_data['jurisdictions'][] = 	$this->jurisdiction_model('government', 'County', 'sub_regional', 'County', $data['counties']['name'], $data['counties']['county_id'], $data['counties']['website_url'], null, null, null, $data['counties']['title'], $data['counties']['address1'], $data['counties']['address2'], $data['counties']['city'], $data['counties']['state'], $county_zip, null, $county_metadata, null, $elected, null);
 
+	$elected = null;
 }
 
 
