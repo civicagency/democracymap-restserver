@@ -1230,7 +1230,8 @@ if(!empty($data['zip'])) {
 
 	$new_data['jurisdictions'][] = $this->jurisdiction_model('government', 'City', 'municipal', 'City', $data['city'], null, $data['place_url_updated'], null, null, null, $data['title'], $data['address1'], $data['address2'], $data['city'], $data['state'], $municipal_zip, null, $municipal_metadata, null, $elected, $data['service_discovery']);
 }
-	
+
+$elected = null;	
 	
 // ##########################################################################################################
 // Counties Jurisdictions
