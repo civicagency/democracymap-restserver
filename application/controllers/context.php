@@ -1233,7 +1233,8 @@ if (!empty($data['mayor_data'])) {
 
 if (!empty($data['city_reps'])) {
 	
-	if (!empty($data['mayor_data'])) {	
+	// filter out the mayor if we have it twice
+	// if (!empty($data['mayor_data'])) {
 	
 	$elected = array_merge($elected, $data['city_reps']);
 		
@@ -1554,7 +1555,7 @@ if (!empty($new_data['jurisdictions'])) {
 
 
 
-	// $new_data['raw_data'] = $data;					
+	//$new_data['raw_data'] = $data;					
 	
 	return $new_data;
 }

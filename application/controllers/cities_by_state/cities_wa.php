@@ -17,11 +17,11 @@ $officials = $this->curl_to_json($url);
 
 // normalized data
 foreach ($officials as $official) {
-		 	
-	if (strripos($official['title'], 'mayor') === true) {
+		 			
+	if (strripos($official['title'], 'mayor') !== false) {
 		$elected_type = 'executive';
 	} 
-	else if (strripos($official['title'], 'council') === true) {
+	else if (strripos($official['title'], 'council') !== false) {
 		$elected_type = 'legislative';
 	} else {
 		$elected_type = 'administrative';
