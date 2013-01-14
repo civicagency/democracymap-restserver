@@ -247,7 +247,7 @@ class Context extends REST_Controller {
 				
 
 				// County Representatives
-				if ($data['counties']['name'] && $data['counties']['state']) {
+				if (!empty($data['counties']['name']) && !empty($data['counties']['state'])) {
 					
 					$data['county_reps'] = $this->get_county_reps($data['counties']['state'], $data['counties']['name']);
 					
@@ -381,7 +381,15 @@ class Context extends REST_Controller {
 				}
 			
 			}
-					
+			
+			// City Data
+			// if include file exists, load it
+			// 		jurisdiction_data = get data;
+
+			// 		$city_reps = $this->get_city_reps($data['city'], $data['state']);
+			// 		
+			//	
+			//		
 
 			// State data
 			if (!empty($data['state_geocoded'])) {
@@ -653,6 +661,15 @@ class Context extends REST_Controller {
 	}	
 		
 	
+function get_city_reps($city, $state) {
+	
+	// include state file
+	
+	return $city_reps;
+	
+}
+
+
 	
 // DC Specific 	
 
