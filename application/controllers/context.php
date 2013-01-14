@@ -382,14 +382,14 @@ class Context extends REST_Controller {
 			
 			}
 			
-			// City Data
-			// if include file exists, load it
-			// 		jurisdiction_data = get data;
-
-			// 		$city_reps = $this->get_city_reps($data['city'], $data['state']);
-			// 		
-			//	
-			//		
+			// City Data			
+		   	$cities_by_state = APPPATH . 'controllers/cities_by_state/cities_' . strtolower($data['state']) .'.php';
+		    if(file_exists($cities_by_state)) {
+		
+				$data['city_reps'] = $this->get_city_reps($cities_by_state, $data['city'], $data['state']);
+			
+			}
+				
 
 			// State data
 			if (!empty($data['state_geocoded'])) {
@@ -661,12 +661,11 @@ class Context extends REST_Controller {
 	}	
 		
 	
-function get_city_reps($city, $state) {
+function get_city_reps($cities_by_state, $city, $state) {
 	
-	// include state file
-	
-	return $city_reps;
-	
+	include $cities_by_state ;
+		
+	return $electeds;
 }
 
 
@@ -1232,6 +1231,12 @@ if (!empty($data['mayor_data'])) {
 	
 }
 
+if (!empty($data['city_reps'])) {
+	
+	$elected = array_merge($elected, $data['city_reps']);
+		
+}
+
 
 
 
@@ -1547,7 +1552,7 @@ if (!empty($new_data['jurisdictions'])) {
 
 
 
-	//$new_data['raw_data'] = $data;					
+	$new_data['raw_data'] = $data;					
 	
 	return $new_data;
 }
