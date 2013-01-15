@@ -3,52 +3,23 @@ require APPPATH.'/libraries/REST_Controller.php';
 
 class Context extends REST_Controller {
 
-	protected $cache 	= array();
-	protected $ttl 		= '86400'; 
+	public $ttl 		= '86400'; 
+
+	function __construct()
+	{
+		parent::__construct();
+	    $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
+	}
 
 	public function index_get()	{
+		
 		
 		if (empty($_GET)) {
 			$this->load->helper('url');			
 			redirect('welcome');	
 		}
 		
-		
-		$data['latitude'] 			  = '';
-		$data['longitude'] 			  = '';
-		$data['city_geocoded'] 		  = '';
-		$data['state_geocoded'] 	  = '';          				
 
-		$data['council_district'] 	  = '';
-		$data['community_district']   = '';
-
-		$data['fid'] 				  = '';
-		$data['state_id'] 	   		  = '';
-		$data['place_id'] 	   		  = '';
-
-		$data['gnis_fid']		      = '';
-		$data['place_name'] 	      = '';
-		$data['political_desc']       = '';
-		$data['title']		          = '';
-		$data['address1']  	          = '';
-		$data['address2']  	          = '';
-		$data['city']		 	      = '';
-		$data['zip']		 	      = '';
-		$data['zip4']		 	      = '';
-		$data['state']	 	          = '';
-		$data['place_url'] 	          = '';
-		$data['population'] 	      = '';
-		$data['county']		          = '';
-
-		$data['community_district']	  = '';
-		$data['community_district_fid'] = '';
-		$data['community_board']      = '';
-		$data['cd_address']		      = '';
-		$data['borough']			  = ''; 
-		
-		$latlong					  = ''; 
-									      	        		
-		
 			$data['input'] 						= $this->input->get('location', TRUE);
 			
 			if(!$data['input'] ) {
@@ -61,8 +32,8 @@ class Context extends REST_Controller {
 			$key 						= $data['input'] . '_context_' . $fullstack;
 
 
-			// Check in cache
-			if ( $cache = $this->cache_get( $key ) ) {
+			// Check in cache		
+			if ( $cache = $this->cache->get( $key ) ) {
 				$this->response($cache, 200);
 			}			
 			
@@ -123,84 +94,19 @@ class Context extends REST_Controller {
 							
 				$data['census_city']			= $this->get_city($data['latitude'], $data['longitude']);
 				
-				// currently this is only getting local nyc data
-				// 
-				// if ($fullstack == 'true') {
-				// 	
-				// 	$council 					= $this->layer_data('census:city_council', 'coundist,gid', $latlong);
-				// 	$community_d 				= $this->layer_data('census:community_district', 'borocd,gid', $latlong);
-                // 
-				// 	$data['council_district'] 	= (!empty($council['features'])) ? $council['features'][0]['properties']['coundist'] : '';
-				// 	$data['council_district_fid'] 	= (!empty($council['features'])) ? $council['features'][0]['properties']['gid'] : '';			
-		        // 
-			    // 
-				// 	$data['community_district'] = (!empty($community_d['features'])) ? $community_d['features'][0]['properties']['borocd'] : '';
-				// 	$data['community_district_fid'] = (!empty($community_d['features'])) ? "community_district." . $community_d['features'][0]['properties']['gid'] : '';
-                // 
-				// }
 				
 
 				if (!empty($data['census_city'])) {
-					
-					
+										
 						$data['state_id'] 	   		= 	$data['census_city']['STATE'];				
  						$data['place_id'] 	   		= 	$data['census_city']['PLACE'];									
-						
 
+						// Load County Model
+						$this->load->model('city_model', 'cities');
 
+						$city = $this->cities->get_city_data($data['state_id'], $data['place_id']);
+						$data = array_merge($data, $city);
 
-					$sql = "SELECT municipalities.GOVERNMENT_NAME, 
-					       	 	 	 municipalities.POLITICAL_DESCRIPTION, 
-									 municipalities.TITLE, 
-									 municipalities.ADDRESS1,
-									 municipalities.ADDRESS2, 
-									 municipalities.CITY, 
-									 municipalities.STATE_ABBR, 
-									 municipalities.ZIP, 
-									 municipalities.ZIP4, 
-									 municipalities.WEB_ADDRESS,
-									 municipalities.POPULATION_2005, 
-									 municipalities.COUNTY_AREA_NAME, 
-		 							 municipalities.MAYOR_NAME, 
-									 municipalities.MAYOR_TWITTER, 
-									 municipalities.SERVICE_DISCOVERY, 
-									 gnis.FEATURE_ID, 
-									 gnis.PRIMARY_LATITUDE, 
-									 gnis.PRIMARY_LONGITUDE
-					   		  	FROM gnis, municipalities
-										      WHERE (municipalities.FIPS_PLACE = gnis.CENSUS_CODE
-										      	    )
-											     AND (municipalities.FIPS_STATE = gnis.STATE_NUMERIC
-											     	 )
-												 AND (municipalities.FIPS_PLACE = '{$data['place_id']}'
-												      )
-												 AND (municipalities.FIPS_STATE = '{$data['state_id']}')
-												";
-
-
-					$query = $this->db->query($sql);
-
-
-					if ($query->num_rows() > 0) {
-					   foreach ($query->result() as $rows)  {
-					      $data['gnis_fid']			=  ucwords(strtolower($rows->FEATURE_ID));
-					      $data['place_name'] 		=  ucwords(strtolower($rows->GOVERNMENT_NAME));
-					      $data['political_desc'] 	=  ucwords(strtolower($rows->POLITICAL_DESCRIPTION));
-					      $data['title']			=  ucwords(strtolower($rows->TITLE));
-					      $data['address1']  		=  ucwords(strtolower($rows->ADDRESS1));
-					      $data['address2']  		=  ucwords(strtolower($rows->ADDRESS2));
-					      $data['city']		 		=  ucwords(strtolower($rows->CITY));
-						  $data['mayor_name']		=  $rows->MAYOR_NAME;
-						  $data['mayor_twitter']	=  $rows->MAYOR_TWITTER;
-						  $data['service_discovery'] =  $rows->SERVICE_DISCOVERY;	
-					      $data['zip']		 		=  $rows->ZIP;
-					      $data['zip4']		 		=  $rows->ZIP4;
-					      $data['state']	 		=  $rows->STATE_ABBR;
-					      $data['place_url'] 	   =  $rows->WEB_ADDRESS;
-					      $data['population'] 	   =  $rows->POPULATION_2005;
-					      $data['county'] 		   =  ucwords(strtolower($rows->COUNTY_AREA_NAME));
-					   }
-					}
 				}	
 				
 				
@@ -212,115 +118,33 @@ class Context extends REST_Controller {
 				// County lookup 
 				if ($latlong) {
 				
+					// Load County Model
+					$this->load->model('county_model', 'counties');
 				
-					$data['county_data']			= $this->get_county($data['latitude'], $data['longitude']);
-				
-				
-					$sql = "SELECT * FROM counties
-							WHERE fips_county = '{$data['county_data']['COUNTY']}' and fips_state = '{$data['county_data']['STATE']}'";
-							
-				
-					$query = $this->db->query($sql);				
+					$data['county_data']			= $this->counties->get_county_geo($data['latitude'], $data['longitude']);	
+					
+					if($data['county_data']['COUNTY']) {			
 						
-					if ($query->num_rows() > 0) {
-					   foreach ($query->result() as $rows)  {	
-							$data['counties']['county_id']					=  $rows->county_id; 	
-							$data['counties']['name']							=  ucwords(strtolower($rows->name));			
-							$data['counties']['political_description']		=  $rows->political_description;
-							$data['counties']['title']						=  ucwords(strtolower($rows->title)); 			
-							$data['counties']['address1']						=  ucwords(strtolower($rows->address1)); 	    
-							$data['counties']['address2']						=  ucwords(strtolower($rows->address2)); 	
-							$data['counties']['city']							=  ucwords(strtolower($rows->city));   
-							$data['counties']['state']						=  $rows->state;  
-							$data['counties']['zip']							=  $rows->zip;    
-							$data['counties']['zip4']							=  $rows->zip4;   
-							$data['counties']['website_url']					=  $rows->website_url; 
-							$data['counties']['population_2006']				=  $rows->population_2006;
-							$data['counties']['fips_state']					=  $rows->fips_state; 
-							$data['counties']['fips_county']					=  $rows->fips_county; 	        			      			      	                               
-					   }
-					}				
+						$data['counties'] 				= $this->counties->get_county_data($data['county_data']['COUNTY'], $data['county_data']['STATE']);
 
+						if ($data['counties']['name']) {
 
+							// County Representatives
+							if (!empty($data['counties']['name']) && !empty($data['counties']['state'])) {
+
+								$data['county_reps'] = $this->counties->get_county_reps($data['counties']['state'], $data['counties']['name']);
+
+							}
+							
+						} else {
+							unset($data['counties']);
+						}
+					}
 				
 				}				
 				
 
-				// County Representatives
-				if (!empty($data['counties']['name']) && !empty($data['counties']['state'])) {
-					
-					$data['county_reps'] = $this->get_county_reps($data['counties']['state'], $data['counties']['name']);
-					
-				}
-				
-
-
-				
-				
-				// Currently unused hyperlocal data for NYC			
-				if (is_numeric($data['community_district']) && $fullstack == 'true') {
-				
-				
-					$sql = "SELECT * FROM community_boards
-							WHERE city_id = {$data['community_district']}";
-
-
-					$query = $this->db->query($sql);				
-						
-					if ($query->num_rows() > 0) {
-					   foreach ($query->result() as $rows)  {	
-							$data['community_board']		=  $rows->community_board;			
-							$data['cd_address']				=  $rows->address;	
-							$data['borough']				=  $rows->borough;
-							$data['board_meeting']			=  $rows->board_meeting;
-							$data['cabinet_meeting']		=  $rows->cabinet_meeting;
-							$data['chair']					=  $rows->chair;
-							$data['district_manager']		=  $rows->district_manager;
-							$data['website']				=  $rows->website;	
-							$data['email']					=  $rows->email;	
-							$data['phone']					=  $rows->phone;	
-							$data['fax']					=  $rows->fax;		
-							$data['neighborhoods']			=  $rows->neighborhoods;		      	
-									      	
-					   }
-					}				
-				
-				}
-
-
-				// Currently unused hyperlocal data for NYC
-				if (is_numeric($data['council_district']) && $fullstack == 'true') {
-				
-				
-					$sql = "SELECT * FROM council_districts
-							WHERE district = {$data['council_district']}";
-
-
-					$query = $this->db->query($sql);				
-						
-					if ($query->num_rows() > 0) {
-					   foreach ($query->result() as $rows)  {	
-							$data['c_address']					=  $rows->address;	
-							$data['c_committees']				=  $rows->committees;	
-							$data['c_term_expiration']			=  $rows->term_expiration;
-							$data['c_district_fax']			=  $rows->district_fax;
-							$data['c_district_phone']			=  $rows->district_phone;	
-							$data['c_email']					=  $rows->email;
-							$data['c_council_member_since']	=  $rows->council_member_since;
-							$data['c_headshot_photo']			=  $rows->headshot_photo;	
-							$data['c_legislative_fax']			=  $rows->legislative_fax;	
-							$data['c_legislative_address']		=  $rows->legislative_address;	
-							$data['c_legislative_phone']		=  $rows->legislative_phone;
-							$data['c_name']					=  $rows->name;		
-							$data['c_twitter_user']					=  $rows->twitter_user;								      	
-									      	
-					   }
-					}				
-				
-				}
-
-			
-				
+		
 								
 			}
 			
@@ -429,7 +253,7 @@ class Context extends REST_Controller {
 				if(!empty($data_errors)) $new_data['errors'] = $data_errors;
 				
 				// Save to cache
-				$this->cache_set( $key, $new_data);
+				$this->cache->save( $key, $new_data, $this->ttl);
 				
 				$this->response($new_data, 200);
 			} else
@@ -446,7 +270,7 @@ class Context extends REST_Controller {
 			if (isset($data['geojson'])) $endpoint['geojson'] = $data['geojson'];
 			
 			// Save to cache
-			$this->cache_set( $key, $endpoint);			
+			$this->cache->save( $key, $endpoint, $this->ttl);			
 			
 			$this->response($endpoint, 200);
 			}
@@ -455,51 +279,22 @@ class Context extends REST_Controller {
 	
 
 	
-	function data()
-	{
-		$this->db->where('id', $this->uri->segment(3));
-		$data['query'] = $this->db->get('dataset');
-		$data['agencies'] = $this->db->get('agency');
-
-		$this->load->view('map_view', $data);
-	}	
-	
-	function dataset_add()
-	{
-		$data['query'] = $this->db->get('agency');
-		
-		$this->load->view('dataset_add', $data);
-	}	
-
-
-	function dataset_insert()
-	{
-			$this->db->insert('dataset', $_POST);
-				
-			redirect('dataset/data/'.$this->db->insert_id());
-	}
 	
 	
 	
 	
-	function layer_data($layer, $properties, $latlong) {
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
-
-		$url = $this->config->item('geoserver_root') . 
-			"/wfs?request=GetFeature&service=WFS&typename=" . 
-			rawurlencode($layer) . 
-			"&propertyname=" . 
-			rawurlencode($properties) .
-			"&CQL_FILTER=" . 
-			rawurlencode("INTERSECT(the_geom, POINT (" . $latlong . "))") . 
-			"&outputformat=JSON";
-
-		
-		$feature_data = $this->curl_to_json($url);
-
-		return $feature_data;
-
-	}
 	
 	
 	
@@ -507,7 +302,7 @@ class Context extends REST_Controller {
 		
 		$url = "http://tigerweb.geo.census.gov/ArcGIS/rest/services/Census2010/tigerWMS/MapServer/58/query?text=&geometry=$long%2C$lat&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&objectIds=&where=&time=&returnCountOnly=false&returnIdsOnly=false&returnGeometry=false&maxAllowableOffset=&outSR=&outFields=*&f=json";
 
-			$feature_data = $this->curl_to_json($url);
+			$feature_data = curl_to_json($url);
 
 			if(!empty($feature_data['features'])) return $feature_data['features'][0]['attributes'];			
 
@@ -521,7 +316,7 @@ class Context extends REST_Controller {
 		$url = $this->config->item('geoserver_root') . '/wfs?request=getFeature&outputFormat=json&layers=census:municipal&featureid=' . $feature_id; 
 		
 		
-			$feature_data = $this->curl_to_json($url);
+			$feature_data = curl_to_json($url);
 
 			return $feature_data;
 
@@ -533,7 +328,7 @@ class Context extends REST_Controller {
 		$key = md5( serialize( "$city, $state" )) . '_city_links';
 		
 		// Check in cache
-		if ( $cache = $this->cache_get( $key ) ) {
+		if ( $cache = $this->cache->get( $key ) ) {
 			return $cache;
 		}		
 			
@@ -543,10 +338,10 @@ class Context extends REST_Controller {
 	
 		$url = "http://api.sba.gov/geodata/all_links_for_city_of/$city/$state.json";
 
-		$data = $this->curl_to_json($url);	
+		$data = curl_to_json($url);	
 		
 		// Save to cache
-		$this->cache_set( $key, $data);
+		$this->cache->save( $key, $data, $this->ttl);
 
 		return $data;
 
@@ -556,7 +351,7 @@ class Context extends REST_Controller {
 	
 	function get_servicediscovery($url) {	
 		
-			$data = $this->curl_to_json($url);
+			$data = curl_to_json($url);
 
 			return $data;
 
@@ -571,7 +366,7 @@ class Context extends REST_Controller {
 		$key = md5( serialize( "$city, $state" )) . '_city_mayor';
 		
 		// Check in cache
-		if ( $cache = $this->cache_get( $key ) ) {
+		if ( $cache = $this->cache->get( $key ) ) {
 			return $cache;
 		}		
 		
@@ -583,12 +378,12 @@ class Context extends REST_Controller {
 		
 		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=us_mayors&query=$query";		
 
-		$mayors = $this->curl_to_json($url);
+		$mayors = curl_to_json($url);
 
 		if(!empty($mayors)) {
 			
 			// Save to cache
-			$this->cache_set( $key, $mayors[0]);
+			$this->cache->save( $key, $mayors[0], $this->ttl);
 			
 			return $mayors[0];			
 		}
@@ -603,7 +398,7 @@ class Context extends REST_Controller {
 		$key = md5( serialize( $city )) . '_city_mayor_sm';
 		
 		// Check in cache
-		if ( $cache = $this->cache_get( $key ) ) {
+		if ( $cache = $this->cache->get( $key ) ) {
 			return $cache;
 		}		
 		
@@ -615,12 +410,12 @@ class Context extends REST_Controller {
 				
 		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=us_mayors_-_social_media_accounts&query=$query";		
 
-		$mayor = $this->curl_to_json($url);
+		$mayor = curl_to_json($url);
 				
 		if(!empty($mayor)) {
 			
 			// Save to cache
-			$this->cache_set( $key, $mayor[0]);
+			$this->cache->save( $key, $mayor[0], $this->ttl);
 			
 			return $mayor[0];			
 		}		
@@ -630,35 +425,7 @@ class Context extends REST_Controller {
 	
 	
 	
-	function get_county_reps($state, $county) {
-		
-		$key = md5( serialize( "$state$county" )) . '_county_rep';
-		
-		// Check in cache
-		if ( $cache = $this->cache_get( $key ) ) {
-			return $cache;
-		}		
-		
-		$county = ucwords($county);	
-		$state = strtoupper($state);	
-				
-		$query = "select rep, rep_email, rep_position from `swdata` where county = '$county' and state = '$state'";		
-		$query = urlencode($query);
-							
-		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=us_county_representatives&query=$query";		
-
-		$county_reps = $this->curl_to_json($url);
-				
-		if(!empty($county_reps)) {
-			
-			// Save to cache
-			$this->cache_set( $key, $county_reps);
-			
-			return $county_reps;			
-		}		
-				
-		
-	}	
+	
 		
 	
 function get_city_reps($cities_by_state, $city, $state) {
@@ -677,7 +444,7 @@ function get_dc_ward($lat, $long)	{
 
 	$url ="http://maps.dcgis.dc.gov/DCGIS/rest/services/DCGIS_DATA/Administrative_Other_Boundaries_WebMercator/MapServer/26/query?text=&geometry=$long%2C+$lat&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&where=&returnGeometry=false&outSR=4326&outFields=NAME%2C+WARD_ID%2C+LABEL&f=json";		
 
-	$data = $this->curl_to_json($url);
+	$data = curl_to_json($url);
 
 	$data = $data['features'][0]['attributes'];
 
@@ -693,7 +460,7 @@ function get_dc_councilmembers($ward)	{
 	$key = md5( serialize( $ward )) . '_dc_ward_members';
 	
 	// Check in cache
-	if ( $cache = $this->cache_get( $key ) ) {
+	if ( $cache = $this->cache->get( $key ) ) {
 		return $cache;
 	}	
 	
@@ -701,33 +468,21 @@ function get_dc_councilmembers($ward)	{
 	
 	$url ="https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=washington_dc_wards_and_councilmembers&query=select%20*%20from%20%60swdata%60%20where%20ward_name%20%3D%20%22$ward%22%3B";		
 
-	$response['my_rep'] = $this->curl_to_json($url);
+	$response['my_rep'] = curl_to_json($url);
 	
 	
 	$url ="https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=washington_dc_wards_and_councilmembers&query=select%20*%20from%20%60swdata%60%20where%20member_type%20!%3D%20%22Ward%20Members%22%3B";		
 
 
-	$response['at_large'] = $this->curl_to_json($url);
+	$response['at_large'] = curl_to_json($url);
 
 	// Save to cache
-	$this->cache_set( $key, $response);
+	$this->cache->save( $key, $response, $this->ttl);
 
 	return $response;	
 	
 }
 
-
-
-function get_county($lat, $long) {	
-	
-	
-	$url = "http://tigerweb.geo.census.gov/ArcGIS/rest/services/Census2010/tigerWMS/MapServer/115/query?text=&geometry=$long%2C$lat&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&objectIds=&where=&time=&returnCountOnly=false&returnIdsOnly=false&returnGeometry=false&maxAllowableOffset=&outSR=&outFields=COUNTY,BASENAME,NAME,STATE&f=json";	
-
-		$feature_data = $this->curl_to_json($url);
-
-		if(!empty($feature_data['features'])) return $feature_data['features'][0]['attributes'];			
-
-}
 	
 	
 	function get_state($state) {
@@ -735,7 +490,7 @@ function get_county($lat, $long) {
 		$key = $state . '_state_data';
 
 		// Check in cache
-		if ( $cache = $this->cache_get( $key ) ) {
+		if ( $cache = $this->cache->get( $key ) ) {
 			return $cache;
 		}		
 		
@@ -746,12 +501,12 @@ function get_county($lat, $long) {
 		
 		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=50_states_data&query=$query";		
 
-		$state = $this->curl_to_json($url);
+		$state = curl_to_json($url);
 		
 		if(!empty($state[0])) {
 		
 			// Save to cache
-			$this->cache_set( $key, $state[0]);
+			$this->cache->save( $key, $state[0], $this->ttl);
 			
 			return $state[0];		
 		}
@@ -766,7 +521,7 @@ function get_county($lat, $long) {
 		$key = $state . '_state_governor';		
 		
 		// Check in cache
-		if ( $cache = $this->cache_get( $key ) ) {
+		if ( $cache = $this->cache->get( $key ) ) {
 			return $cache;
 		}		
 		
@@ -776,12 +531,12 @@ function get_county($lat, $long) {
 				
 		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=us_governors&query=$query";		
 
-		$state = $this->curl_to_json($url);
+		$state = curl_to_json($url);
 
 		if(!empty($state[0])) {
 
 			// Save to cache
-			$this->cache_set( $key, $state[0]);		
+			$this->cache->save( $key, $state[0], $this->ttl);		
 		
 			return $state[0];
 		}
@@ -797,7 +552,7 @@ function get_county($lat, $long) {
 		$key = $state . '_state_governor_sm';				
 		
 		// Check in cache
-		if ( $cache = $this->cache_get( $key ) ) {
+		if ( $cache = $this->cache->get( $key ) ) {
 			return $cache;
 		}		
 		
@@ -807,12 +562,12 @@ function get_county($lat, $long) {
 				
 		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=us_governors_-_social_media_accounts&query=$query";		
 
-		$state = $this->curl_to_json($url);
+		$state = curl_to_json($url);
 		
 		if(!empty($state[0])) {
 			
 			// Save to cache
-			$this->cache_set( $key, $state[0]);
+			$this->cache->save( $key, $state[0], $this->ttl);
 			
 			return $state[0];		
 		}	
@@ -853,7 +608,7 @@ function get_county($lat, $long) {
 		
 		$url = "http://openstates.org/api/v1/legislators/geo/?long=" . $long . "&lat=" . $lat . "&fields=state,chamber,district,full_name,url,photo_url&apikey=" . $this->config->item('sunlight_api_key');
 
-		$state_legislators = $this->curl_to_json($url);
+		$state_legislators = curl_to_json($url);
 				
 		if(!empty($state_legislators)) return $state_legislators;				
 		else return false;
@@ -867,16 +622,16 @@ function get_county($lat, $long) {
 		$key = $state . '_' . $chamber . '_state_boundaries';
 		
 		// Check in cache
-		if ( $cache = $this->cache_get( $key ) ) {
+		if ( $cache = $this->cache->get( $key ) ) {
 			return $cache;
 		}		
 		
 		$url = "http://openstates.org/api/v1/districts/" . $state . "/" . $chamber . "/?fields=name,boundary_id&apikey=" . $this->config->item('sunlight_api_key');
 
-		$state_boundaries = $this->curl_to_json($url);
+		$state_boundaries = curl_to_json($url);
 		$state_boundaries = $this->process_boundaries($state_boundaries);
 
-		$this->cache_set( $key, $state_boundaries);
+		$this->cache->save( $key, $state_boundaries, $this->ttl);
 
 		return $state_boundaries;
 
@@ -890,7 +645,7 @@ function get_county($lat, $long) {
 		$url = "http://openstates.org/api/v1/districts/boundary/" . $boundary_id . "/?apikey=" . $this->config->item('sunlight_api_key');
 
 
-		$geojson = $this->curl_to_json($url);	
+		$geojson = curl_to_json($url);	
 
 		$boundary_shape['coordinates'] = $geojson['shape'];
 		$boundary_shape = json_encode($boundary_shape);
@@ -1018,7 +773,7 @@ function national_legislators($lat, $long) {
 	$url = "http://services.sunlightlabs.com/api/legislators.allForLatLong.json?latitude=" . $lat . "&longitude=" . $long . "&apikey=" . $this->config->item('sunlight_api_key');
 
 
-	$legislators = $this->curl_to_json($url);
+	$legislators = curl_to_json($url);
 	$legislators = $legislators['response']['legislators'];
 
 	return $legislators;	
@@ -1077,59 +832,6 @@ function process_nat_legislators($representatives) {
 	
 }	
 
-
-function curl_to_json($url) {
-	
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $url);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-	$data=curl_exec($ch);
-	curl_close($ch);
-
-
-	return json_decode($data, true);	
-	
-}
-
-
-/**
- * Retrieve data from Alternative PHP Cache (APC).
- */
-protected function cache_get( $key ) {
-	
-	if ( !extension_loaded('apc') || (ini_get('apc.enabled') != 1) ) {
-		if ( isset( $this->cache[ $key ] ) ) {
-			return $this->cache[ $key ];
-		}
-	}
-	else {
-		return apc_fetch( $key );
-	}
-
-	return false;
-
-}
-
-/**
- * Store data in Alternative PHP Cache (APC).
- */
-protected function cache_set( $key, $value, $ttl = null ) {
-
-	if ( $ttl == null ) {
-		$ttl = ($this->config->item('cache_ttl')) ? $this->config->item('cache_ttl') : $this->ttl;
-	}
-
-	$key = 'db_api_' . $key;
-
-	if ( extension_loaded('apc') && (ini_get('apc.enabled') == 1) ) {
-		return apc_store( $key, $value, $ttl );
-	}
-
-	$this->cache[$key] = $value;
-
-
-}
 
 
 function re_schema($data) {

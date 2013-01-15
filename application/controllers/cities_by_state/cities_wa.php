@@ -3,7 +3,7 @@
 $key = md5( serialize("$city $state")) . '_city_reps';
 
 // Check in cache
-if ( $cache = $this->cache_get( $key ) ) {
+if ( $cache = $this->cache->get( $key ) ) {
 	return $cache;
 }	
 
@@ -13,7 +13,7 @@ $query = urlencode($query);
 
 $url ="https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=city_representatives_-_washington&query=$query";		
 
-$officials = $this->curl_to_json($url);
+$officials = curl_to_json($url);
 
 // normalized data
 foreach ($officials as $official) {
@@ -53,7 +53,7 @@ foreach ($officials as $official) {
 
 
 // Save to cache
-$this->cache_set( $key, $electeds);
+$this->cache->save( $key, $electeds, $this->ttl);
 
 
 ?>
