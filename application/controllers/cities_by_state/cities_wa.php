@@ -55,5 +55,6 @@ foreach ($officials as $official) {
 // Save to cache
 $this->cache->save( $key, $electeds, $this->ttl);
 
+return $electeds;
 
 ?>
