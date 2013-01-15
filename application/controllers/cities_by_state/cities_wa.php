@@ -1,12 +1,5 @@
 <?php
 
-$key = md5( serialize("$city $state")) . '_city_reps';
-
-// Check in cache
-if ( $cache = $this->cache->get( $key ) ) {
-	return $cache;
-}	
-
 
 $query = "select * from `rep` where city = '$city' and (title like '%council%' or title like '%mayor%')";
 $query = urlencode($query);
@@ -52,9 +45,5 @@ foreach ($officials as $official) {
 }
 
 
-// Save to cache
-$this->cache->save( $key, $electeds, $this->ttl);
-
-return $electeds;
 
 ?>

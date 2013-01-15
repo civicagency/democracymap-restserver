@@ -13,6 +13,7 @@ class Context extends REST_Controller {
 
 	public function index_get()	{
 		
+//		$this->cache->clean();
 		
 		if (empty($_GET)) {
 			$this->load->helper('url');			
@@ -209,12 +210,12 @@ class Context extends REST_Controller {
 			// City Data			
 		   	$cities_by_state = APPPATH . 'controllers/cities_by_state/cities_' . strtolower($data['state']) .'.php';
 		    if(file_exists($cities_by_state)) {
-		
+
 				$data['city_reps'] = $this->get_city_reps($cities_by_state, $data['city'], $data['state']);
 			
 			}
+			
 				
-
 			// State data
 			if (!empty($data['state_geocoded'])) {
 				$state = $this->get_state($data['state_geocoded']);
@@ -430,8 +431,20 @@ class Context extends REST_Controller {
 	
 function get_city_reps($cities_by_state, $city, $state) {
 	
-	include $cities_by_state ;
+	$key = md5( serialize("$city $state")) . '_city_reps';
+
+	// Check in cache
+	if ( $cache = $this->cache->get( $key ) ) {
+		return $cache;
+	} 		
 		
+	include $cities_by_state ;
+	
+	// Save to cache
+	$this->cache->save( $key, $electeds, $this->ttl);
+    
+	return $electeds;	
+	
 }
 
 
@@ -937,7 +950,7 @@ if (!empty($data['city_reps'])) {
 	// filter out the mayor if we have it twice
 	// if (!empty($data['mayor_data'])) {
 	
-	$elected = array_merge($elected, $data['city_reps']);
+	$elected = (!empty($elected)) ? array_merge($elected, $data['city_reps']) : $data['city_reps'];
 		
 }
 
