@@ -13,7 +13,7 @@ class Context extends REST_Controller {
 
 	public function index_get()	{
 		
-//		$this->cache->clean();
+		//$this->cache->clean();
 		
 		if (empty($_GET)) {
 			$this->load->helper('url');			
@@ -102,7 +102,7 @@ class Context extends REST_Controller {
 						$data['state_id'] 	   		= 	$data['census_city']['STATE'];				
  						$data['place_id'] 	   		= 	$data['census_city']['PLACE'];									
 
-						// Load County Model
+						// Load City Model
 						$this->load->model('city_model', 'cities');
 
 						$city = $this->cities->get_city_data($data['state_id'], $data['place_id']);
@@ -122,12 +122,12 @@ class Context extends REST_Controller {
 					// Load County Model
 					$this->load->model('county_model', 'counties');
 				
-					$data['county_data']			= $this->counties->get_county_geo($data['latitude'], $data['longitude']);	
+					$data['county_data']			= $this->counties->get_county_geo($data['latitude'], $data['longitude']);				
 					
 					if($data['county_data']['COUNTY']) {			
 						
 						$data['counties'] 				= $this->counties->get_county_data($data['county_data']['COUNTY'], $data['county_data']['STATE']);
-
+						
 						if ($data['counties']['name']) {
 
 							// County Representatives
@@ -947,10 +947,29 @@ if (!empty($data['mayor_data'])) {
 
 if (!empty($data['city_reps'])) {
 	
-	// filter out the mayor if we have it twice
-	// if (!empty($data['mayor_data'])) {
+	// filter out the mayor if we have it 
+	$count = 0;
+	foreach($data['city_reps'] as $city_rep) {
+		if (strtolower($city_rep['title']) == 'mayor' );
+		$mayor_key = $count;
+		$count++;
+	}
+	
+	// If we have a mayor, remove it if it's duplicative, otherwise put it at the top
+	if ($mayor_key !== false) {
+		
+		$mayor_temp = $data['city_reps'][$mayor_key];
+		unset($data['city_reps'][$mayor_key]);
+		
+		// if we don't already have mayor data then, move the mayor we found to the top of the array
+		if (empty($data['mayor_data'])) {
+			array_unshift($data['city_reps'], $mayor_temp);
+		}
+	}
 	
 	$elected = (!empty($elected)) ? array_merge($elected, $data['city_reps']) : $data['city_reps'];
+		
+	
 		
 }
 

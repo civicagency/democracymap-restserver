@@ -33,7 +33,7 @@ class County_model extends CI_Model {
 		if ($query->num_rows() > 0) {
 		   foreach ($query->result() as $rows)  {	
 			
-			$county = array(
+			$county_data = array(
 					
 				'county_id'						=>  $rows->county_id, 	
 				'name'							=>  ucwords(strtolower($rows->name)),		
@@ -53,10 +53,15 @@ class County_model extends CI_Model {
 			);	        			      			      	                               
 			
 		   }
-		}		
+		}	
+	
 		
-		
-		return $county;
+		if (!empty($county_data)) {	
+			return $county_data;
+		}
+		else {
+			return false;
+		}
 		
 	}	
 	
