@@ -13,7 +13,7 @@ class Context extends REST_Controller {
 
 	public function index_get()	{
 		
-	//	$this->cache->clean();
+		// $this->cache->clean();
 		
 		if (empty($_GET)) {
 			$this->load->helper('url');			
@@ -143,11 +143,40 @@ class Context extends REST_Controller {
 					}
 				
 				}				
-				
-
-		
-								
+												
 			}
+			
+			
+			// State data
+			if (!empty($data['state_geocoded'])) {
+				
+				$data['state_data'] = $this->get_state($data['state_geocoded']);
+								
+				$governor = $this->get_governor($data['state_geocoded']);
+				
+				if(!empty($governor)) {
+					$data['governor_data'] = $governor;				
+				}	
+				
+				$governor_socialmedia = $this->get_governor_sm($data['state_geocoded']);			
+				
+				if(!empty($governor_socialmedia)) {
+					$data['governor_sm'] = $governor_socialmedia;				
+				}				
+				
+			}			
+			
+			
+			
+			// If we didn't get state abbreviation from the city lookup, see if we can get it elsewhere
+			if (empty($data['state']) && !empty($data['counties']['state'])) {
+				$data['state'] = $data['counties']['state'];
+				// $data['state'] = $data['state_geocoded']; this is more reliable, but isn't the abbreviation	
+			}	
+			
+			
+			
+					
 			
 			// get GeoJSON from GeoServer
 			if ($this->input->get('geojson', TRUE) == 'true') {				
@@ -189,7 +218,9 @@ class Context extends REST_Controller {
 				
 				if(!empty($data['mayor_data']['url'])) {
 					$data['place_url_updated'] = $data['mayor_data']['url'];	
-				} else {
+				} 
+				
+				if (!empty($data['place_url'])) {
 					$data['place_url_updated'] = $data['place_url'];	
 				}
 			}
@@ -197,7 +228,7 @@ class Context extends REST_Controller {
 			
 			
 			// DC Hyperlocal data - this should be totally decoupled, but including it here as a proof of concept
-			if (($data['state_id'] == '11') && ($data['place_id'] == '50000')) {
+			if (!empty($data['state_id']) && ($data['state_id'] == '11') && ($data['place_id'] == '50000')) {
 			
 				$data['city_ward'] = $this->get_dc_ward($data['latitude'], $data['longitude']); 
 			
@@ -209,35 +240,14 @@ class Context extends REST_Controller {
 			
 			// City Data			
 		   	$cities_by_state = APPPATH . 'controllers/cities_by_state/cities_' . strtolower($data['state']) .'.php';
-		    if(file_exists($cities_by_state)) {
+		    if(!empty($data['city']) && file_exists($cities_by_state)) {
 
 				$data['city_reps'] = $this->get_city_reps($cities_by_state, $data['city'], $data['state']);
 			
 			}
 			
 				
-			// State data
-			if (!empty($data['state_geocoded'])) {
-				$state = $this->get_state($data['state_geocoded']);
 				
-				if(!empty($state)) {
-					$data['state_data'] = $state;				
-				}
-				
-				$governor = $this->get_governor($data['state_geocoded']);
-				
-				if(!empty($governor)) {
-					$data['governor_data'] = $governor;				
-				}	
-				
-				$governor_socialmedia = $this->get_governor_sm($data['state_geocoded']);			
-				
-				if(!empty($governor_socialmedia)) {
-					$data['governor_sm'] = $governor_socialmedia;				
-				}				
-				
-			}			
-			
 
 			// See if we have google analytics tracking code
 			if($this->config->item('ganalytics_id')) {
@@ -1097,7 +1107,8 @@ if (!empty($data['state_chambers']['upper']) && (!empty($data['national_chambers
 		
 if (!empty($data['state_data'])) {
 
-	$state_metadata = array(array("key" => "state_id", "value" => $data['state_id']));										
+
+	$state_metadata = (!empty($data['state_id'])) ? array(array("key" => "state_id", "value" => $data['state_id'])) : null;
 	
 // Governor
 	$elected = array($this->elected_official_model('executive', 'Governor', null, null, null, $data['state_data']['governor'], $data['state_data']['governor_url'], null, null, null, null, null, null, null, null, null, null, null, null, null, null));
