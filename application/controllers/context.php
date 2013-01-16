@@ -13,7 +13,7 @@ class Context extends REST_Controller {
 
 	public function index_get()	{
 		
-		//$this->cache->clean();
+	//	$this->cache->clean();
 		
 		if (empty($_GET)) {
 			$this->load->helper('url');			
@@ -933,8 +933,44 @@ if (!empty($data['mayor_data'])) {
 }
 
 
+// State by state city rep data
+
+if (!empty($data['city_reps'])) {
+	
+	// check to see if we have mayor in the general city reps data
+	$count = 0;
+	foreach($data['city_reps'] as $city_rep) {
+		if (strtolower($city_rep['title']) == 'mayor' ) {
+			$mayor_key = $count;
+		} 		
+		$count++;
+	}
+	
+	// If we have a mayor, remove it if it's duplicative, otherwise put it at the top
+	if ($mayor_key !== false) {
+							
+		$mayor_temp = $data['city_reps'][$mayor_key];
+		unset($data['city_reps'][$mayor_key]);
+		
+		// if we don't already have mayor data then, move the mayor we found to the top of the array
+		if (empty($data['mayor_data'])) {
+			array_unshift($data['city_reps'], $mayor_temp);
+		} else {
+		// if we do already have mayor data then try to merge the data
+		
+			$this->load->helper('api');			
+			$elected[0] = array_mash($elected[0], $mayor_temp);
+		}
+	}
+	
+	$elected = (!empty($elected)) ? array_merge($elected, $data['city_reps']) : $data['city_reps'];
+		
+		
+}
 
 
+
+// DC Specific?
  if (!empty($data['council_reps']['at_large'])) {
 	
 	foreach ($data['council_reps']['at_large'] as $at_large) {
@@ -945,33 +981,7 @@ if (!empty($data['mayor_data'])) {
 	
 }
 
-if (!empty($data['city_reps'])) {
-	
-	// filter out the mayor if we have it 
-	$count = 0;
-	foreach($data['city_reps'] as $city_rep) {
-		if (strtolower($city_rep['title']) == 'mayor' );
-		$mayor_key = $count;
-		$count++;
-	}
-	
-	// If we have a mayor, remove it if it's duplicative, otherwise put it at the top
-	if ($mayor_key !== false) {
-		
-		$mayor_temp = $data['city_reps'][$mayor_key];
-		unset($data['city_reps'][$mayor_key]);
-		
-		// if we don't already have mayor data then, move the mayor we found to the top of the array
-		if (empty($data['mayor_data'])) {
-			array_unshift($data['city_reps'], $mayor_temp);
-		}
-	}
-	
-	$elected = (!empty($elected)) ? array_merge($elected, $data['city_reps']) : $data['city_reps'];
-		
-	
-		
-}
+
 
 
 

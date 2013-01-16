@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Retrives json at GET from specified URL and decodes to php. 
+ * Should probably be called 'curl_from_json' or 'decode_json_curl'
+ */
+
 function curl_to_json($url) {
 	
 	$ch = curl_init();
@@ -15,42 +20,25 @@ function curl_to_json($url) {
 }
 
 
-
 /**
- * Retrieve data from Alternative PHP Cache (APC).
+ * This mashes together two arrays with the same keys
+ * It fills in any empty values, but gives precedence to the $primary array
  */
-function cache_get( $key ) {
-	
-	if ( !extension_loaded('apc') || (ini_get('apc.enabled') != 1) ) {
-		if ( isset( $this->cache[ $key ] ) ) {
-			return $this->cache[ $key ];
+
+function array_mash($primary, $secondary) {
+	$primary = (array)$primary;
+	$secondary = (array)$secondary;
+	$out = array();
+	foreach($primary as $name => $value) {
+		if ( array_key_exists($name, $secondary) && !empty($secondary[$name]) && empty($value)) {
+			$out[$name] = $secondary[$name];
+		}
+		else {
+			$out[$name] = $value;
 		}
 	}
-	else {
-		return apc_fetch( $key );
-	}
-
-	return false;
-
+	return $out;
 }
 
-/**
- * Store data in Alternative PHP Cache (APC).
- */
-function cache_set( $key, $value, $ttl = null ) {
-
-	if ( $ttl == null ) {
-		$ttl = ($this->config->item('cache_ttl')) ? $this->config->item('cache_ttl') : $this->ttl;
-	}
-
-	$key = 'db_api_' . $key;
-
-	if ( extension_loaded('apc') && (ini_get('apc.enabled') == 1) ) {
-		return apc_store( $key, $value, $ttl );
-	}
-
-	$this->cache[$key] = $value;
-
-}
 
 ?>
