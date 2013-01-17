@@ -1,7 +1,40 @@
+.dmap {
+width : 700px;
+border : 1px solid #ccc;
+margin : 1em auto;
+}
+
+.right {
+float : right;
+}
+
 .jurisdictions {
-width : 100%;
 clear : both;
 float : left;
+ width : 100%;
+}
+
+#searchbox input#addressid {
+font-size : 2em;
+line-height : 2.25em;
+ height : 2.5em;
+ padding : .5em;
+  
+width : 100%;
+box-sizing : border-box;
+-moz-box-sizing:border-box; /* Firefox */
+-webkit-box-sizing:border-box; /* Safari */
+ display : block;
+margin : 0;
+
+}
+
+@media screen and (max-width: 900px) {
+.dmap {
+width : auto;
+border : 0;
+margin : 0;
+}
 }
 
 /* List reset */
@@ -48,4 +81,8 @@ margin-bottom : 0;
 .jurisdictions .elected-list .text-box {
 float : left;
 }
+
+
+
+
 
