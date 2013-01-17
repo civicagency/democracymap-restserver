@@ -1197,8 +1197,11 @@ $nhr = $data['national_chambers']['house']['reps'][0];
 		$img_url = $this->config->item('democracymap_root') . '/img/headshot/us-congress/' . $nhr['bioguide_id'] . '.jpg';
 
 
-	$elected = 	array($this->elected_official_model('legislative', $nhr['title'], null, null, null, $nhr['full_name'], $nhr['website'], $img_url, null, null, null, $nhr['phone'], null, null, null, null, null, null, null, null, $social_media));
+	$title = ($nhr['title'] == 'Rep') ? 'Representative' : null;
+
+	$elected = 	array($this->elected_official_model('legislative', $title, null, null, null, $nhr['full_name'], $nhr['website'], $img_url, null, null, null, $nhr['phone'], null, null, null, null, null, null, null, null, $social_media));
 	
+	$title = null;
 	$district = "District " . $nhr['district'];
 
 	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'House of Representatives', 'national', 'United States', $district, $nhr['district'], null, null, null, null, null, null, null, null, null, null, null, null, null, $elected, null);
@@ -1255,9 +1258,11 @@ if (!empty($data['state_chambers']['upper']) && (!empty($data['national_chambers
 			$social_media[] = array("type" => "youtube","description" => "Youtube","username" => null,"url" => $slc_rep['youtube_url'],"last_updated" => null);
 		}		
 		
+		$title = ($slc_rep['title'] == 'Sen') ? 'Senator' : null;
 		
-		$elected[] = $this->elected_official_model('legislative', $slc_rep['title'], $slc_rep['district'], $slc_rep['name_given'], $slc_rep['name_family'], $slc_rep['full_name'], $slc_rep['website'], $img_url, null, $slc_rep['url_contact'], $slc_rep['email'], $slc_rep['phone'], null, $slc_rep['congress_office'], null, null, null, null, null, null, $social_media);					
+		$elected[] = $this->elected_official_model('legislative', $title, $slc_rep['district'], $slc_rep['name_given'], $slc_rep['name_family'], $slc_rep['full_name'], $slc_rep['website'], $img_url, null, $slc_rep['url_contact'], $slc_rep['email'], $slc_rep['phone'], null, $slc_rep['congress_office'], null, null, null, null, null, null, $social_media);					
 
+		$title = null;
 }
 	
 	
