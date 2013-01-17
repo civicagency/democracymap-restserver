@@ -450,10 +450,14 @@ function get_city_reps($cities_by_state, $city, $state) {
 		
 	include $cities_by_state ;
 	
-	// Save to cache
-	$this->cache->save( $key, $electeds, $this->ttl);
-    
-	return $electeds;	
+	if (!empty($electeds)) {
+		// Save to cache
+		$this->cache->save( $key, $electeds, $this->ttl);
+   
+		return $electeds;	
+	} else {
+		return null;
+	}
 	
 }
 
