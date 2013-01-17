@@ -56,9 +56,16 @@ foreach ($jurisdictions['jurisdictions'] as $jurisdiction) {
 	</h2>		
 		
 	<?php
-	}
-	?>	
+	}?>
 	
+	
+	<?php if (!empty($jurisdiction['phone'])) : ?>
+		<div class="phone"><?php echo $jurisdiction['phone']; ?></div>
+	<?php endif; ?>
+	
+	
+	
+
 	
 	<!-- Again, limit to data->jurisdictions->elected_office->type = executive -->
 
@@ -92,6 +99,17 @@ foreach ($jurisdiction['elected_office'] as $elected) {
 				<h4>
 						<?php echo $elected['name_full']?> <!-- data->jurisdictions->elected_office->name_full -->
 				</h4> 
+				
+				<?php if (!empty($elected['phone'])) : ?>
+					<div class="phone"><?php echo $elected['phone']; ?></div>
+				<?php endif; ?>
+
+
+				<?php if (!empty($elected['email'])) : ?>
+					<div class="email"><?php echo $elected['email']; ?></div>
+				<?php endif; ?>				
+				
+				
 			</div>										
 			<img class="elected-photo" src="<?php echo $elected['url_photo']?>" /> <!-- data->jurisdictions->elected_office->url_photo -->
 		</li>
