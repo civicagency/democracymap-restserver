@@ -4,6 +4,7 @@
 $query = "select * from `rep` where city = '$city' and (title like '%council%'  
 													 or title like '%mayor%' 
 													 or title like '%member%' 
+													 or title like '%district%' 
 													 or title like '%city administrator%' 
 													 or title like '%chief executive officer%' 
 													 or title like '%city manager%' 																										
@@ -21,7 +22,7 @@ foreach ($officials as $official) {
 	if (strripos($official['title'], 'mayor') !== false) { // Had considered these tests too, but don't think they're elected: OR strripos($official['title'], 'city manager') !== false OR strripos($official['title'], 'executive') !== false
 		$elected_type = 'executive';
 	} 
-	else if (strripos($official['title'], 'council') !== false OR strripos($official['title'], 'member') !== false) {
+	else if (strripos($official['title'], 'council') !== false OR strripos($official['title'], 'member') !== false OR strripos($official['title'], 'district') !== false) {
 		$elected_type = 'legislative';
 	} else {
 		$elected_type = 'administrative';
