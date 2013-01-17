@@ -28,6 +28,15 @@ foreach ($jurisdictions['jurisdictions'] as $jurisdiction) {
 	
 	
 	<?php 
+	
+	
+	$jurisdiction['name'] = $jurisdiction['type_name'] . ': ' . $jurisdiction['name'];
+	
+	if ($jurisdiction['type'] == 'legislative' && $jurisdiction['level'] == 'regional') { 
+		$jurisdiction['name'] = $jurisdiction['level_name'] . ' ' . $jurisdiction['name'];
+	}
+	
+	
 	if (!empty($jurisdiction['url'])) { 
 	?>
 	<h2>
