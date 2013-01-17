@@ -29,8 +29,8 @@ class Context extends REST_Controller {
 
 			}
 			
-			$fullstack 					= $this->input->get('fullstack', TRUE);			
-			$key 						= $data['input'] . '_context_' . $fullstack;
+
+			$key 						= $data['input'] . '_context';
 
 
 			// Check in cache		
@@ -54,14 +54,14 @@ class Context extends REST_Controller {
 			} 
 			else {
 				$data_errors[] = 'The location could not be geocoded';
-			}
+			}			
 			
 			// If we're not using a geocoder, but we have a lat,long directly...
 			// there should be validation here to see if provided latlong is actually valid and well-formed
 			if (!$latlong) $latlong = $data['input'];
 
 
-			if($latlong && $fullstack == 'true') {
+			if($latlong) {
 								
 				$state_legislators = $this->state_legislators($data['latitude'], $data['longitude']);
 
@@ -70,7 +70,7 @@ class Context extends REST_Controller {
 					$data['state_chambers'] = $state_chambers;
 				}
 				else {
-					$data_errors[] = 'State Legislators API (OpenStates) did not respond (perhaps a timeout)';
+					$data_errors[] = 'State legislature lookup failed'; // OpenStates API
 				}
 				
 				$national_legislators = $this->national_legislators($data['latitude'], $data['longitude']);	
@@ -83,7 +83,7 @@ class Context extends REST_Controller {
 					$data['national_chambers'] = $national_chambers;				
 				}
 				else {
-					$data_errors[] = 'National Legislators API (Sunlight) did not respond (perhaps a timeout)';
+					$data_errors[] = 'National legislature lookup failed'; // Sunlight API
 				}				
 
 			}
@@ -108,7 +108,9 @@ class Context extends REST_Controller {
 						$city = $this->cities->get_city_data($data['state_id'], $data['place_id']);
 						$data = array_merge($data, $city);
 
-				}	
+				} else {
+						$data_errors[] = 'City could not be geocoded';					
+				}
 				
 				
 				// Get City/County data from SBA
@@ -140,6 +142,8 @@ class Context extends REST_Controller {
 						} else {
 							unset($data['counties']);
 						}
+					} else {
+						$data_errors[] = 'County could not be geocoded';
 					}
 				
 				}				
@@ -167,12 +171,16 @@ class Context extends REST_Controller {
 			}			
 			
 			
-			
 			// If we didn't get state abbreviation from the city lookup, see if we can get it elsewhere
 			if (empty($data['state']) && !empty($data['counties']['state'])) {
 				$data['state'] = $data['counties']['state'];
 				// $data['state'] = $data['state_geocoded']; this is more reliable, but isn't the abbreviation	
 			}	
+			if (empty($data['state']) && !empty($data['governor_data']['address_state'])) {
+				$data['state'] = $data['governor_data']['address_state'];
+			}
+			
+			
 			
 			
 			
@@ -212,7 +220,7 @@ class Context extends REST_Controller {
 			if(!empty($city_data)) {
 				$data['place_url_updated'] = $city_data[0]['url'];
 
-				if ($fullstack == 'true') $data['city_data'] = $city_data[0];
+				$data['city_data'] = $city_data[0];
 				
 			} else {
 				
@@ -238,12 +246,14 @@ class Context extends REST_Controller {
 			
 			}
 			
-			// City Data			
-		   	$cities_by_state = APPPATH . 'controllers/cities_by_state/cities_' . strtolower($data['state']) .'.php';
-		    if(!empty($data['city']) && file_exists($cities_by_state)) {
+			// City Data
+			if(!empty($data['state'])) {		
+			   	$cities_by_state = APPPATH . 'controllers/cities_by_state/cities_' . strtolower($data['state']) .'.php';
+			    if(!empty($data['city']) && file_exists($cities_by_state)) {
 
-				$data['city_reps'] = $this->get_city_reps($cities_by_state, $data['city'], $data['state']);
+					$data['city_reps'] = $this->get_city_reps($cities_by_state, $data['city'], $data['state']);
 			
+				}
 			}
 			
 				
@@ -256,7 +266,7 @@ class Context extends REST_Controller {
 			
 			
 			
-			if ($fullstack == 'true') {
+
 				
 				$new_data = $this->re_schema($data);
 				
@@ -267,24 +277,8 @@ class Context extends REST_Controller {
 				$this->cache->save( $key, $new_data, $this->ttl);
 				
 				$this->response($new_data, 200);
-			} else
-			{
-						
-			$endpoint['url'] = (!empty($data['place_url_updated'])) ? $data['place_url_updated'] : $data['place_url'];
-			
-			// In this case we're just publishing service discovery and geojson
-			if (!empty($data['service_discovery'])) {
-				$endpoint['service_discovery'] 	= $data['service_discovery'];
-			}
-			
-			// only return geojson if requested
-			if (isset($data['geojson'])) $endpoint['geojson'] = $data['geojson'];
-			
-			// Save to cache
-			$this->cache->save( $key, $endpoint, $this->ttl);			
-			
-			$this->response($endpoint, 200);
-			}
+
+
 		
 	}
 	
