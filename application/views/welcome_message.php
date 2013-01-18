@@ -74,7 +74,7 @@ code {
 
 <h3>Context</h3>
 
-<pre>URL: http://api.democracymap.org/context</pre>
+<pre>URL: <?php echo $this->config->item('democracymap_root'); ?>/context</pre>
 
 <p>There are just a few parameters</p>
 
@@ -86,7 +86,7 @@ code {
 
 <h4>Example Call</h4>
 <p>
-	<a href="http://api.democracymap.org/context?location=chicago">http://api.democracymap.org/context?location=chicago</a>
+	<a href="<?php echo $this->config->item('democracymap_root'); ?>/context?location=chicago"><?php echo $this->config->item('democracymap_root'); ?>/context?location=chicago</a>
 </p>	
 
 <h1>Source and More information</h1>
