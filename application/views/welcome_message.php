@@ -63,7 +63,7 @@ code {
 <p>To give you a sense of <em>some</em> of the information made available here, you may want to see this <a href="./demo">DemocracyMap Demo</a></p>
 
 <p>
-	The DemocracyMap API aims to provides normalized structured data for all of the contact details and other primary information for every government body and government official that represents you. Currently this API is more of a meta-API that aggregates, normalizes, and caches other data sources including geospatial boundary queries, but ultimately it aims to help provide standardized geospatial queries and merge with similar efforts like those based on the <a href="https://github.com/opennorth/represent-canada">Boundary Services API</a> (like <a href="http://represent.opennorth.ca/">OpenNorth Represent</a>).
+	The DemocracyMap API aims to provide normalized structured data for all of the contact details and other primary information for every government body and government official that represents you. Currently this API is more of a meta-API that aggregates, normalizes, and caches other data sources including geospatial boundary queries, but ultimately it aims to help provide standardized geospatial queries and merge with similar efforts like those based on the <a href="https://github.com/opennorth/represent-canada">Boundary Services API</a> (like <a href="http://represent.opennorth.ca/">OpenNorth Represent</a>).
 </p>
 <p>	
 	The long term vision includes helping to form part of the core infrastructure for querying <a href="http://wiki.open311.org/GeoWeb_DNS">geospatially bound web services</a> such as returning <a href="http://wiki.open311.org/GeoReport_v2">Open311 API endpoints</a> associated with a city jurisdiction. If you run the example query for Chicago listed below you'll see that the service discovery data is filled out with information about the Open311 API endpoint in Chicago. This is drawn directly from <a href="http://311api.cityofchicago.org/open311/discovery.json">Chicago's own</a> <a href="http://wiki.open311.org/Service_Discovery">service discovery</a> document. 
@@ -74,9 +74,9 @@ code {
 <h2>Formats</h2>
 
 <p>
-	The default format returned is <strong>json</strong>, but <strong>xml</strong> and <strong>csv</strong> are also supported. You can specify the format by 
+	The default format returned is <strong>json</strong>, but <strong>xml</strong> is also supported. You can specify the <!--format by 
 	appending the format extension after the resource, eg getting xml would be "/context.xml" 
-	or you can specify format as another query parameter, eg "/context?format=xml"
+	or you can specify -->format as another query parameter, eg "/context?format=xml"
 </p>
 
 <h2>Resources</h2>
