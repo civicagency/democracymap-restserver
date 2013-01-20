@@ -60,6 +60,15 @@ code {
 
 <h1>Welcome to the experimental DemocracyMap API</h1>
 
+<p>To give you a sense of <em>some</em> of the information made available here, you may want to see this <a href="./demo">DemocracyMap Demo</a></p>
+
+<p>
+	The DemocracyMap API aims to provides normalized structured data for all of the contact details and other primary information for every government body and government official that represents you. Currently this API is more of a meta-API that aggregates, normalizes, and caches other data sources including geospatial boundary queries, but ultimately it aims to help provide standardized geospatial queries and merge with similar efforts like those based on the <a href="https://github.com/opennorth/represent-canada">Boundary Services API</a> (like <a href="http://represent.opennorth.ca/">OpenNorth Represent</a>).
+</p>
+<p>	
+	The long term vision includes helping to form part of the core infrastructure for querying <a href="http://wiki.open311.org/GeoWeb_DNS">geospatially bound web services</a> such as returning <a href="http://wiki.open311.org/GeoReport_v2">Open311 API endpoints</a> associated with a city jurisdiction. If you run the example query for Chicago listed below you'll see that the service discovery data is filled out with information about the Open311 API endpoint in Chicago. This is drawn directly from <a href="http://311api.cityofchicago.org/open311/discovery.json">Chicago's own</a> <a href="http://wiki.open311.org/Service_Discovery">service discovery</a> document. 
+</p>
+
 <p>Currently this demo is limited to the United States</p>
 
 <h2>Formats</h2>
@@ -89,10 +98,26 @@ code {
 	<a href="<?php echo $this->config->item('democracymap_root'); ?>/context?location=chicago"><?php echo $this->config->item('democracymap_root'); ?>/context?location=chicago</a>
 </p>	
 
-<h1>Source and More information</h1>
-<p>You can find a description of <a href="http://wiki.open311.org/GeoWeb_DNS">GeoWeb DNS on the Open311 wiki</a>. The source code for this is <a href="https://github.com/GSA-OCSIT/democracymap-restserver">available on github</a>. This is experimental, don't expect it to be accurate or to stick around</p>
+<h1>Get Involved</h1>
 
-<h2>Credits</h2>
+<p>The main place for information about DemocracyMap is <a href="http://democracymap.org">democracymap.org</a> and the <a href="http://forums.e-democracy.org/groups/democracymap">DemocracyMap mailing list</a>. For more information about the service discovery component, see the description of <a href="http://wiki.open311.org/GeoWeb_DNS">GeoWeb DNS on the Open311 wiki</a> 
+	and join the <a href="http://lists.open311.org/groups/discuss/">Open311 mailing list</a>.
+</p>
+
+<h2>Contribute a Data Scraper</h2>
+<p>
+The best way to contribute now is to add a scraper for more data. The primary place this is being tracked now is this <a href="http://pages.e-democracy.org/DemocracyMap_Representatives">wiki page for city representatives per state</a> which lists data sources that need scrapers. If you would like to contribute a scraper, you're encouraged to host it on ScraperWiki (which will make it useful beyond this project) and update the wiki to mention that you are working on it. When your scraper is working, please update the wiki to point to the functioning scraper. 
+</p>
+
+<h1>Sources</h1>
+
+<h2>Source Code</h2>
+<p>	
+	The source code for this is <a href="https://github.com/GSA-OCSIT/democracymap-restserver">available on github</a>. The code is being regularly refactored and is not well documented at the moment, but if you're interested in it, say something on the <a href="http://forums.e-democracy.org/groups/democracymap">mailing list</a>. 
+</p>
+
+
+<h2>Data Sources &amp; Credits</h2>
 <p>
 This is built on the same data as the main <a href="http://beta.democracymap.org">DemocracyMap demo</a>, so I'm repeating those credits here. 
 City and County data from U.S. Census (including the <a href="http://www.census.gov/govs/cog/">2007 Census of Governments</a> and <a href="http://tigerweb.geo.census.gov/tigerwebmain/TIGERweb_restmapservice.html">TigerWeb</a>) with updated URLs 
@@ -114,9 +139,6 @@ City-level geospatial data served by <a href="http://geoserver.org">GeoServer</a
 
  -->
 
-<p> 
-	Please check out the  <a href="http://lists.open311.org/groups/discuss/">Open311 mailing list</a> and the <a href="http://forums.e-democracy.org/groups/democracymap">DemocracyMap mailing list</a>.
-</p>
 
 
 <?php
