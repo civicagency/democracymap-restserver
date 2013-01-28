@@ -3,7 +3,7 @@ require APPPATH.'/libraries/REST_Controller.php';
 
 class Context extends REST_Controller {
 
-	public $ttl 		= '86400'; 
+	public $ttl 		= '604800'; // 604800s = 1 week
 
 	function __construct()
 	{
@@ -441,7 +441,7 @@ function get_city_reps($cities_by_state, $city, $state) {
 	if ( $cache = $this->cache->get( $key ) ) {
 		return $cache;
 	} 		
-		
+	
 	include $cities_by_state ;
 	
 	if (!empty($electeds)) {
