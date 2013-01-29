@@ -3,7 +3,7 @@ require APPPATH.'/libraries/REST_Controller.php';
 
 class Context extends REST_Controller {
 
-	public $ttl 		= '604800'; // 604800s = 1 week
+	public $ttl 		= $this->config->item('cache_ttl');
 
 	function __construct()
 	{
