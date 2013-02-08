@@ -3,7 +3,7 @@ require APPPATH.'/libraries/REST_Controller.php';
 
 class Context extends REST_Controller {
 
-	public $ttl 		= $this->config->item('cache_ttl');
+	public $ttl 		= 604800;
 
 	function __construct()
 	{
@@ -791,7 +791,6 @@ function process_state_legislators($representatives) {
 function national_legislators($lat, $long) {
 
 	$url = "http://services.sunlightlabs.com/api/legislators.allForLatLong.json?latitude=" . $lat . "&longitude=" . $long . "&apikey=" . $this->config->item('sunlight_api_key');
-
 
 	$legislators = curl_to_json($url);
 	$legislators = $legislators['response']['legislators'];
