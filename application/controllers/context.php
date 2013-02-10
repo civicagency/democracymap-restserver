@@ -13,7 +13,7 @@ class Context extends REST_Controller {
 
 	public function index_get()	{
 		
-		// $this->cache->clean();
+		$this->cache->clean();
 		
 		if (empty($_GET)) {
 			$this->load->helper('url');			
