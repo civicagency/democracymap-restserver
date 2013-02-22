@@ -6,7 +6,7 @@ $(feeds[i]).tweet({
 username: feeds[i].id,
 avatar_size: 32,
 count: 4,
-loading_text: "loading tweets..."
+loading_text: ""
 });
 
       

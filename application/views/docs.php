@@ -22,6 +22,10 @@ a {
  font-weight: normal;
 }
 
+a.nanchor {
+	color : #000;
+}
+
 h1 {
  color: #444;
  background-color: transparent;
@@ -98,16 +102,53 @@ code {
 	<a href="<?php echo $this->config->item('democracymap_root'); ?>/context?location=chicago"><?php echo $this->config->item('democracymap_root'); ?>/context?location=chicago</a>
 </p>	
 
-<h1>Get Involved</h1>
+<h1><a class="nanchor" name="get-involved">Get Involved</a></h1>
 
 <p>The main place for information about DemocracyMap is <a href="http://democracymap.org">democracymap.org</a> and the <a href="http://forums.e-democracy.org/groups/democracymap">DemocracyMap mailing list</a>. For more information about the service discovery component, see the description of <a href="http://wiki.open311.org/GeoWeb_DNS">GeoWeb DNS on the Open311 wiki</a> 
 	and join the <a href="http://lists.open311.org/groups/discuss/">Open311 mailing list</a>.
 </p>
 
-<h2>Contribute a Data Scraper</h2>
+<h2><a class="nanchor" name="contribute">Contribute a Data Scraper</a></h2>
 <p>
 The best way to contribute now is to add a scraper for more data. The primary place this is being tracked now is this <a href="http://pages.e-democracy.org/DemocracyMap_Representatives">wiki page for city representatives per state</a> which lists data sources that need scrapers. If you would like to contribute a scraper, you're encouraged to host it on ScraperWiki (which will make it useful beyond this project) and update the wiki to mention that you are working on it. When your scraper is working, please update the wiki to point to the functioning scraper. 
 </p>
+
+<h1>Stats</h1>
+
+<h3>National</h3>
+<ul>
+<li>All Congressman (Sunlight Congress API)</li>
+</ul>
+
+<h3>State</h3>
+<p>
+Primary contact information for all US States (website, phone number, etc)
+</p>
+<ul>
+<li>All 50 Governors</li>
+<li>All State legislators - (Open States API)</li>
+</ul>
+
+<h3>Counties</h3>
+<p>Primary contact information for all US counties (website, address, etc)</p>
+<ul>
+<li>All County Officials (35,907 officials)</li>
+</ul>
+
+<h3>Cities:</h3>
+<p>
+Primary contact information for all US cities (website, address, etc)
+</p>
+City Officials:
+<ul>
+<li>1,214 mayors for major cities</li>
+<li>8,777 city officials in California</li>
+<li>4,716 city officials in Washington State</li>
+<li>3,396 city officials in Oregon</li>
+<li>56,354 city officials in Pennsylvania</li>
+<li>19,821 city officials in Texas</li>
+<li>3,290 city officials in Florida</li>
+</ul>
 
 <h1>Sources</h1>
 

@@ -48,7 +48,7 @@ margin : 0;
 font-size : .75em;
 margin-bottom : 1.5em;
 padding-bottom : 2em;
-border-bottom : 1px solid #e8edf2;
+border-bottom : 0;
 float : left;
 width : 100%;
 clear : both;
@@ -57,10 +57,20 @@ clear : both;
 
 
 .jurisdictions .jurisdiction h2 {
-font-size : 2em;
-margin-bottom : 0;
+font-size : 3em;
+margin-bottom : 1em;
 clear : both;
+border-bottom : 1px solid #ccc;
 }
+
+.jurisdictions .jurisdiction h2 a {
+color : #000;
+}
+
+.jurisdictions .jurisdiction h2 a:hover {
+text-decoration : none;
+}
+
 
 .jurisdictions .elected-list li {
 clear : both;
