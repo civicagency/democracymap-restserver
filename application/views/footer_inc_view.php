@@ -1,5 +1,8 @@
   </div>
 
+  <script type="text/javascript" src="/js/load_tweets.js"></script>
+
+
 <?php
 if (isset($ganalytics_id)):
 ?>

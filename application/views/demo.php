@@ -108,10 +108,30 @@ foreach ($jurisdiction['elected_office'] as $elected) {
 				<?php if (!empty($elected['email'])) : ?>
 					<div class="email"><?php echo $elected['email']; ?></div>
 				<?php endif; ?>				
-				
-				
+								
 			</div>										
 			<img class="elected-photo" src="<?php echo $elected['url_photo']?>" /> <!-- data->jurisdictions->elected_office->url_photo -->
+			
+			
+			<?php if (!empty($elected['social_media'])) : 
+				
+					foreach ($elected['social_media'] as $account) {
+						if ($account['type'] == 'twitter') {
+							$twitter_id = $account['username'];
+							break;
+						}
+					}
+					
+					if(!empty($twitter_id)):
+				?>
+						<div id="<?php echo $twitter_id?>" class="twitter-feed"></div>
+
+				
+					<?php endif; ?>			
+				
+			<?php endif; ?>			
+			
+			
 		</li>
 	
 <?php

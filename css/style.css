@@ -86,3 +86,54 @@ float : left;
 
 
 
+.tweet, .query {
+    color: #255384;
+    font: 100% Georgia,serif;
+}
+.tweet_list {
+    background-color: #F4F4F4;
+    font-size: 0.9em;
+    list-style: none outside none;
+    margin: 0;
+    overflow-y: hidden;
+    padding: 0;
+clear : both;
+
+}
+.tweet_list .awesome, .tweet_list .epic {
+    text-transform: uppercase;
+}
+.tweet_list li {
+    border-bottom: 1px solid #CCCCCC;
+    list-style-type: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 1em 0.5em;
+}
+
+.jurisdictions .elected-list .tweet_list li {
+margin : 0;
+}
+
+
+.tweet_list .tweet_even {
+    background-color: #EAEAEA;
+}
+.tweet_list .tweet_avatar {
+    float: left;
+    padding-right: 0.5em;
+}
+.tweet_list .tweet_avatar img {
+    vertical-align: middle;
+}
+
+.jurisdictions .elected-list  .tweet_list {
+	margin : 1em 0;
+	float : left;
+width : 100%;
+font-size : 1.2em;
+}
+
+
+
+
