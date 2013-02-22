@@ -110,7 +110,7 @@ code {
 
 <h2><a class="nanchor" name="contribute">Contribute a Data Scraper</a></h2>
 <p>
-The best way to contribute now is to add a scraper for more data. The primary place this is being tracked now is this <a href="http://pages.e-democracy.org/DemocracyMap_Representatives">wiki page for city representatives per state</a> which lists data sources that need scrapers. If you would like to contribute a scraper, you're encouraged to host it on ScraperWiki (which will make it useful beyond this project) and update the wiki to mention that you are working on it. When your scraper is working, please update the wiki to point to the functioning scraper. 
+The best way to contribute now is to add a scraper for more data. The primary place this is being tracked now is this <a href="http://pages.e-democracy.org/DemocracyMap_Representatives">wiki page for city representatives per state</a> which lists data sources that need scrapers. If you would like to contribute a scraper, you're encouraged to host it on <a href="http://scraperwiki.com">ScraperWiki</a> (which will help share and make it useful even beyond this project) and update the wiki to mention that you are working on it. When your scraper is working, please update the wiki to point to the functioning scraper. You can find examples of existing scrapers for this project on <a href="https://scraperwiki.com/profiles/philipashlock/">Scraperwiki</a> and <a href="https://github.com/philipashlock/democracymap-scrapers">github</a>.
 </p>
 
 <h1>Stats</h1>
