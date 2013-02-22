@@ -100,6 +100,15 @@ foreach ($jurisdiction['elected_office'] as $elected) {
 						<?php echo $elected['name_full']?> <!-- data->jurisdictions->elected_office->name_full -->
 				</h4> 
 				
+				
+				<?php 
+				if (!empty($elected['url'])) : 
+				?>
+				<div class="website"><a href="<?php echo $elected['url']?>"> <!-- data->jurisdictions->elected_office->url OR data->jurisdictions->elected_office->url_contact -->
+					<?php echo $elected['url']?> <!-- data->jurisdictions->elected_office->title -->
+				</a></div>
+				<?php endif;?>				
+				
 				<?php if (!empty($elected['phone'])) : ?>
 					<div class="phone"><?php echo $elected['phone']; ?></div>
 				<?php endif; ?>

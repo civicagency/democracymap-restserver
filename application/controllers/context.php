@@ -925,6 +925,7 @@ if (!empty($data['mayor_data'])) {
 	//$mayor_url 					= $data['place_url_updated']; 	// We're assuming that the place_url_updated will always match the mayor url, but be more updated. Hopefully this is a safe assumption. 	
 	$mayor_url_photo 			= isset($data['mayor_data']['url_photo']) ? $data['mayor_data']['url_photo'] : null;
 	$mayor_email 				= isset($data['mayor_data']['email']) ? $data['mayor_data']['email'] : null;
+	$mayor_email 				= ($mayor_email == 'none reported') ? null : $mayor_email;
 	$mayor_phone 				= isset($data['mayor_data']['phone']) ? $data['mayor_data']['phone'] : null;	
 	$mayor_current_term_enddate = isset($data['mayor_data']['current_term_enddate']) ? date('c', strtotime($data['mayor_data']['next_election'])) : null;	
 	

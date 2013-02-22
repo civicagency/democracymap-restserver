@@ -82,6 +82,10 @@ margin-top : 1em;
 margin-bottom : 0;
 }
 
+.jurisdictions .elected-list h3 a {
+color : black;
+}
+
 .jurisdictions .elected-list img {
 float : right;
 max-width : 100px;
