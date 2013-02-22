@@ -104,9 +104,10 @@ foreach ($jurisdiction['elected_office'] as $elected) {
 				<?php 
 				if (!empty($elected['url'])) : 
 				?>
-				<div class="website"><a href="<?php echo $elected['url']?>"> <!-- data->jurisdictions->elected_office->url OR data->jurisdictions->elected_office->url_contact -->
-					<?php echo $elected['url']?> <!-- data->jurisdictions->elected_office->title -->
-				</a></div>
+				<div class="website">
+					<a href="<?php echo $elected['url']?>">
+					<?php echo $elected['url']?> </a>
+				</div>
 				<?php endif;?>				
 				
 				<?php if (!empty($elected['phone'])) : ?>
@@ -116,8 +117,24 @@ foreach ($jurisdiction['elected_office'] as $elected) {
 
 				<?php if (!empty($elected['email'])) : ?>
 					<div class="email"><?php echo $elected['email']; ?></div>
+				<?php endif; ?>	
+				
+		
+				<?php if (!empty($elected['social_media'])) : 
+			
+						foreach ($elected['social_media'] as $account) {
+							?>
+							
+							<div class="social-media" id="<?php echo $account['type']?>"><a href="<?php echo $account['url']?>"><?php echo $account['description']?></a></div>
+							
+							<?php
+						}
+				
+
+					?>
+
 				<?php endif; ?>				
-								
+			
 			</div>										
 			<img class="elected-photo" src="<?php echo $elected['url_photo']?>" /> <!-- data->jurisdictions->elected_office->url_photo -->
 			
