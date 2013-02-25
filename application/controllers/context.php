@@ -13,7 +13,7 @@ class Context extends REST_Controller {
 
 	public function index_get()	{
 		
-		//$this->cache->clean();
+		// $this->cache->clean();
 		
 		if (empty($_GET)) {
 			$this->load->helper('url');			
@@ -38,10 +38,16 @@ class Context extends REST_Controller {
 				$this->response($cache, 200);
 			}			
 			
-			// Geocode our address
-			$location 					= $this->geocode(urlencode($data['input']));
-
-			if(!empty($location->query->results->Result->latitude)) {
+			// Geocode our address (if needed)
+			
+			if ($check_input = $this->test_latlong($data['input'])) {
+				
+				$data['latitude'] 			= $check_input['latitude'];
+				$data['longitude'] 			= $check_input['longitude'];
+				$latlong 					= $data['latitude'] . " " . $data['longitude'];									
+							
+			}
+			else if($location = $this->geocode(urlencode($data['input']))) {
 			
 				$location = $location->query->results->Result;
 				
@@ -54,14 +60,10 @@ class Context extends REST_Controller {
 			} 
 			else {
 				$data_errors[] = 'The location could not be geocoded';
-			}			
-			
-			// If we're not using a geocoder, but we have a lat,long directly...
-			// there should be validation here to see if provided latlong is actually valid and well-formed
-			if (!$latlong) $latlong = $data['input'];
+			}					
 
 
-			if($latlong) {
+			if(!empty($latlong)) {
 								
 				$state_legislators = $this->state_legislators($data['latitude'], $data['longitude']);
 
@@ -1380,10 +1382,35 @@ return $data;
 
 }
 
+
+function test_latlong($query) {
+	
+	$result = explode(",", $query);  // Split the string by commas
+	if (count($result) > 1) {
+		$lat = trim($result[0]);         // Clean whitespace
+		$lon = trim($result[1]);         // Clean whitespace
+			
+		if ((is_numeric($lat)) and (is_numeric($lon))) {
+			$response = array('latitude' => $lat, 'longitude' => $lon);
+			return $response;
+		} else {
+			return false;
+		}		
+		
+	} else {
+		return false;
+	}
+	
+	
+}
+
+
 }
 
 # $this->elected_official_model($type, $title, $description, $name_given, $name_family, $name_full, $url, $url_photo, $url_schedule, $url_contact, $email, $phone, $address_name, $address_1, $address_2, $address_city, $address_state, $address_zip, $current_term_enddate, $last_updated, $social_media);
 # $this->jurisdiction_model($type, $type_name, $level, $level_name, $name, $id, $url, $url_contact, $email, $phone, $address_name, $address_1, $address_2, $address_city, $address_state, $address_zip, $last_updated, $metadata, $social_media, $elected_office, $service_discovery);
+
+
 
 
 ?>
