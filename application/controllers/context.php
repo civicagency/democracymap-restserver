@@ -13,7 +13,7 @@ class Context extends REST_Controller {
 
 	public function index_get()	{
 		
-		// $this->cache->clean();
+		 //$this->cache->clean();
 		
 		if (empty($_GET)) {
 			$this->load->helper('url');			
@@ -109,6 +109,7 @@ class Context extends REST_Controller {
 
 						$city = $this->cities->get_city_data($data['state_id'], $data['place_id']);
 						$data = array_merge($data, $city);
+						
 
 				} else {
 						$data_errors[] = 'City could not be geocoded';					
@@ -247,6 +248,19 @@ class Context extends REST_Controller {
 				}
 			
 			}
+			
+			
+			// NYC Hyperlocal data					
+			if ($data['place_id'] == '51000') {
+					$this->load->model('nyc_model', 'nyc');
+					$this->load->model('democracymap_model', 'democracymap');
+				
+					$data['nyc_council'] 			= $this->nyc->get_city_council($latlong, $this->democracymap);
+					$data['nyc_community_boards'] 	= $this->nyc->get_community_board($latlong, $this->democracymap);								
+					//$nyc_officials 			= $this->nyc->get_officials($democracymap);							
+			}			
+			
+
 			
 			// City Data
 			if(!empty($data['state'])) {		
@@ -632,6 +646,7 @@ function get_dc_councilmembers($ward)	{
 
 		$state_legislators = curl_to_json($url);
 				
+		
 		if(!empty($state_legislators)) return $state_legislators;				
 		else return false;
 		
@@ -714,7 +729,8 @@ function process_state_legislators($representatives) {
 		foreach($representatives as $repdata){
 			
 				$rep = array(
-							'full_name' => $repdata['full_name']
+							'full_name' => $repdata['full_name'], 
+							'state' => $repdata['state'], 
 							);
 				
 				// there are some missing fields on some entries, check for that
@@ -869,6 +885,31 @@ function re_schema($data) {
  // ############################################################################################################
  // City Council  
  
+
+// NYC 
+
+if(!empty($data['nyc_community_boards'])) {
+
+	$new_data['jurisdictions'][] = $data['nyc_community_boards'];
+	
+}
+
+
+if(!empty($data['nyc_council'])) {
+
+	$new_data['jurisdictions'][] = $data['nyc_council'];
+	
+}
+
+
+	
+
+
+
+
+
+ // DC
+
  // Elected
  
  if (!empty($data['council_reps']['my_rep'])) {	
@@ -1055,16 +1096,20 @@ if (!empty($data['state_chambers']['lower'])) {
 	// elected office
 
 	$slc_reps = $data['state_chambers']['lower'][$rep_id]['reps'];	
-	foreach($slc_reps as $slc_rep) {		
+	foreach($slc_reps as $slc_rep) { 		
 		$slc_rep['photo_url'] = (!empty($slc_rep['photo_url'])) ? $slc_rep['photo_url'] : null;
-		$reps[] = $this->elected_official_model('legislative', 'Representative', null, null, null, $slc_rep['full_name'], $slc_rep['url'], $slc_rep['photo_url'], null, null, null, null, null, null, null, null, null, null, null, null, null);		
+		$reps[] = $this->elected_official_model('legislative', 'Representative', null, null, null, $slc_rep['full_name'], $slc_rep['url'], $slc_rep['photo_url'], null, null, null, null, null, null, null, null, strtoupper($slc_rep['state']), null, null, null, null);		
 	}
+
+	# $this->jurisdiction_model($type, $type_name, $level, $level_name, $name, $id, $url, $url_contact, $email, $phone, $address_name, $address_1, $address_2, $address_city, $address_state, $address_zip, $last_updated, $metadata, $social_media, $elected_office, $service_discovery);
+
 
 
 	// jurisdiction 
 
-	$district = 'District ' . $rep_id;		
-	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'House of Representatives', 'regional', 'State', $district, $rep_id, null, null, null, null, null, null, null, null, null, null, null, null, null, $reps, null);
+	$district = 'District ' . $rep_id;
+	$type_name = (strtoupper($slc_rep['state']) == 'NY') ? 'Assembly' : 'House of Representatives';		
+	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', $type_name, 'regional', 'State', $district, $rep_id, null, null, null, null, null, null, null, null, strtoupper($slc_rep['state']), null, null, null, null, $reps, null);
 
 }
 	

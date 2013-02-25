@@ -93,11 +93,33 @@ class democracymap_model extends CI_Model {
 		
 	}	
 	
-	public function officials() {
+	public function official() {
 		
-		$officials = null; //array();
+		$official = array(
+			'type' 					=> NULL,                 		
+			'title' 				=> NULL,                		
+			'description' 			=> NULL,          		
+			'name_given' 			=> NULL,           		
+			'name_family' 			=> NULL,          			
+			'name_full' 			=> NULL,            			
+			'url' 					=> NULL,                  
+			'url_photo' 			=> NULL,            
+			'url_schedule' 			=> NULL,         
+			'url_contact' 			=> NULL,          
+			'email' 				=> NULL,                
+			'phone' 				=> NULL,                
+			'address_name' 			=> NULL,         
+			'address_1' 			=> NULL,            
+			'address_2' 			=> NULL,            
+			'address_city' 			=> NULL,         
+			'address_state' 		=> NULL,        
+			'address_zip' 			=> NULL,          
+			'current_term_enddate' 	=> NULL, 
+			'last_updated' 			=> NULL,         			
+			'social_media' 			=> NULL         			
+		);
 		
-		return $officials;
+		return $official;
 		
 	}	
 	

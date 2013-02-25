@@ -1,6 +1,48 @@
+@font-face {
+    font-family: "museo_sans";
+    font-style: normal;
+    font-weight: 100;
+    src: url("/css/museosans_100.eot?#iefix") format("embedded-opentype"), url("/css/museosans_100.woff") format("woff"), url("/css/museosans_100.ttf") format("truetype"), url("/css/museosans_100.svg#museo_sans_100regular") format("svg");
+}
+@font-face {
+    font-family: "museo_sans";
+    font-style: normal;
+    font-weight: 300;
+    src: url("/css/museosans_300.eot?#iefix") format("embedded-opentype"), url("/css/museosans_300.woff") format("woff"), url("/css/museosans_300.ttf") format("truetype"), url("/css/museosans_300.svg#museo_sans_300regular") format("svg");
+}
+@font-face {
+    font-family: "museo_sans";
+    font-style: normal;
+    font-weight: 500;
+    src: url("/css/museosans_500.eot?#iefix") format("embedded-opentype"), url("/css/museosans_500.woff") format("woff"), url("/css/museosans_500.ttf") format("truetype"), url("/css/museosans_500.svg#museo_sans_500regular") format("svg");
+}
+@font-face {
+    font-family: "museo_sans";
+    font-style: italic;
+    font-weight: 500;
+    src: url("/css/museosans_500_italic.eot?#iefix") format("embedded-opentype"), url("/css/museosans_500_italic.woff") format("woff"), url("/css/museosans_500_italic.ttf") format("truetype"), url("/css/museosans_500_italic.svg#museo_sans_500italic") format("svg");
+}
+@font-face {
+    font-family: "museo_sans";
+    font-style: normal;
+    font-weight: 700;
+    src: url("/css/museosans_700.eot?#iefix") format("embedded-opentype"), url("/css/museosans_700.woff") format("woff"), url("/css/museosans_700.ttf") format("truetype"), url("/css/museosans_700.svg#museo_sans_700regular") format("svg");
+}
+@font-face {
+    font-family: "museo_sans";
+    font-style: normal;
+    font-weight: 900;
+    src: url("/css/museosans_900.eot?#iefix") format("embedded-opentype"), url("/css/museosans_900.woff") format("woff"), url("/css/museosans_900.ttf") format("truetype"), url("/css/museosans_900.svg#museo_sans_900regular") format("svg");
+}
+
+body {
+margin : 0;
+padding : 0;
+font : 500 15px/21px 'museo_sans',Arial,Helvetica,sans-serif;
+}
+
+
 .dmap {
-width : 700px;
-border : 1px solid #ccc;
 margin : 1em auto;
 }
 
