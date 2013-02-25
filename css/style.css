@@ -73,12 +73,10 @@ text-decoration : none;
 
 .jurisdictions .elected-list li {
 clear : both;
-
-margin-top : 1em;
 border : 0;
 border-bottom : 1px solid #E8E8E8;
-padding-bottom : 1em;
-display: inline-block;
+padding : 1em 0;
+margin : 0;
 width : 100%;
 }
 
@@ -113,7 +111,6 @@ float : left;
     font: 100% Georgia,serif;
 }
 .tweet_list {
-    background-color: #F4F4F4;
     font-size: 0.9em;
     list-style: none outside none;
     margin: 0;
@@ -138,8 +135,9 @@ margin : 0;
 }
 
 
-.tweet_list .tweet_even {
-    background-color: #EAEAEA;
+.tweet_list .tweet_odd {
+    background-color: #F4F4F4;
+
 }
 .tweet_list .tweet_avatar {
     float: left;
