@@ -30,6 +30,6 @@
   <script type="text/javascript" src="/js/jquery.tweet.js"></script>
   <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
-<?php  if(!isset($_REQUEST['location'])): ?>
+<?php  if(empty($jurisdictions['jurisdictions'])): ?>
   <script type="text/javascript" src="/js/set_location.js"></script>
 <?php endif;?>
