@@ -11,12 +11,15 @@ class Nyc_model extends CI_Model {
 	
 	public function get_city_council($latlong, $democracymap) {
 			
-		$this->load->helper('api');					
-		$council = layer_data($this->config->item('geoserver_root'), 'census:city_council', 'coundist,gid', $latlong);
+		$this->load->helper('api');	
+		
+		if ($council = layer_data($this->config->item('geoserver_root'), 'census:city_council', 'coundist,gid', $latlong)) {
+			$data['council_district'] 	= (!empty($council['features'])) ? $council['features'][0]['properties']['coundist'] : '';
+			$data['council_district_fid'] 	= (!empty($council['features'])) ? $council['features'][0]['properties']['gid'] : '';			
+		} else {
+			return false;
+		}
 
-
-		$data['council_district'] 	= (!empty($council['features'])) ? $council['features'][0]['properties']['coundist'] : '';
-		$data['council_district_fid'] 	= (!empty($council['features'])) ? $council['features'][0]['properties']['gid'] : '';
 
 
 //		$sql = "SELECT * FROM citylaws_councilmember 
@@ -37,63 +40,67 @@ class Nyc_model extends CI_Model {
 		$jurisdiction = $democracymap->jurisdiction();
 		$official 	  = $democracymap->official();
 		
-		$council = $this->get_councilmember($data['council_district']);		
+		if ($council = $this->get_councilmember($data['council_district'])) {		
 
-		// Map returned values over to our data model for officials
-		$official['title']					=  'City Councilmember';
-		$official['type']					=  'legislative';
+			// Map returned values over to our data model for officials
+			$official['title']					=  'City Councilmember';
+			$official['type']					=  'legislative';
         
-		$official['name_given']				=  $council['first_name'];	
-		$official['name_family']			=  $council['last_name'];	
+			$official['name_given']				=  $council['first_name'];	
+			$official['name_family']			=  $council['last_name'];	
 		
-		$middle 							= (!empty($council['mid_name'])) ? ' ' . $council['mid_name'] . ' ' : ' ';
-		$official['name_full']				=  $council['first_name'] . $middle . $council['last_name'];					
+			$middle 							= (!empty($council['mid_name'])) ? ' ' . $council['mid_name'] . ' ' : ' ';
+			$official['name_full']				=  $council['first_name'] . $middle . $council['last_name'];					
         
         
-		$official['url']					=  $council['website'];	
-		$official['url_photo']				=  $council['image_url'];					
-		$official['email']					=  $council['email'];									
-		$official['phone']					=  $council['city_hall_telephone'];									
+			$official['url']					=  $council['website'];	
+			$official['url_photo']				=  $council['image_url'];					
+			$official['email']					=  $council['email'];									
+			$official['phone']					=  $council['city_hall_telephone'];									
         
         
-		$official['address_1']				=  $council['street_address_1'];	
-		$official['address_2']				=  $council['street_address_2'];					
-		$official['address_city']			=  $council['city'];					
-		$official['address_state']			=  $council['state'];					
-		$official['address_zip']			=  $council['zip'];																	
+			$official['address_1']				=  $council['street_address_1'];	
+			$official['address_2']				=  $council['street_address_2'];					
+			$official['address_city']			=  $council['city'];					
+			$official['address_state']			=  $council['state'];					
+			$official['address_zip']			=  $council['zip'];																	
         
-		$end_date							= (substr($council['end_date'], 0, 1) == '9') ? null : $council['end_date'];
-		$official['current_term_enddate']	=  $end_date;							      	
+			$end_date							= (substr($council['end_date'], 0, 1) == '9') ? null : $council['end_date'];
+			$official['current_term_enddate']	=  $end_date;							      	
         
-		$official['extra']					=  array(
-															array("key" => 'committees', "value" => $council['committees']),
-															array("key" => 'party', "value" => $council['party'])															 
-															);
+			$official['extra']					=  array(
+																array("key" => 'committees', "value" => $council['committees']),
+																array("key" => 'party', "value" => $council['party'])															 
+																);
 
-		// Map to our data model for jurisdiction												
-		$jurisdiction['type'] 			= 'legislative';	
-		$jurisdiction['type_name'] 		= 'City Council';
-		$jurisdiction['level'] 			= 'municipal';
-		$jurisdiction['level_name'] 	= 'City';
-		$jurisdiction['name'] 			= 'Council District ' . $council['district'];
-		$jurisdiction['url'] 			= $council['website'];	
+			// Map to our data model for jurisdiction												
+			$jurisdiction['type'] 			= 'legislative';	
+			$jurisdiction['type_name'] 		= 'City Council';
+			$jurisdiction['level'] 			= 'municipal';
+			$jurisdiction['level_name'] 	= 'City';
+			$jurisdiction['name'] 			= 'Council District ' . $council['district'];
+			$jurisdiction['url'] 			= $council['website'];	
 
-		$jurisdiction['phone'] 			= $council['district_telephone'];	
+			$jurisdiction['phone'] 			= $council['district_telephone'];	
 
 
-		$jurisdiction['address_1']	    =  $council['street_address_1'];	
-		$jurisdiction['address_2']	    =  $council['street_address_2'];					
-		$jurisdiction['address_city']   =  $council['city'];					
-		$jurisdiction['address_state']  =  $council['state'];					
-		$jurisdiction['address_zip']    =  $council['zip'];
+			$jurisdiction['address_1']	    =  $council['street_address_1'];	
+			$jurisdiction['address_2']	    =  $council['street_address_2'];					
+			$jurisdiction['address_city']   =  $council['city'];					
+			$jurisdiction['address_state']  =  $council['state'];					
+			$jurisdiction['address_zip']    =  $council['zip'];
 
 		
-		$jurisdiction['id'] 			= $council['district'];	
+			$jurisdiction['id'] 			= $council['district'];	
 		
-		// Attach official to jurisdiction
-		$jurisdiction['elected_office'] = array($official);
+			// Attach official to jurisdiction
+			$jurisdiction['elected_office'] = array($official);
 		
-		return $jurisdiction;
+			return $jurisdiction;
+		} else {
+		  return false;
+		}
+		
 		
 	}	
 	
@@ -118,7 +125,9 @@ class Nyc_model extends CI_Model {
 			$this->cache->save( $key, $council[0], $this->ttl);
 			
 			return $council[0];		
-		}	
+		}	else {
+			return false;
+		}
 
 	}	
 	
@@ -133,17 +142,19 @@ class Nyc_model extends CI_Model {
 	function get_community_board($latlong, $democracymap) {
 		
 		$this->load->helper('api');					
-		$community_board = layer_data($this->config->item('geoserver_root'), 'census:community_district', 'borocd,gid', $latlong);
-
-		$data['community_board'] = (!empty($community_board['features'])) ? $community_board['features'][0]['properties']['borocd'] : '';
-		$data['community_board_fid'] = (!empty($community_board['features'])) ? "community_district." . $community_board['features'][0]['properties']['gid'] : '';
+		if($community_board = layer_data($this->config->item('geoserver_root'), 'census:community_district', 'borocd,gid', $latlong)) {
+			$data['community_board'] = (!empty($community_board['features'])) ? $community_board['features'][0]['properties']['borocd'] : '';
+			$data['community_board_fid'] = (!empty($community_board['features'])) ? "community_district." . $community_board['features'][0]['properties']['gid'] : '';			
+		} else {
+			return false;
+		}
 
 		$jurisdiction = $democracymap->jurisdiction();
 		$official 	  = $democracymap->official();
 		$official2 	  = $democracymap->official();		
 		
 		
-		$community_board = $this->get_community_board_data($data['community_board']);
+		if($community_board = $this->get_community_board_data($data['community_board'])) {
 
 
 			// Map returned values over to our data model for officials
@@ -151,10 +162,10 @@ class Nyc_model extends CI_Model {
 			$official['type']					=  'executive';
 			$official['name_full']				=  $community_board['chair'];										      	
 			$official['email'] 					= $community_board['email'];	
-					
-		   $official2['title']					=  'District Manager';
-		   $official2['type']					=  'administrative';
-		   $official2['name_full']				=  $community_board['district_manager'];						
+
+			$official2['title']					=  'District Manager';
+			$official2['type']					=  'administrative';
+			$official2['name_full']				=  $community_board['district_manager'];						
 
 
 			// Map to our data model for jurisdiction												
@@ -176,12 +187,12 @@ class Nyc_model extends CI_Model {
 			$jurisdiction['address_city']   =  trim($address[1]);					
 			$jurisdiction['address_state']  =  trim($location[0]);				
 			$jurisdiction['address_zip']    =  trim($location[1]);	
-			
+
 			$jurisdiction['metadata']					=  array(
-																array("key" => 'neighborhoods', "value" => $community_board['neighborhoods']),
-																array("key" => 'cabinet_meeting', "value" => $community_board['cabinet_meeting']),																
-																array("key" => 'board_meeting', "value" => $community_board['board_meeting'])															 
-																);			
+														array("key" => 'neighborhoods', "value" => $community_board['neighborhoods']),
+														array("key" => 'cabinet_meeting', "value" => $community_board['cabinet_meeting']),																
+														array("key" => 'board_meeting', "value" => $community_board['board_meeting'])															 
+														);			
 
 
 			$jurisdiction['id'] 			= $community_board['community_board'];	
@@ -191,7 +202,10 @@ class Nyc_model extends CI_Model {
 
 
 			return $jurisdiction;
-
+			
+		} else {
+			return false;
+		}
 
 	}	
 	
@@ -216,7 +230,9 @@ class Nyc_model extends CI_Model {
 			$this->cache->save( $key, $cb[0], $this->ttl);
     
 			return $cb[0];		
-		}	
+		}	else {
+		 	return false;
+		 }	
     
 	}	
 	

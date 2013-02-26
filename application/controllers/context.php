@@ -47,18 +47,18 @@ class Context extends REST_Controller {
 				$latlong 					= $data['latitude'] . " " . $data['longitude'];									
 							
 			}
-			else if($location = $this->geocode(urlencode($data['input']))) {
-			
-				$location = $location->query->results->Result;
-				
-				$data['latitude'] 			= $location->latitude;
-				$data['longitude'] 			= $location->longitude;
-				$data['city_geocoded'] 		= $location->city;
-				$data['state_geocoded'] 	= $location->state;
-
-				$latlong 					= $data['latitude'] . " " . $data['longitude'];									
-			} 
 			else {
+			
+				$this->load->model('geocoder_model', 'geocoder');			
+				
+				if ($location 	= $this->geocoder->geocode(urlencode($data['input']))) {
+					$data 		= array_merge($data, $location);			
+					$latlong 	= $data['latitude'] . " " . $data['longitude'];					
+				}			
+
+			} 
+			
+			if (empty($latlong)) {
 				$data_errors[] = 'The location could not be geocoded';
 			}					
 
@@ -92,7 +92,7 @@ class Context extends REST_Controller {
 
 
 
-			if ($latlong) {
+			if (!empty($latlong)) {
 				
 							
 				$data['census_city']			= $this->get_city($data['latitude'], $data['longitude']);
@@ -122,7 +122,7 @@ class Context extends REST_Controller {
 				}
 			
 				// County lookup 
-				if ($latlong) {
+				if (!empty($latlong)) {
 				
 					// Load County Model
 					$this->load->model('county_model', 'counties');
@@ -251,7 +251,7 @@ class Context extends REST_Controller {
 			
 			
 			// NYC Hyperlocal data					
-			if ($data['place_id'] == '51000') {
+			if (!empty($data['place_id']) && $data['place_id'] == '51000') {
 					$this->load->model('nyc_model', 'nyc');
 					$this->load->model('democracymap_model', 'democracymap');
 				
@@ -283,16 +283,23 @@ class Context extends REST_Controller {
 			
 			
 
-				
+			if (!empty($latlong)) {
 				$new_data = $this->re_schema($data);
+			} else {
+				$new_data = array();
+			}
 				
-				// basic error reporting
-				if(!empty($data_errors)) $new_data['errors'] = $data_errors;
+			// basic error reporting
+			if(!empty($data_errors)) {
+				$new_data['errors'] = $data_errors;
+			}
 				
-				// Save to cache
+			// Save to cache	
+			if (!empty($latlong)) {				
 				$this->cache->save( $key, $new_data, $this->ttl);
+			}
 				
-				$this->response($new_data, 200);
+			$this->response($new_data, 200);
 
 
 		
@@ -611,33 +618,7 @@ function get_dc_councilmembers($ward)	{
 	}
 
 
-
-
-	function geocode($location) {
-		
-		$this->load->helper('oauth.php');
-		
-		$url = "http://query.yahooapis.com/v1/yql/";
-		$args = array();
-		$args["q"] = 'select * from geo.placefinder where text="' . $location . '"';
-		$args["format"] = "json";
-
-		$consumer = new OAuthConsumer($this->config->item('yahoo_oauth_key'), $this->config->item('yahoo_oauth_secret'));
-		$request = OAuthRequest::from_consumer_and_token($consumer, NULL,"GET", $url, $args);
-		$request->sign_request(new OAuthSignatureMethod_HMAC_SHA1(), $consumer, NULL);
-		$url = sprintf("%s?%s", $url, OAuthUtil::build_http_query($args));
-		$ch = curl_init();
-		$headers = array($request->to_header());
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		$rsp = curl_exec($ch);
-		$location = json_decode($rsp);
-
-		return $location;
-
-	}	
-		
+	
 	
 	
 	function state_legislators($lat, $long) {

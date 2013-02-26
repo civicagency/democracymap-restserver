@@ -61,10 +61,13 @@ function layer_data($server, $layer, $properties, $latlong) {
 	//curl_setopt($ch, CURLOPT_HEADER, TRUE);		
 	
 	$gid_data=curl_exec($ch);			
-	$feature_data = json_decode($gid_data, true);	
 	curl_close($ch);
 
-	return $feature_data;
+	if($gid_data) {
+		return json_decode($gid_data, true);
+	} else {
+		return false;
+	}
 
 }
 
