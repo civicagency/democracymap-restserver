@@ -87,8 +87,14 @@ class democracymap_model extends CI_Model {
 	
 	public function social_media() {
 		
-		$social_media = null; //array();
-		
+		$social_media = array(			
+	    	'type'                  => NULL,
+	    	'description'           => NULL,
+	    	'username'              => NULL,
+	    	'url'                   => NULL,
+	    	'last_updated'          => NULL				
+		);
+
 		return $social_media;
 		
 	}	

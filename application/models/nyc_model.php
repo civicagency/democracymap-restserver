@@ -39,6 +39,7 @@ class Nyc_model extends CI_Model {
 		
 		$jurisdiction = $democracymap->jurisdiction();
 		$official 	  = $democracymap->official();
+		$social_media = $democracymap->social_media();	
 		
 		if ($council = $this->get_councilmember($data['council_district'])) {		
 
@@ -46,32 +47,46 @@ class Nyc_model extends CI_Model {
 			$official['title']					=  'City Councilmember';
 			$official['type']					=  'legislative';
         
-			$official['name_given']				=  $council['first_name'];	
-			$official['name_family']			=  $council['last_name'];	
+			//$official['name_given']				=  $council['first_name'];	
+			//$official['name_family']			=  $council['last_name'];	
 		
-			$middle 							= (!empty($council['mid_name'])) ? ' ' . $council['mid_name'] . ' ' : ' ';
-			$official['name_full']				=  $council['first_name'] . $middle . $council['last_name'];					
+			//$middle 							= (!empty($council['mid_name'])) ? ' ' . $council['mid_name'] . ' ' : ' ';
+			$official['name_full']				=  $council['name'];					
         
         
-			$official['url']					=  $council['website'];	
+			$official['url']					=  $council['source'];	
 			$official['url_photo']				=  $council['image_url'];					
 			$official['email']					=  $council['email'];									
-			$official['phone']					=  $council['city_hall_telephone'];									
+			$official['phone']					=  $council['legislative_office_phone'];									
         
         
-			$official['address_1']				=  $council['street_address_1'];	
-			$official['address_2']				=  $council['street_address_2'];					
-			$official['address_city']			=  $council['city'];					
-			$official['address_state']			=  $council['state'];					
-			$official['address_zip']			=  $council['zip'];																	
+			//$official['address_1']				=  $council['street_address_1'];	
+			//$official['address_2']				=  $council['street_address_2'];					
+			//$official['address_city']			=  $council['city'];					
+			//$official['address_state']			=  $council['state'];					
+			//$official['address_zip']			=  $council['zip'];																	
         
-			$end_date							= (substr($council['end_date'], 0, 1) == '9') ? null : $council['end_date'];
-			$official['current_term_enddate']	=  $end_date;							      	
+			//$end_date							= (substr($council['end_date'], 0, 1) == '9') ? null : $council['end_date'];
+			//$official['current_term_enddate']	=  $end_date;							      	
         
 			$official['extra']					=  array(
-																array("key" => 'committees', "value" => $council['committees']),
+																//array("key" => 'committees', "value" => $council['committees']),
 																array("key" => 'party', "value" => $council['party'])															 
 																);
+
+			// Social Media
+			if ($council['twitter']) {
+				$twitter							= trim($council['twitter'], '@');
+				$social_media['type'] 				= 'twitter';
+				$social_media['description'] 		= 'Twitter';
+				$social_media['username'] 			= $twitter;	
+				$social_media['url'] 				= 'https://twitter.com/' . $twitter;				
+																					
+
+				$official['social_media']			= array($social_media);
+			}													
+																
+																
 
 			// Map to our data model for jurisdiction												
 			$jurisdiction['type'] 			= 'legislative';	
@@ -79,16 +94,16 @@ class Nyc_model extends CI_Model {
 			$jurisdiction['level'] 			= 'municipal';
 			$jurisdiction['level_name'] 	= 'City';
 			$jurisdiction['name'] 			= 'Council District ' . $council['district'];
-			$jurisdiction['url'] 			= $council['website'];	
+			$jurisdiction['url'] 			= $council['source'];	
 
-			$jurisdiction['phone'] 			= $council['district_telephone'];	
+			$jurisdiction['phone'] 			= $council['district_office_phone'];	
 
 
-			$jurisdiction['address_1']	    =  $council['street_address_1'];	
-			$jurisdiction['address_2']	    =  $council['street_address_2'];					
-			$jurisdiction['address_city']   =  $council['city'];					
-			$jurisdiction['address_state']  =  $council['state'];					
-			$jurisdiction['address_zip']    =  $council['zip'];
+			//$jurisdiction['address_1']	    =  $council['street_address_1'];	
+			//$jurisdiction['address_2']	    =  $council['street_address_2'];					
+			//$jurisdiction['address_city']   =  $council['city'];					
+			//$jurisdiction['address_state']  =  $council['state'];					
+			//$jurisdiction['address_zip']    =  $council['zip'];
 
 		
 			$jurisdiction['id'] 			= $council['district'];	
@@ -107,29 +122,36 @@ class Nyc_model extends CI_Model {
 	
 	
 	function get_councilmember($id) {
-			
-		$key = 'nyc_council' . $id;				
+	
+		$key = 'nyc_council' . $id;		
 		
-		// Check in cache
-		if ( $cache = $this->cache->get( $key ) ) {
-			return $cache;
-		}		
-		
-		$url = "http://www.databeam.org/philipashlock/democracymap-gotham/citylaws_councilmember.json?column=district&value=$id&order_by=start_date&direction=DESC&limit=1&api_key=api-key";		
+	 	// Check in cache
+	 	if ( $cache = $this->cache->get( $key ) ) {
+	 		return $cache;
+	 	}		
+	
+		$query = "select * from 'swdata' where (district = '$id')";
+    	
+		$query = urlencode($query);
+    	
+		$url ="https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=new_york_city_council&query=$query";		
+    	
+		$council = curl_to_json($url);	
 
-		$council = curl_to_json($url);
-		
 		if(!empty($council[0])) {
-			
+	
 			// Save to cache
 			$this->cache->save( $key, $council[0], $this->ttl);
-			
-			return $council[0];		
-		}	else {
-			return false;
-		}
-
-	}	
+	
+			return $council[0];		                           	
+		}	else {                                             	
+			return false;                                      	
+		}                                                      	
+	
+	
+	}
+	
+	
 	
 	
 	
