@@ -49,7 +49,7 @@
 
 <div id="searchbox">
 	<form action="/gotham/" method="get">
-		<input type="text" name="location" id="addressid" placeholder="250 Broadway, New York, NY" />
+		<input type="text" name="location" id="addressid" placeholder="250 Broadway, New York, NY 10007" />
 	</form>
 </div>
 
