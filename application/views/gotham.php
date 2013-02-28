@@ -40,7 +40,7 @@
    
 	<header class="page-header row-fluid">
 	      <!--header     <h1 class="pull-left">What's Your District</h1>	 -->
-	Please enter a full address to find your districts and representatives.
+	Please enter a full address including the five digit zip-code to find your districts and representatives.
     </header>
 
 
