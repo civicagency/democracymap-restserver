@@ -148,6 +148,7 @@ City Officials:
 <li>56,354 city officials in Pennsylvania</li>
 <li>19,821 city officials in Texas</li>
 <li>3,290 city officials in Florida</li>
+<li>4,907 city officials in Massachusetts</li>
 </ul>
 
 <h1>Sources</h1>
