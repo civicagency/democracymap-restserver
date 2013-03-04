@@ -7,7 +7,12 @@ $query = "select * from `swdata` where jurisdiction = '$city' and (position like
 		 or position like '%member%' 
 		 or position like '%district%' 
 		 or position like '%city administrator%' 
+		 or position like '%administrative coordinator%' 		
 		 or position like '%chief executive officer%' 
+		 or position like '%town manager%' 	
+		 or position like '%selectman%' 	
+		 or position like '%selectboard%' 	
+		 or position like '%alderman%' 								
 		 or position like '%city manager%' 	
 		 or position like '%council%' 																												
 		)";
@@ -40,7 +45,12 @@ foreach ($officials as $official) {
 	if (strripos($official['position'], 'mayor') !== false) { // Had considered these tests too, but don't think they're elected: OR strripos($official['title'], 'city manager') !== false OR strripos($official['title'], 'executive') !== false
 		$elected_type = 'executive';
 	} 
-	else if (strripos($official['position'], 'council') !== false OR strripos($official['position'], 'member') !== false OR strripos($official['position'], 'district') !== false) {
+	else if (strripos($official['position'], 'council') !== false 
+			OR strripos($official['position'], 'member') !== false 
+			OR strripos($official['position'], 'district') !== false 
+			OR strripos($official['position'], 'selectman') !== false 
+			OR strripos($official['position'], 'selectboard') !== false 
+			OR strripos($official['position'], 'alderman') !== false) {
 		$elected_type = 'legislative';
 	} else {
 		$elected_type = 'administrative';
