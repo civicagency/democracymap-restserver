@@ -979,7 +979,7 @@ if (!empty($data['city_reps'])) {
 	}
 	
 	// If we have a mayor, remove it if it's duplicative, otherwise put it at the top
-	if ($mayor_key !== false) {
+	if (isset($mayor_key) && $mayor_key !== false) {
 							
 		$mayor_temp = $data['city_reps'][$mayor_key];
 		unset($data['city_reps'][$mayor_key]);
