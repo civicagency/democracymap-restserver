@@ -93,239 +93,64 @@ class Geocoder_model extends CI_Model {
 
 	function state_abbr($abbr) {
 		
-$states = '		[
-		    {
-		        "abbreviation": "AL",
-		        "state": "Alabama"
-		    },
-		    {
-		        "abbreviation": "AK",
-		        "state": "Alaska"
-		    },
-		    {
-		        "abbreviation": "0",
-		        "state": "American Samoa"
-		    },
-		    {
-		        "abbreviation": "AZ",
-		        "state": "Arizona"
-		    },
-		    {
-		        "abbreviation": "AR",
-		        "state": "Arkansas"
-		    },
-		    {
-		        "abbreviation": "CA",
-		        "state": "California"
-		    },
-		    {
-		        "abbreviation": "CO",
-		        "state": "Colorado"
-		    },
-		    {
-		        "abbreviation": "CT",
-		        "state": "Connecticut"
-		    },
-		    {
-		        "abbreviation": "DE",
-		        "state": "Delaware"
-		    },
-		    {
-		        "abbreviation": "FL",
-		        "state": "Florida"
-		    },
-		    {
-		        "abbreviation": "GA",
-		        "state": "Georgia"
-		    },
-		    {
-		        "abbreviation": "GU",
-		        "state": "Guam"
-		    },
-		    {
-		        "abbreviation": "HI",
-		        "state": "Hawaii"
-		    },
-		    {
-		        "abbreviation": "ID",
-		        "state": "Idaho"
-		    },
-		    {
-		        "abbreviation": "IL",
-		        "state": "Illinois"
-		    },
-		    {
-		        "abbreviation": "IN",
-		        "state": "Indiana"
-		    },
-		    {
-		        "abbreviation": "IA",
-		        "state": "Iowa"
-		    },
-		    {
-		        "abbreviation": "KS",
-		        "state": "Kansas"
-		    },
-		    {
-		        "abbreviation": "KY",
-		        "state": "Kentucky"
-		    },
-		    {
-		        "abbreviation": "LA",
-		        "state": "Louisiana"
-		    },
-		    {
-		        "abbreviation": "ME",
-		        "state": "Maine"
-		    },
-		    {
-		        "abbreviation": "MD",
-		        "state": "Maryland"
-		    },
-		    {
-		        "abbreviation": "MA",
-		        "state": "Massachusetts"
-		    },
-		    {
-		        "abbreviation": "MI",
-		        "state": "Michigan"
-		    },
-		    {
-		        "abbreviation": "MN",
-		        "state": "Minnesota"
-		    },
-		    {
-		        "abbreviation": "MS",
-		        "state": "Mississippi"
-		    },
-		    {
-		        "abbreviation": "MO",
-		        "state": "Missouri"
-		    },
-		    {
-		        "abbreviation": "0",
-		        "state": "Montana"
-		    },
-		    {
-		        "abbreviation": "NE",
-		        "state": "Nebraska"
-		    },
-		    {
-		        "abbreviation": "NV",
-		        "state": "Nevada"
-		    },
-		    {
-		        "abbreviation": "0",
-		        "state": "New Hampshire"
-		    },
-		    {
-		        "abbreviation": "NJ",
-		        "state": "New Jersey"
-		    },
-		    {
-		        "abbreviation": "NM",
-		        "state": "New Mexico"
-		    },
-		    {
-		        "abbreviation": "NY",
-		        "state": "New York"
-		    },
-		    {
-		        "abbreviation": "0",
-		        "state": "North Carolina"
-		    },
-		    {
-		        "abbreviation": "ND",
-		        "state": "North Dakota"
-		    },
-		    {
-		        "abbreviation": "MP",
-		        "state": "Northern Mariana Islands"
-		    },
-		    {
-		        "abbreviation": "OH",
-		        "state": "Ohio"
-		    },
-		    {
-		        "abbreviation": "OK",
-		        "state": "Oklahoma"
-		    },
-		    {
-		        "abbreviation": "OR",
-		        "state": "Oregon"
-		    },
-		    {
-		        "abbreviation": "PA",
-		        "state": "Pennsylvania"
-		    },
-		    {
-		        "abbreviation": "0",
-		        "state": "Puerto Rico"
-		    },
-		    {
-		        "abbreviation": "RI",
-		        "state": "Rhode Island"
-		    },
-		    {
-		        "abbreviation": "SC",
-		        "state": "South Carolina"
-		    },
-		    {
-		        "abbreviation": "SD",
-		        "state": "South Dakota"
-		    },
-		    {
-		        "abbreviation": "TN",
-		        "state": "Tennessee"
-		    },
-		    {
-		        "abbreviation": "TX",
-		        "state": "Texas"
-		    },
-		    {
-		        "abbreviation": "UT",
-		        "state": "Utah"
-		    },
-		    {
-		        "abbreviation": "VT",
-		        "state": "Vermont"
-		    },
-		    {
-		        "abbreviation": "VI",
-		        "state": "Virgin Islands"
-		    },
-		    {
-		        "abbreviation": "VA",
-		        "state": "Virginia"
-		    },
-		    {
-		        "abbreviation": "WA",
-		        "state": "Washington"
-		    },
-		    {
-		        "abbreviation": "WV",
-		        "state": "West Virginia"
-		    },
-		    {
-		        "abbreviation": "WI",
-		        "state": "Wisconsin"
-		    },
-		    {
-		        "abbreviation": "WY",
-		        "state": "Wyoming"
-		    }
-		]';		
+	    $state["AL"] = "Alabama";
+	    $state["AK"] = "Alaska";
+	    $state["AS"] = "American Samoa";
+	    $state["AZ"] = "Arizona";
+	    $state["AR"] = "Arkansas";
+	    $state["CA"] = "California";
+	    $state["CO"] = "Colorado";
+	    $state["CT"] = "Connecticut";
+	    $state["DE"] = "Delaware";
+	    $state["FL"] = "Florida";
+	    $state["GA"] = "Georgia";
+	    $state["GU"] = "Guam";
+	    $state["HI"] = "Hawaii";
+	    $state["ID"] = "Idaho";
+	    $state["IL"] = "Illinois";
+	    $state["IN"] = "Indiana";
+	    $state["IA"] = "Iowa";
+	    $state["KS"] = "Kansas";
+	    $state["KY"] = "Kentucky";
+	    $state["LA"] = "Louisiana";
+	    $state["ME"] = "Maine";
+	    $state["MD"] = "Maryland";
+	    $state["MA"] = "Massachusetts";
+	    $state["MI"] = "Michigan";
+	    $state["MN"] = "Minnesota";
+	    $state["MS"] = "Mississippi";
+	    $state["MO"] = "Missouri";
+	    $state["MT"] = "Montana";
+	    $state["NE"] = "Nebraska";
+	    $state["NV"] = "Nevada";
+	    $state["NH"] = "New Hampshire";
+	    $state["NJ"] = "New Jersey";
+	    $state["NM"] = "New Mexico";
+	    $state["NY"] = "New York";
+	    $state["NC"] = "North Carolina";
+	    $state["ND"] = "North Dakota";
+	    $state["MP"] = "Northern Mariana Islands";
+	    $state["OH"] = "Ohio";
+	    $state["OK"] = "Oklahoma";
+	    $state["OR"] = "Oregon";
+	    $state["PA"] = "Pennsylvania";
+	    $state["PR"] = "Puerto Rico";
+	    $state["RI"] = "Rhode Island";
+	    $state["SC"] = "South Carolina";
+	    $state["SD"] = "South Dakota";
+	    $state["TN"] = "Tennessee";
+	    $state["TX"] = "Texas";
+	    $state["UT"] = "Utah";
+	    $state["VT"] = "Vermont";
+	    $state["VI"] = "Virgin Islands";
+	    $state["VA"] = "Virginia";
+	    $state["WA"] = "Washington";
+	    $state["WV"] = "West Virginia";
+	    $state["WI"] = "Wisconsin";
+	    $state["WY"] = "Wyoming";	
 		
 		
-		$states = json_decode($states);
-			
-		foreach ($states as $state) {
-			if ($abbr == $state->abbreviation) {
-				return $state->state;
-			}
-				
-		}
-		
+		return $state[$abbr];		
 	}
 	
 	
