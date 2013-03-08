@@ -64,7 +64,14 @@ class City_model extends CI_Model {
 		      $city['county'] 		   =  ucwords(strtolower($rows->COUNTY_AREA_NAME));
 		   }
 		}		
+
+		if(strlen($city['zip']) < 5) {
+			$city['zip'] = str_pad($city['zip'], 5, "0", STR_PAD_LEFT);
+		}
 		
+		if(!empty($city['zip4']) && strlen($city['zip4']) < 4) {
+			$city['zip4'] = str_pad($city['zip4'], 4, "0", STR_PAD_LEFT);
+		}
 		
 		return $city;
 		

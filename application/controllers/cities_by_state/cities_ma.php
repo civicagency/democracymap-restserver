@@ -59,6 +59,8 @@ foreach ($officials as $official) {
 		$name_middle = ($official['middle_name']) ? ' ' . $official['middle_name'] . ' ' : ' '; 
 		$name_full = $official['first_name'] . $name_middle . $official['last_name'];
 		
+		$address_zip = ($official['zipcode']) ? trim($official['zipcode'], "'") : null;
+		
 	$electeds[] = $this->elected_official_model($type = $elected_type, 
 											  $title = $official['position'], 
 											  $description = $official['functional_role'], 
@@ -76,7 +78,7 @@ foreach ($officials as $official) {
 											  $address_2 = $official['address_line2'], 
 											  $address_city = $official['city'], 
 											  $address_state = $official['state'], 
-											  $address_zip = $official['zipcode'], 
+											  $address_zip, 
 											  $current_term_enddate = null, 
 											  $last_updated = null,
 											  $social_media = null);

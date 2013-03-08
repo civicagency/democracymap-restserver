@@ -50,7 +50,18 @@ class County_model extends CI_Model {
 				'fips_state'					=>  $rows->fips_state,
 				'fips_county'					=>  $rows->fips_county
 			
-			);	        			      			      	                               
+			);	  
+			
+			
+			if(strlen($county_data['zip']) < 5) {
+				$county_data['zip'] = str_pad($county_data['zip'], 5, "0", STR_PAD_LEFT);
+			}
+
+			if(!empty($county_data['zip4']) && strlen($county_data['zip4']) < 4) {
+				$county_data['zip4'] = str_pad($county_data['zip4'], 4, "0", STR_PAD_LEFT);
+			}			
+			
+			      			      			      	                               
 			
 		   }
 		}	
