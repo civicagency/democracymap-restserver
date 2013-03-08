@@ -4,16 +4,21 @@ require APPPATH.'/libraries/REST_Controller.php';
 class Context extends REST_Controller {
 
 	public $ttl 		= 604800;
+	public $phoneUtil	= null;
 
 	function __construct()
 	{
 		parent::__construct();
+		
+	   	$this->load->helper('phone/PhoneNumberUtil');			
+	   	$this->phoneUtil = PhoneNumberUtil::getInstance();			
+		
 	    $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
 	}
 
 	public function index_get()	{
 		
-		 //$this->cache->clean();
+		// $this->cache->clean();
 		
 		if (empty($_GET)) {
 			$this->load->helper('url');			
@@ -159,6 +164,12 @@ class Context extends REST_Controller {
 				
 				$data['state_data'] = $this->get_state($data['state_geocoded']);
 								
+				if(!empty($data['state_data']['phone_primary'])) {
+					$data['state_data']['phone_primary'] = $this->format_phone($data['state_data']['phone_primary']);
+				}				
+
+				
+								
 				$governor = $this->get_governor($data['state_geocoded']);
 				
 				if(!empty($governor)) {
@@ -235,6 +246,8 @@ class Context extends REST_Controller {
 					$data['place_url_updated'] = $data['place_url'];	
 				}
 			}
+			
+			if(empty($data['place_url_updated'])) $data['place_url_updated'] = null;
 		
 			
 			
@@ -623,11 +636,11 @@ function get_dc_councilmembers($ward)	{
 	
 	function state_legislators($lat, $long) {
 		
-		$url = "http://openstates.org/api/v1/legislators/geo/?long=" . $long . "&lat=" . $lat . "&fields=state,chamber,district,full_name,url,photo_url&apikey=" . $this->config->item('sunlight_api_key');
+		// $url = "http://openstates.org/api/v1/legislators/geo/?long=" . $long . "&lat=" . $lat . "&fields=state,chamber,district,full_name,url,photo_url&apikey=" . $this->config->item('sunlight_api_key');
+		$url = "http://openstates.org/api/v1/legislators/geo/?long=" . $long . "&lat=" . $lat . "&apikey=" . $this->config->item('sunlight_api_key');
 
 		$state_legislators = curl_to_json($url);
-				
-		
+
 		if(!empty($state_legislators)) return $state_legislators;				
 		else return false;
 		
@@ -811,6 +824,12 @@ function process_nat_legislators($representatives) {
 			
 			$full_name = $repdata['firstname'] . ' ' . $repdata['lastname'];
 			
+			if ($repdata['phone']) {
+				$phone = $this->format_phone($repdata['phone']);
+			} else {
+				$phone = null;
+			}
+			
 		
 				$rep = array(
 							'district' 		=> $repdata['district'], 
@@ -821,7 +840,7 @@ function process_nat_legislators($representatives) {
 							'website' 		=> $repdata['website'], 
 							'url_contact' 		=> $repdata['webform'], 							
 							'title' 	=> $repdata['title'],								
-							'phone' 	=> $repdata['phone'], 
+							'phone' 	=> $phone, 
 							'twitter_id' 	=> $repdata['twitter_id'],
 							'youtube_url' 	=> $repdata['youtube_url'],																					
 							'congress_office' 		=> $repdata['congress_office'], 
@@ -850,7 +869,18 @@ function process_nat_legislators($representatives) {
 	
 }	
 
-
+function format_phone($phone) {
+	
+	$phone = $this->phoneUtil->parse($phone, "US");
+	
+	if($this->phoneUtil->isValidNumber($phone)) {
+		return $this->phoneUtil->format($phone, PhoneNumberFormat::RFC3966);	
+	} else {
+		return null;
+	}
+	
+	
+}
 
 function re_schema($data) {
 	
@@ -1140,8 +1170,18 @@ if (!empty($data['state_data'])) {
 	$elected = array($this->elected_official_model('executive', 'Governor', null, null, null, $data['state_data']['governor'], $data['state_data']['governor_url'], null, null, null, null, null, null, null, null, null, null, null, null, null, null));
 
 if (!empty($data['governor_data'])) {
+	
+	
+	if ($data['governor_data']['phone']) {
+		$phone = $this->format_phone($data['governor_data']['phone']);
+	} else {
+		$phone = null;
+	}	
+	
+	
+	
 	$elected[0]['url_photo'] = $data['governor_data']['url_photo'];
-	$elected[0]['phone'] = $data['governor_data']['phone'];
+	$elected[0]['phone'] = $phone;
 	$elected[0]['address_1'] = $data['governor_data']['address_1'];	
 	$elected[0]['address_2'] = $data['governor_data']['address_2'];	
 	$elected[0]['address_city'] = $data['governor_data']['address_city'];	
