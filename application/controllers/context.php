@@ -263,8 +263,9 @@ class Context extends REST_Controller {
 			}
 			
 			
-			// NYC Hyperlocal data					
-			if (!empty($data['place_id']) && $data['place_id'] == '51000') {
+			// NYC Hyperlocal data		
+			//if (!empty($data['gnis_fid']) && $data['gnis_fid'] == '2395220') {		
+			if (!empty($data['place_id']) && !empty($data['state_id']) && $data['place_id'] == '51000' && $data['state_id'] == '36') {
 					$this->load->model('nyc_model', 'nyc');
 					$this->load->model('democracymap_model', 'democracymap');
 				
