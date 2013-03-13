@@ -1,167 +1,187 @@
+body {
+     background-color: #DFDFDF;
+     background-image: url("/img/noise.png");
+padding : 0;
+}
+
+.page-header {
+margin-bottom : 10px;
+}
+
 .dmap {
-width : 700px;
-border : 1px solid #ccc;
-margin : 1em auto;
+     background-color: #F6F6F6;
+     background-image: url("/img/noise.png");
+     border: 1px solid #FFFFFF;
+     box-shadow: 0px 0px 1px 1px #BABABA;
+     margin: 1em auto;
+     width: 700px;
 }
 
 .right {
-float : right;
+     float: right;
 }
 
 .jurisdictions {
-clear : both;
-float : left;
- width : 100%;
+     clear: both;
+     float: left;
+     width: 100%;
 }
 
 #searchbox input#addressid {
-font-size : 2em;
-line-height : 2.25em;
- height : 2.5em;
- padding : .5em;
-  
-width : 100%;
-box-sizing : border-box;
--moz-box-sizing:border-box; /* Firefox */
--webkit-box-sizing:border-box; /* Safari */
- display : block;
-margin : 0;
+     -moz-box-sizing: border-box;
+     display: block;
+     font-size: 2em;
+     height: 2.5em;
+     line-height: 2.25em;
+     margin: 0px;
+     padding: 0.5em;
+     width: 100%;
+}
 
+header h1 a {
+     background: url("/img/dmap-logo.png") no-repeat scroll 0% 0% transparent;
+     color: #0E4475;
+     display: block;
+     min-height: 62px;
+     padding-left: 80px;
+     padding-top: 10px;
+}
+
+header h1 a:hover {
+     text-decoration: none;
 }
 
 @media screen and (max-width: 900px) {
-.dmap {
-width : auto;
-border : 0;
-margin : 0;
-}
+  .dmap { 
+	width: auto; 
+	border: 0px none; 
+	margin: 0px; 
+	padding : 0 20px;
+	}
+
 }
 
-/* List reset */
 .jurisdictions ul, .jurisdictions li {
-list-style-type : none;
-padding : 0;
-margin : 0;
+     list-style-type: none;
+     margin: 0px;
+     padding: 0px;
 }
 
 .jurisdictions .jurisdiction {
-font-size : .75em;
-margin-bottom : 1.5em;
-padding-bottom : 2em;
-border-bottom : 0;
-float : left;
-width : 100%;
-clear : both;
+     border-bottom: 0px none;
+     clear: both;
+     float: left;
+     font-size: 0.75em;
+     margin-bottom: 1.5em;
+     padding-bottom: 2em;
+     width: 100%;
 }
 
-
-
 .jurisdictions .jurisdiction h2 {
-font-size : 3em;
-clear : both;
-border-bottom : 1px solid #ccc;
+     border-bottom: 1px solid #DADADA;
+     box-shadow: 0px 1px 0px #FFFFFF;
+     clear: both;
+     font-size: 3em;
 }
 
 .jurisdictions .jurisdiction h2 a {
-color : #000;
+     color: #000000;
 }
 
 .jurisdictions .jurisdiction h2 a:hover {
-text-decoration : none;
+     text-decoration: none;
 }
-
 
 .jurisdictions .elected-list li {
-clear : both;
-border : 0;
-border-bottom : 1px solid #E8E8E8;
-padding : 1em 0;
-margin : 0;
-width : 100%;
-display : inline-block;
+     -moz-border-bottom-colors: none;
+     -moz-border-left-colors: none;
+     -moz-border-right-colors: none;
+     -moz-border-top-colors: none;
+     border-color: -moz-use-text-color -moz-use-text-color #E8E8E8;
+     border-image: none;
+     border-style: none none solid;
+     border-width: 0px 0px 1px;
+     box-shadow: 0px 1px 0px #FFFFFF;
+     clear: both;
+     display: inline-block;
+     margin: 0px;
+     padding: 1em 0px;
+     width: 100%;
 }
-
 
 .jurisdictions .elected-list .tweet_list li {
-display : block;	
+     display: block;
 }
-	
 
 .jurisdictions .elected-list li:last-child {
-	border-bottom :0;
+     border-bottom: 0px none;
+     box-shadow: none;
 }
 
 .jurisdictions .elected-list h3 {
-margin : 0;
+     margin: 0px;
 }
 
 .jurisdictions .elected-list h3 a {
-color : black;
+     color: black;
 }
 
 .jurisdictions .elected-list img {
-float : right;
-max-width : 100px;
-margin-bottom : 0;
+     float: right;
+     margin-bottom: 0px;
+     max-width: 100px;
 }
 
 .jurisdictions .elected-list .text-box {
-float : left;
+     float: left;
 }
-
-
-
-
 
 .tweet, .query {
-    color: #255384;
-    font: 100% Georgia,serif;
+     color: #255384;
+     font: 100% Georgia,serif;
 }
-.tweet_list {
-    font-size: 0.9em;
-    list-style: none outside none;
-    margin: 0;
-    overflow-y: hidden;
-    padding: 0;
-clear : both;
 
+.tweet_list {
+     clear: both;
+     font-size: 0.9em;
+     list-style: none outside none;
+     margin: 0px;
+     overflow-y: hidden;
+     padding: 0px;
 }
+
 .tweet_list .awesome, .tweet_list .epic {
-    text-transform: uppercase;
+     text-transform: uppercase;
 }
+
 .tweet_list li {
-    border-bottom: 1px solid #CCCCCC;
-    list-style-type: none;
-    overflow-x: hidden;
-    overflow-y: auto;
-    padding: 1em 0.5em;
+     border-bottom: 1px solid #CCCCCC;
+     list-style-type: none;
+     overflow-x: hidden;
+     overflow-y: auto;
+     padding: 1em 0.5em;
 }
 
 .jurisdictions .elected-list .tweet_list li {
-margin : 0;
+     margin: 0px;
 }
-
 
 .tweet_list .tweet_odd {
-    background-color: #F4F4F4;
-
+     background-color: #F4F4F4;
 }
+
 .tweet_list .tweet_avatar {
-    float: left;
-    padding-right: 0.5em;
+     float: left;
+     padding-right: 0.5em;
 }
+
 .tweet_list .tweet_avatar img {
-    vertical-align: middle;
+     vertical-align: middle;
 }
 
-.jurisdictions .elected-list  .tweet_list {
-	margin : 1em 0;
-	float : left;
-width : 100%;
-font-size : 1.2em;
+.jurisdictions .elected-list .tweet_list {
+     float: left;
+     font-size: 1.2em;
+     margin: 1em 0px;
+     width: 100%;
 }
-
-
-
-
-
