@@ -101,6 +101,7 @@ class Geocoder_model extends CI_Model {
 	    $state["CA"] = "California";
 	    $state["CO"] = "Colorado";
 	    $state["CT"] = "Connecticut";
+	    $state["DC"] = "Washington D.C.";
 	    $state["DE"] = "Delaware";
 	    $state["FL"] = "Florida";
 	    $state["GA"] = "Georgia";
