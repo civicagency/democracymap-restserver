@@ -34,14 +34,19 @@ class Context extends REST_Controller {
 
 			}
 			
-
 			$key 						= $data['input'] . '_context';
 
 
-			// Check in cache		
-			if ( $cache = $this->cache->get( $key ) && !$this->test_latlong($data['input'])) {
-				$this->response($cache, 200);
-			}			
+			if (!$this->test_latlong($data['input'])) {
+				
+				// Check in cache		
+				if ( $cache = $this->cache->get( $key )) {
+					$this->response($cache, 200);
+				}				
+				
+			}
+			
+		
 			
 			// Geocode our address (if needed)
 			
