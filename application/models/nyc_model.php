@@ -259,6 +259,125 @@ class Nyc_model extends CI_Model {
 	}	
 	
 
+	function get_pubadvocate($democracymap) {	
+		
+		$official 	  = $democracymap->official();
+
+		$official['title']					=  'Public Advocate';
+		$official['type']					=  'advocate';
+		$official['name_given'] 			=  'Bill';	
+		$official['name_family'] 			=  'de Blasio';
+		$official['name_full']				=  'Bill de Blasio';											      	
+		$official['description'] 			=  '';	
+
+
+		$official['url'] 					=  'http://pubadvocate.nyc.gov/';	
+		$official['url_photo'] 				=  'https://twimg0-a.akamaihd.net/profile_images/2431823933/jwygymtec2srad1qj4r0.jpeg'; //'http://pubadvocate.nyc.gov/sites/advocate.nyc.gov/files/imagecache/picture_resized/deBlasio_0.jpg';	
+		$official['url_schedule'] 			=  '';	
+		$official['url_contact'] 			=  '';	
+		$official['email'] 					=  'GetHelp@pubadvocate.nyc.gov';	
+		$official['phone'] 					=  '+1-212-669-7200';	
+		$official['address_name'] 			=  '';	
+		$official['address_1'] 				=  '1 Centre Street';
+		$official['address_2'] 				=  '15th Floor';	
+		$official['address_city'] 			=  'New York';	
+		$official['address_state'] 			=  'NY';	
+		$official['address_zip'] 			=  '10007';	
+		$official['current_term_enddate'] 	=  '';
+		
+		// Twitter
+		$social_media_account = $democracymap->social_media();		
+
+		$social_media_account['type']			= 'twitter';
+		$social_media_account['description']	= 'Twitter';
+		$social_media_account['username']		= 'BilldeBlasio';				
+		$social_media_account['url']			= 'https://twitter.com/BilldeBlasio';							
+
+		$social_media[] 						= $social_media_account;
+		
+		// Facebook				
+		$social_media_account 	= $democracymap->social_media();		
+	
+		$social_media_account['type']			= 'facebook';
+		$social_media_account['description']	= 'Facebook';
+		$social_media_account['username']		= '';				
+		$social_media_account['url']			= 'http://www.facebook.com/pabilldeblasio';							
+
+		$social_media[] 						= $social_media_account;		
+		
+		$official['social_media'] 			=  $social_media;	
+		
+		return $official;
+	
+	}
+	
+	
+	function get_comptroller($democracymap) {	
+		
+		$official 	  = $democracymap->official();
+
+		$official['title']					=  'Comptroller';
+		$official['type']					=  'comptroller';
+		$official['name_given'] 			=  'John';	
+		$official['name_family'] 			=  'Liu';
+		$official['name_full']				=  'John C. Liu';											      	
+		$official['description'] 			=  '';	
+
+
+		$official['url'] 					=  'http://www.comptroller.nyc.gov/';	
+		$official['url_photo'] 				=  'http://www.comptroller.nyc.gov/images/headshots/John_Liu2-thumb.jpg';	
+		$official['url_schedule'] 			=  '';	
+		$official['url_contact'] 			=  '';	
+		$official['email'] 					=  '';	
+		$official['phone'] 					=  '+1-212-669-3916';	
+		$official['address_name'] 			=  'Municipal Building';	
+		$official['address_1'] 				=  '1 Centre Street';
+		$official['address_2'] 				=  '';	
+		$official['address_city'] 			=  'New York';	
+		$official['address_state'] 			=  'NY';	
+		$official['address_zip'] 			=  '10007';	
+		$official['current_term_enddate'] 	=  '';
+		
+		// Twitter
+		$social_media_account = $democracymap->social_media();		
+
+		$social_media_account['type']			= 'twitter';
+		$social_media_account['description']	= 'Twitter';
+		$social_media_account['username']		= 'JohnCLiu';				
+		$social_media_account['url']			= 'https://twitter.com/JohnCLiu';							
+
+		$social_media[] 						= $social_media_account;
+		
+		// Facebook				
+		$social_media_account 	= $democracymap->social_media();		
+	
+		$social_media_account['type']			= 'facebook';
+		$social_media_account['description']	= 'Facebook';
+		$social_media_account['username']		= '';				
+		$social_media_account['url']			= 'http://www.facebook.com/Liu.NYC';							
+
+		$social_media[] 						= $social_media_account;		
+		
+		$official['social_media'] 			=  $social_media;	
+		
+		return $official;
+	
+	}	
+	
+	
+	
+	
+	
+	
+	
+	function get_officials($democracymap) {	
+		
+		$elected[] = $this->get_pubadvocate($democracymap);		
+		$elected[] = $this->get_comptroller($democracymap);
+		
+		return $elected;
+		
+	}	
 	
 	
 	

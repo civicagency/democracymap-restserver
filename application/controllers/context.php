@@ -276,7 +276,7 @@ class Context extends REST_Controller {
 				
 					$data['nyc_council'] 			= $this->nyc->get_city_council($latlong, $this->democracymap);
 					$data['nyc_community_boards'] 	= $this->nyc->get_community_board($latlong, $this->democracymap);								
-					//$nyc_officials 			= $this->nyc->get_officials($democracymap);							
+					$data['nyc_officials']			= $this->nyc->get_officials($this->democracymap);
 			}			
 			
 
@@ -918,7 +918,6 @@ if(!empty($data['nyc_council'])) {
 	
 }
 
-
 	
 
 
@@ -1050,7 +1049,12 @@ if (!empty($data['city_reps'])) {
 }
 
 
+// NYC Specific
+if(!empty($data['nyc_officials'])) {
 
+	$elected =  array_merge($elected, $data['nyc_officials']);
+	
+}
 
 
 
