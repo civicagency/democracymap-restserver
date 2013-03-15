@@ -30,6 +30,14 @@
   <script type="text/javascript" src="/js/jquery.tweet.js"></script>
   <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
+<!-- Activate responsiveness in the "child" page -->
+<script src="https://raw.github.com/npr/responsiveiframe/master/dist/jquery.responsiveiframe.js"></script>
+<script>
+var ri = responsiveIframe();
+ri.allowResponsiveEmbedding();
+</script>
+
+
 <?php  if(empty($jurisdictions['jurisdictions'])): ?>
   <script type="text/javascript" src="/js/set_location.js"></script>
 <?php endif;?>
@@ -52,7 +60,7 @@
 
 <div id="searchbox">
 	<form action="/gotham/" method="get" target="_self">
-		<input type="text" name="location" id="addressid" placeholder="250 Broadway, New York, NY 10008" />
+		<input type="text" name="location" id="addressid" placeholder="250 Broadway, New York, NY 10007" />
 	</form>
 </div>
 
