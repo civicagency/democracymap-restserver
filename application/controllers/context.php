@@ -1225,6 +1225,18 @@ if (!empty($data['governor_sm'])) {
 	$elected[0]['social_media'] = $social_media;
 }
 
+// NY Specific
+if ($data['state'] == 'NY') {
+	
+	$this->load->model('state_ny_model', 'ny');
+	if(!$this->democracymap) $this->load->model('democracymap_model', 'democracymap');
+
+	 $elected[]			= $this->ny->get_ag($this->democracymap);
+	
+
+}
+
+
 
 	$new_data['jurisdictions'][] = $this->jurisdiction_model('government', 'State', 'regional', 'State', $data['state_geocoded'], $data['state'], $data['state_data']['official_name_url'], $data['state_data']['information_url'], $data['state_data']['email'], $data['state_data']['phone_primary'], null, null, null, null, null, null, null, $state_metadata, null, $elected, null);
 	
