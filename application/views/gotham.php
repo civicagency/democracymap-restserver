@@ -34,6 +34,9 @@
   <script type="text/javascript" src="/js/set_location.js"></script>
 <?php endif;?>
 
+<!-- this is just because we're expecting this to be in an iframe -->
+<base target="_parent" />
+
 </head>
   <body>
     <div class="dmap container-fluid">
@@ -48,8 +51,8 @@
 
 
 <div id="searchbox">
-	<form action="/gotham/" method="get">
-		<input type="text" name="location" id="addressid" placeholder="250 Broadway, New York, NY 10007" />
+	<form action="/gotham/" method="get" target="_self">
+		<input type="text" name="location" id="addressid" placeholder="250 Broadway, New York, NY 10008" />
 	</form>
 </div>
 
