@@ -1,3 +1,9 @@
+
+	<div class="footer-colophon">
+		Please help this project get support from the Knight News Challenge by "applauding" its <a href="https://www.newschallenge.org/open/open-government/submission/democracymap/">entry page</a>
+	</div>		
+			
+
   </div>
 
   <script type="text/javascript" src="/js/load_tweets.js"></script>

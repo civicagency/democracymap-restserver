@@ -1,18 +1,15 @@
 * {
-  -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
-          box-sizing: border-box;
 }
-
 
 body {
      background-color: #DFDFDF;
      background-image: url("/img/noise.png");
-padding : 0;
+     padding: 0px;
 }
 
 .page-header {
-margin-bottom : 10px;
+     margin-bottom: 10px;
 }
 
 .dmap {
@@ -58,13 +55,7 @@ header h1 a:hover {
 }
 
 @media screen and (max-width: 900px) {
-  .dmap { 
-	width: auto; 
-	border: 0px none; 
-	margin: 0px; 
-	padding : 0 20px;
-	}
-
+  .dmap { width: auto; border: 0px none; margin: 0px; padding: 0px 20px; }
 }
 
 .jurisdictions ul, .jurisdictions li {
@@ -190,4 +181,14 @@ header h1 a:hover {
      font-size: 1.2em;
      margin: 1em 0px;
      width: 100%;
+}
+
+.footer-colophon {
+color : #683434;
+border : 1px solid #a92e2e;
+margin : 1em 0;
+padding : .2em;
+text-align : center;
+background-color : #c12424;
+background: rgba(193, 36, 36, 0.25); 
 }
