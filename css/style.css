@@ -184,6 +184,8 @@ header h1 a:hover {
 }
 
 .footer-colophon {
+float : left;
+width : 100%;
 color : #683434;
 border : 1px solid #a92e2e;
 margin : 1em 0;
