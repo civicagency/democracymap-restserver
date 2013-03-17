@@ -18,7 +18,7 @@ class Context extends REST_Controller {
 
 	public function index_get()	{
 		
-		// $this->cache->clean();
+		 // $this->cache->clean();
 		
 		if (empty($_GET)) {
 			$this->load->helper('url');			
@@ -264,7 +264,14 @@ class Context extends REST_Controller {
 				if(!empty($data['city_ward']['LABEL'])) {
 					$data['council_reps'] = $this->get_dc_councilmembers($data['city_ward']['LABEL']);
 				}
-			
+				
+				
+				$data['city_anc'] = $this->get_dc_anc($data['latitude'], $data['longitude']); 
+				
+				if(!empty($data['city_anc']['ANC_ID'])) {
+					$data['anc_reps'] = $this->get_dc_anc_members($data['city_anc']['ANC_ID']);
+				}				
+
 			}
 			
 			
@@ -515,6 +522,21 @@ function get_dc_ward($lat, $long)	{
 }
 
 
+function get_dc_anc($lat, $long)	{
+	
+
+	$url ="http://maps.dcgis.dc.gov/DCGIS/rest/services/DCGIS_DATA/Administrative_Other_Boundaries_WebMercator/MapServer/2/query?text=&geometry=$long%2C+$lat&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&where=&returnGeometry=false&outSR=4326&outFields=NAME,ANC_ID,WEB_URL&f=json";
+
+	$data = curl_to_json($url);
+
+	$data = $data['features'][0]['attributes'];
+
+	return $data;
+	
+}
+
+
+
 // DC Specific 	
 
 function get_dc_councilmembers($ward)	{
@@ -544,6 +566,34 @@ function get_dc_councilmembers($ward)	{
 	return $response;	
 	
 }
+
+// DC Specific 	
+
+function get_dc_anc_members($anc)	{
+	
+	$key = md5( serialize( $anc )) . '_dc_anc_members';
+	
+	// Check in cache
+	if ( $cache = $this->cache->get( $key ) ) {
+		return $cache;
+	}	
+	
+	$query = "select * from `swdata` where anc = '$anc'";
+	
+	$query = urlencode($query);
+	
+	$url ="https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=city_representatives_hyperlocal_-_dc_anc_members&query=$query";		
+
+	$response = curl_to_json($url);
+
+	// Save to cache
+	$this->cache->save( $key, $response, $this->ttl);
+
+	return $response;	
+	
+}
+
+
 
 	
 	
@@ -898,6 +948,38 @@ function re_schema($data) {
 
 			
 
+ // ############################################################################################################
+ // Hyperlocal
+
+
+
+ // DC
+
+ // Elected
+ 
+ if (!empty($data['anc_reps'])) {	
+ 
+ 
+	foreach ($data['anc_reps'] as $anc_rep) {
+
+	$name_full = $anc_rep['first_name'] . ' ' . $anc_rep['last_name'];
+	$title = 'Single Member District ' . $anc_rep['smd'] . ' Commissioner';
+
+	$elected[] = $this->elected_official_model('legislative', $title, null, $anc_rep['first_name'], $anc_rep['last_name'], $name_full, null, null, null, null, $anc_rep['email'], $anc_rep['phone'], null, $anc_rep['address'], null, null, null, null, null, null, null);
+
+	}
+
+ 
+ // Jurisdiction
+
+ 	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Advisory Neighborhood Commission', 'sub-municipal', 'Advisory Neighborhood Commission', $data['city_anc']['ANC_ID'], $data['city_anc']['ANC_ID'], $data['city_anc']['WEB_URL'], null, null, null, null, null, null, null, null, null, null, null, null, $elected, null);
+ }
+
+
+
+
+
+
 
  // ############################################################################################################
  // City Council  
@@ -1037,7 +1119,7 @@ if (!empty($data['city_reps'])) {
 
 
 
-// DC Specific?
+// DC Specific
  if (!empty($data['council_reps']['at_large'])) {
 	
 	foreach ($data['council_reps']['at_large'] as $at_large) {
