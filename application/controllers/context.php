@@ -965,7 +965,7 @@ function re_schema($data) {
 	$name_full = $anc_rep['first_name'] . ' ' . $anc_rep['last_name'];
 	$title = 'Single Member District ' . $anc_rep['smd'] . ' Commissioner';
 
-	$elected[] = $this->elected_official_model('legislative', $title, null, $anc_rep['first_name'], $anc_rep['last_name'], $name_full, null, null, null, null, $anc_rep['email'], $anc_rep['phone'], null, $anc_rep['address'], null, null, null, null, null, null, null);
+	$elected[] = $this->elected_official_model('legislative', $title, null, $anc_rep['first_name'], $anc_rep['last_name'], $name_full, null, null, null, null, $anc_rep['email'], $anc_rep['phone'], null, $anc_rep['address'], null, null, null, $anc_rep['zip'], null, null, null);
 
 	}
 
