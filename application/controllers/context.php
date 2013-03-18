@@ -18,7 +18,7 @@ class Context extends REST_Controller {
 
 	public function index_get()	{
 		
-		 // $this->cache->clean();
+		 $this->cache->clean();
 		
 		if (empty($_GET)) {
 			$this->load->helper('url');			
@@ -268,9 +268,24 @@ class Context extends REST_Controller {
 				
 				$data['city_anc'] = $this->get_dc_anc($data['latitude'], $data['longitude']); 
 				
-				if(!empty($data['city_anc']['ANC_ID'])) {
-					$data['anc_reps'] = $this->get_dc_anc_members($data['city_anc']['ANC_ID']);
+				if(!empty($data['city_anc']['external_id'])) {
+					$data['anc_reps'] = $this->get_dc_anc_members($data['city_anc']['external_id']);
+				}		
+				
+				
+				$data['city_smd'] = $this->get_dc_smd($data['latitude'], $data['longitude']); 
+
+				if(!empty($data['city_smd']['external_id'])) {
+					foreach ($data['anc_reps'] as $smd_rep) {
+						if($smd_rep['smd'] == $data['city_smd']['external_id']) {
+							$data['smd_rep'] = $smd_rep;
+							reset($data['anc_reps']);
+							break;							
+						}				
+					}
 				}				
+				
+						
 
 			}
 			
@@ -525,15 +540,36 @@ function get_dc_ward($lat, $long)	{
 function get_dc_anc($lat, $long)	{
 	
 
-	$url ="http://maps.dcgis.dc.gov/DCGIS/rest/services/DCGIS_DATA/Administrative_Other_Boundaries_WebMercator/MapServer/2/query?text=&geometry=$long%2C+$lat&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&where=&returnGeometry=false&outSR=4326&outFields=NAME,ANC_ID,WEB_URL&f=json";
+	//$url ="http://maps.dcgis.dc.gov/DCGIS/rest/services/DCGIS_DATA/Administrative_Other_Boundaries_WebMercator/MapServer/2/query?text=&geometry=$long%2C+$lat&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&where=&returnGeometry=false&outSR=4326&outFields=NAME,ANC_ID,WEB_URL&f=json";
+
+	$url ="http://gis.govtrack.us/boundaries/dc-anc-2013/?contains=$lat,$long";
 
 	$data = curl_to_json($url);
 
-	$data = $data['features'][0]['attributes'];
+	$data = $data['objects'][0];
 
 	return $data;
 	
 }
+
+
+
+function get_dc_smd($lat, $long)	{
+	
+	$url ="http://gis.govtrack.us/boundaries/dc-smd-2013/?contains=$lat,$long";
+
+	$data = curl_to_json($url);
+
+	$data = $data['objects'][0];
+
+	return $data;
+	
+}
+
+
+
+
+
 
 
 
@@ -952,27 +988,47 @@ function re_schema($data) {
  // Hyperlocal
 
 
-
  // DC
+
+
+
+
+if (!empty($data['city_smd']) && !empty($data['smd_rep'])) {	
+
+ // Elected
+
+	$name_full = $data['smd_rep']['first_name'] . ' ' . $data['smd_rep']['last_name'];
+
+	$elected = array();
+	$elected[] = $this->elected_official_model('legislative', 'Commissioner', null, $data['smd_rep']['first_name'], $data['smd_rep']['last_name'], $name_full, null, null, null, null, $data['smd_rep']['email'], $data['smd_rep']['phone'], null, $data['smd_rep']['address'], null, null, null, $data['smd_rep']['zip'], null, null, null);
+
+
+ // Jurisdiction
+
+ 	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Single Member District', 'sub-municipal', 'Single Member District', $data['city_smd']['external_id'], $data['city_smd']['external_id'], null, null, $data['smd_rep']['email'], $data['smd_rep']['phone'], null, null, null, null, null, null, null, null, null, $elected, null);
+
+ }
+
+
 
  // Elected
  
  if (!empty($data['anc_reps'])) {	
  
- 
+	$elected = array();
 	foreach ($data['anc_reps'] as $anc_rep) {
 
-	$name_full = $anc_rep['first_name'] . ' ' . $anc_rep['last_name'];
-	$title = 'Single Member District ' . $anc_rep['smd'] . ' Commissioner';
+		$name_full = $anc_rep['first_name'] . ' ' . $anc_rep['last_name'];
+		$title = 'Commissioner SMD ' . $anc_rep['smd'];
 
-	$elected[] = $this->elected_official_model('legislative', $title, null, $anc_rep['first_name'], $anc_rep['last_name'], $name_full, null, null, null, null, $anc_rep['email'], $anc_rep['phone'], null, $anc_rep['address'], null, null, null, $anc_rep['zip'], null, null, null);
+		$elected[] = $this->elected_official_model('legislative', $title, null, $anc_rep['first_name'], $anc_rep['last_name'], $name_full, null, null, null, null, $anc_rep['email'], $anc_rep['phone'], null, $anc_rep['address'], null, null, null, $anc_rep['zip'], null, null, null);
 
 	}
 
  
  // Jurisdiction
 
- 	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Advisory Neighborhood Commission', 'sub-municipal', 'Advisory Neighborhood Commission', $data['city_anc']['ANC_ID'], $data['city_anc']['ANC_ID'], $data['city_anc']['WEB_URL'], null, null, null, null, null, null, null, null, null, null, null, null, $elected, null);
+ 	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Advisory Neighborhood Commission', 'sub-municipal', 'Advisory Neighborhood Commission', $data['city_anc']['external_id'], $data['city_anc']['external_id'], null, null, null, null, null, null, null, null, null, null, null, null, null, $elected, null);
  }
 
 
