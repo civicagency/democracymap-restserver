@@ -18,7 +18,7 @@ class Context extends REST_Controller {
 
 	public function index_get()	{
 		
-		 //$this->cache->clean();
+		 $this->cache->clean();
 		
 		if (empty($_GET)) {
 			$this->load->helper('url');			
@@ -261,8 +261,8 @@ class Context extends REST_Controller {
 			
 				$data['city_ward'] = $this->get_dc_ward($data['latitude'], $data['longitude']); 
 			
-				if(!empty($data['city_ward']['LABEL'])) {
-					$data['council_reps'] = $this->get_dc_councilmembers($data['city_ward']['LABEL']);
+				if(!empty($data['city_ward']['external_id'])) {
+					$data['council_reps'] = $this->get_dc_councilmembers($data['city_ward']['name']);
 				}
 				
 				
@@ -526,11 +526,12 @@ function get_city_reps($cities_by_state, $city, $state) {
 function get_dc_ward($lat, $long)	{
 	
 
-	$url ="http://maps.dcgis.dc.gov/DCGIS/rest/services/DCGIS_DATA/Administrative_Other_Boundaries_WebMercator/MapServer/26/query?text=&geometry=$long%2C+$lat&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&where=&returnGeometry=false&outSR=4326&outFields=NAME%2C+WARD_ID%2C+LABEL&f=json";		
+	//$url ="http://maps.dcgis.dc.gov/DCGIS/rest/services/DCGIS_DATA/Administrative_Other_Boundaries_WebMercator/MapServer/26/query?text=&geometry=$long%2C+$lat&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&where=&returnGeometry=false&outSR=4326&outFields=NAME%2C+WARD_ID%2C+LABEL&f=json";		
+	$url ="http://gis.govtrack.us/boundaries/dc-ward-2013/?contains=$lat,$long";
 
 	$data = curl_to_json($url);
 
-	$data = $data['features'][0]['attributes'];
+	$data = $data['objects'][0];
 
 	return $data;
 	
@@ -1077,7 +1078,7 @@ if(!empty($data['nyc_council'])) {
  
  // Jurisdiction
 
- 	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'City Council', 'municipal', 'City', $myrep['ward_name'], $data['city_ward']['WARD_ID'], $myrep['ward_url'], null, null, null, null, null, null, null, null, null, null, null, null, $elected, null);
+ 	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'City Council', 'municipal', 'City', $myrep['ward_name'], $data['city_ward']['external_id'], $myrep['ward_url'], null, null, null, null, null, null, null, null, null, null, null, null, $elected, null);
  }
  
  
