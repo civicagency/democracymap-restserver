@@ -26,10 +26,23 @@ class Gotham extends CI_Controller {
 
 				foreach ($jurisdictions as $jurisdiction) {			
 					$level = ($jurisdiction['level'] == 'sub-municipal') ? 'municipal' : $jurisdiction['level'];			
-					$custom_order[$level][] = $jurisdiction;
+					$temp_order[$level][] = $jurisdiction;
 				}
 
-				$data['jurisdictions'] = array_reverse($custom_order);
+				$temp_order = array_reverse($temp_order);
+				
+				foreach ($temp_order as $key => $region) {
+					
+					$region = array_reverse($region);
+					$executive = array_pop($region);
+					
+					array_unshift($region, $executive);
+					
+					$custom_order[$key] = $region;
+				
+				}
+				
+				$data['jurisdictions'] = $custom_order;
 			}
 			else {
 				$data['jurisdictions'] = null;								
