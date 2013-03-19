@@ -38,7 +38,7 @@ ri.allowResponsiveEmbedding();
 </script>
 
 
-<?php  if(empty($jurisdictions['jurisdictions'])): ?>
+<?php  if(empty($jurisdictions)): ?>
   <script type="text/javascript" src="/js/set_location.js"></script>
 <?php endif;?>
 
