@@ -44,7 +44,7 @@ class Nyc_model extends CI_Model {
 		if ($council = $this->get_councilmember($data['council_district'])) {		
 
 			// Map returned values over to our data model for officials
-			$official['title']					=  'City Councilmember';
+			$official['title']					=  'Councilmember';
 			$official['type']					=  'legislative';
         
 			//$official['name_given']				=  $council['first_name'];	
@@ -93,7 +93,7 @@ class Nyc_model extends CI_Model {
 			$jurisdiction['type_name'] 		= 'City Council';
 			$jurisdiction['level'] 			= 'municipal';
 			$jurisdiction['level_name'] 	= 'City';
-			$jurisdiction['name'] 			= 'Council District ' . $council['district'];
+			$jurisdiction['name'] 			= 'District ' . $council['district'];
 			$jurisdiction['url'] 			= $council['source'];	
 
 			$jurisdiction['phone'] 			= $council['district_office_phone'];	

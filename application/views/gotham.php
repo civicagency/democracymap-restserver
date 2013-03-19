@@ -55,9 +55,6 @@ ri.allowResponsiveEmbedding();
     </header>
 
 
-
-
-
 <div id="searchbox">
 	<form action="/gotham/" method="get" target="_self">
 		<input type="text" name="location" id="addressid" placeholder="250 Broadway, New York, NY 10007" />
@@ -66,7 +63,7 @@ ri.allowResponsiveEmbedding();
 
 <?php
 
-if (!empty($jurisdictions['jurisdictions'])) {
+if (!empty($jurisdictions)) {
 	
 ?>
 
@@ -75,9 +72,14 @@ if (!empty($jurisdictions['jurisdictions'])) {
 	
 
 <?php
-foreach ($jurisdictions['jurisdictions'] as $jurisdiction) {
+foreach ($jurisdictions as $region_name => $region) {
 ?>	
 
+
+<?php
+$region_count = 1;
+foreach ($region as $jurisdiction) {
+?>
 
 <li class="jurisdiction"> 
 	
@@ -91,27 +93,24 @@ foreach ($jurisdictions['jurisdictions'] as $jurisdiction) {
 		$jurisdiction['name'] = $jurisdiction['level_name'] . ' ' . $jurisdiction['name'];
 	}
 	
-	
-	if (!empty($jurisdiction['url'])) { 
+
+	$region_class = ($region_count == 1) ? "region-heading $region_name" : $region_name;
+
 	?>
-	<h2>
-		<a href="<?php echo $jurisdiction['url']?>"> <!-- data->jurisdictions->elected_office->url OR data->jurisdictions->elected_office->url_contact -->
-			<?php echo $jurisdiction['name']?> <!-- data->jurisdictions->elected_office->title -->
-		</a>
+	<?php echo "<h2 class=\"$region_class\">"; ?>
+		
+		<?php
+			if (!empty($jurisdiction['url'])) { 			
+		?>
+				<a href="<?php echo $jurisdiction['url']?>"> <!-- data->jurisdictions->elected_office->url OR data->jurisdictions->elected_office->url_contact -->
+					<?php echo $jurisdiction['name']?> <!-- data->jurisdictions->elected_office->title -->
+				</a>
+			
+			<?php
+			} else {
+			 echo $jurisdiction['name'];
+			}?>			
 	</h2>
-		<a href="<?php echo $jurisdiction['url']?>"> <!-- data->jurisdictions->elected_office->url OR data->jurisdictions->elected_office->url_contact -->
-			<?php echo $jurisdiction['url']?> <!-- data->jurisdictions->elected_office->title -->
-		</a>	
-	<?php
-	} else {
-	?>	
-		
-	<h2>		
-	<?php echo $jurisdiction['name']?> 		
-	</h2>		
-		
-	<?php
-	}?>
 	
 	
 	<?php if (!empty($jurisdiction['phone'])) : ?>
@@ -132,6 +131,10 @@ if (!empty($jurisdiction['elected_office'])) {
 
 	
 <?php 
+
+
+$rep_count = count($jurisdiction['elected_office']);
+
 foreach ($jurisdiction['elected_office'] as $elected) {
 ?>	
 	
@@ -140,6 +143,11 @@ foreach ($jurisdiction['elected_office'] as $elected) {
 				<h3>
 					
 					<?php 
+					
+					$single_rep = ($rep_count == 1 || $elected['title'] == 'Senator') ? true : false;
+					
+					if($single_rep) $elected['title'] = $elected['name_full'];
+					
 					if (!empty($elected['url'])) { 
 					?>
 					<a href="<?php echo $elected['url']?>"> <!-- data->jurisdictions->elected_office->url OR data->jurisdictions->elected_office->url_contact -->
@@ -150,19 +158,21 @@ foreach ($jurisdiction['elected_office'] as $elected) {
 					 echo $elected['title'];
 					}
 					?>
-				</h3>													
-				<h4>
-						<?php echo $elected['name_full']?> <!-- data->jurisdictions->elected_office->name_full -->
-				</h4> 
+				</h3>	
+				
+				<?php
+				if(!$single_rep) {
+				?>												
+					<h4>
+							<?php echo $elected['name_full']?> <!-- data->jurisdictions->elected_office->name_full -->
+					</h4> 
+				<?php } ?>
 				
 				
 				<?php 
 				if (!empty($elected['url'])) : 
 				?>
-				<div class="website">
-					<a href="<?php echo $elected['url']?>">
-					<?php echo $elected['url']?> </a>
-				</div>
+
 				<?php endif;?>				
 				
 				<?php if (!empty($elected['phone'])) : ?>
@@ -227,9 +237,14 @@ foreach ($jurisdiction['elected_office'] as $elected) {
 	
 </li>
 
-	
-	
+
 <?php	
+$region_count++;
+}
+?>
+	
+	
+<?php
 }
 ?>
 	</ul>
@@ -245,4 +260,4 @@ foreach ($jurisdiction['elected_office'] as $elected) {
 
 
 
-<?php include 'footer_inc_view.php';?>
+<?php include 'gotham_footer_inc_view.php';?>

@@ -18,8 +18,23 @@ class Gotham extends CI_Controller {
 		if(!empty($location)){
 			
 			$jurisdictions = $this->get_jurisdictions($location);
-			
-			$data['jurisdictions'] = (!empty($jurisdictions)) ? $jurisdictions : null;
+						 
+			if (!empty($jurisdictions)) {
+
+				// Custom ordering for GG	
+				$jurisdictions = array_reverse($jurisdictions['jurisdictions']);
+
+				foreach ($jurisdictions as $jurisdiction) {			
+					$level = ($jurisdiction['level'] == 'sub-municipal') ? 'municipal' : $jurisdiction['level'];			
+					$custom_order[$level][] = $jurisdiction;
+				}
+
+				$data['jurisdictions'] = array_reverse($custom_order);
+			}
+			else {
+				$data['jurisdictions'] = null;								
+			}
+
 			
 		}
 		
@@ -29,7 +44,10 @@ class Gotham extends CI_Controller {
 		// See if we have google analytics tracking code
 		if($this->config->item('ganalytics_id')) {
 			$data['ganalytics_id'] = $this->config->item('ganalytics_id');
-		}		
+		}	
+		
+
+			
 		
 		$this->load->view('gotham', $data);
 	}

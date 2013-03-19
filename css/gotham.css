@@ -205,5 +205,8 @@ font-size : 1.2em;
 
 
 
-
+.jurisdictions h2.region-heading {
+	border-bottom : .25em solid #ccc;
+	margin-top : 3em;
+}
 
