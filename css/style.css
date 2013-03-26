@@ -187,11 +187,15 @@ header h1 a:hover {
 .footer-colophon {
 float : left;
 width : 100%;
-color : #683434;
-border : 1px solid #a92e2e;
+color : #0976AD;
+border : 1px solid #1BB5E0;
 margin : 1em 0;
 padding : .2em;
 text-align : center;
 background-color : #c12424;
-background: rgba(193, 36, 36, 0.25); 
+background: rgba(27, 181, 224, 0.2); 
+}
+
+.footer-colophon a {
+	color : #00274A;
 }

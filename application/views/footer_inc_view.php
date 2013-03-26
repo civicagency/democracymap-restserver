@@ -1,6 +1,6 @@
 
 	<div class="footer-colophon">
-		Please help this project get support from the Knight News Challenge by "applauding" its <a href="https://www.newschallenge.org/open/open-government/submission/democracymap/">entry page</a>
+		Please help improve this project by providing feedback &amp; comments on the <a href="https://www.newschallenge.org/open/open-government/submission/democracymap/">News Challenge proposal</a>
 	</div>		
 			
 
