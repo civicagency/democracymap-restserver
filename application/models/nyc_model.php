@@ -195,20 +195,20 @@ class Nyc_model extends CI_Model {
 			$jurisdiction['type_name'] 		= 'Community Board';
 			$jurisdiction['level'] 			= 'sub-municipal';
 			$jurisdiction['level_name'] 	= 'Community Board';
-			$jurisdiction['name'] 			= $community_board['borough'] . ' ' . $community_board['community_board'];
+			$jurisdiction['name'] 			= $community_board['borough'] . ' ' . $community_board['community_board_number'];
 			$jurisdiction['url'] 			= $community_board['website'];	
 
 			$jurisdiction['phone'] 			= $community_board['phone'];	
 			$jurisdiction['email'] 			= $community_board['email'];	
 
+			$jurisdiction['address_title']	=  $community_board['address_title']; 
 
-			$address = explode(',', $community_board['address']);
-			$location = explode(' ', trim($address[2]));			
-
-			$jurisdiction['address_1']	    =  trim($address[0]);	
-			$jurisdiction['address_city']   =  trim($address[1]);					
-			$jurisdiction['address_state']  =  trim($location[0]);				
-			$jurisdiction['address_zip']    =  trim($location[1]);	
+			$jurisdiction['address_1']	    =  $community_board['address_1']; 
+			$jurisdiction['address_2']	    =  $community_board['address_2'];  
+			 
+			$jurisdiction['address_city']   =  $community_board['address_city'];  				
+			$jurisdiction['address_state']  =  $community_board['address_state'];				
+			$jurisdiction['address_zip']    =  $community_board['address_zip'];	
 
 			$jurisdiction['metadata']					=  array(
 														array("key" => 'neighborhoods', "value" => $community_board['neighborhoods']),
@@ -242,8 +242,13 @@ class Nyc_model extends CI_Model {
 			return $cache;
 		}		
     
-		$url = "http://www.databeam.org/philipashlock/democracymap-gotham/community_boards.json?column=city_id&value=$id&api_key=api-key";		
-    
+   
+		$query = "select * from `community_board` where city_id = '$id'";
+    	
+		$query = urlencode($query);
+    	
+		$url ="https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=city_representatives_-_nyc_community_boards_2&query=$query";		
+
 		$cb = curl_to_json($url);
     
 		if(!empty($cb[0])) {

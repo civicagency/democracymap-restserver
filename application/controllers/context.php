@@ -1631,6 +1631,19 @@ function test_latlong($query) {
 	
 }
 
+// Force clear the whole cache
+public function clear_get()	{
+	
+	$this->cache->clean();
+	//var_dump($this->cache->cache_info());
+	
+	if (empty($_GET)) {
+		$this->load->helper('url');			
+		redirect('demo');	
+	}
+}
+
+
 
 }
 
