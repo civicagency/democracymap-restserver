@@ -32,19 +32,8 @@ class Gotham extends CI_Controller {
 				}
 
 				$temp_order = array_reverse($temp_order);
-				
-				foreach ($temp_order as $key => $region) {
-					
-					$region = array_reverse($region);
-					$executive = array_pop($region);
-					
-					array_unshift($region, $executive);
-					
-					$custom_order[$key] = $region;
-				
-				}
-				
-				$data['jurisdictions'] = $custom_order;
+								
+				$data['jurisdictions'] = $temp_order; 
 			}
 			else {
 				$data['jurisdictions'] = null;								
