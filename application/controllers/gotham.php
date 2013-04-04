@@ -19,6 +19,8 @@ class Gotham extends CI_Controller {
 			
 			$jurisdictions = $this->get_jurisdictions($location);
 						 
+			$data = $jurisdictions;			
+						
 			if (!empty($jurisdictions)) {
 
 				// Custom ordering for GG	

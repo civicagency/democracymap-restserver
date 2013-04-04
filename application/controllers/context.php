@@ -1017,12 +1017,12 @@ function re_schema($data) {
 
 	if(!empty($data['geocoded_state'])) {
 
-		$geocoded_street 		= !empty($data['geocoded_street']) ? $data['geocoded_street'] : '';	
-		$geocoded_city 			= !empty($data['geocoded_city']) ? $data['geocoded_city'] : '';
-		$geocoded_state 		= !empty($data['state_geocoded']) ? $data['state_geocoded'] : '';
+		$geocoded_street 		= !empty($data['geocoded_street']) ? $data['geocoded_street'] . ', ' : '';	
+		$geocoded_city 			= !empty($data['geocoded_city']) ? $data['geocoded_city'] . ', ' : '';
+		$geocoded_state 		= !empty($data['geocoded_state']) ? $data['geocoded_state'] . ' ' : '';
 		$geocoded_postalcode 	= !empty($data['geocoded_postalcode']) ? $data['geocoded_postalcode'] : '';
 		
-		$geocoded_address = "$geocoded_street, $geocoded_city, $geocoded_state $geocoded_postalcode";		
+		$geocoded_address = trim($geocoded_street . $geocoded_city . $geocoded_state . $geocoded_postalcode);		
 		$new_data['geocoded_address'] = $geocoded_address;
 		
 		$new_data['geocoded_map_url'] = $data['geocoded_map_url'];

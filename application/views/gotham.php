@@ -30,6 +30,9 @@
   <script type="text/javascript" src="/js/jquery.tweet.js"></script>
   <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
+<script type="text/javascript" src="/contact-files/contact-form.js"></script>
+
+
 <!-- Activate responsiveness in the "child" page -->
 <script src="https://raw.github.com/npr/responsiveiframe/master/dist/jquery.responsiveiframe.js"></script>
 <script>
@@ -65,7 +68,45 @@ ri.allowResponsiveEmbedding();
 
 if (!empty($jurisdictions)) {
 	
-?>
+	// Provide geocoder accuracy feedback
+	if (!empty($geocoded_address)) :
+		
+		if($geocoded_precision !== 'POINT' &&
+		   $geocoded_precision !== 'ADDRESS' &&  
+		   $geocoded_precision !== 'INTERSECTION' && 
+		   $geocoded_precision !== 'STREET') {
+			
+			$geocoded_precision = 'warn';
+		} else {
+			$geocoded_precision = 'good';
+		}
+	?>	
+		
+		<div class="geocoder-accuracy <?php echo $geocoded_precision;?>">
+			You entered "<?php echo $input_location;?>" which was interpreted as "<?php echo $geocoded_address;?>" 
+			
+			<?php
+			if($geocoded_precision == 'warn'):
+			?>	
+
+				<span class="geocoder-feedback">
+					The location you entered may not be complete enough to provide accurate results. Be sure to included a full street address with postcode.
+				</span>
+
+			<?php	
+			endif;?>			
+			
+			
+		</div>
+		
+	<?php	
+	endif;
+	?>
+
+<div class="disclaimer">
+	This tool is a beta release and is still in development. If you find any errors or incorrect information, <span id="feedback-button"><a data-toggle="modal" href="#feedbackBox">please let us know</a></span> 
+</div>
+
 
 <div class="jurisdictions">
 	<ul class="jurisdiction-list">
@@ -259,6 +300,25 @@ $region_count++;
 ?>
 
 
+
+<div class="modal hide" id="feedbackBox">
+    <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal">×</button>
+	    <h3>Contact Us</h3>
+	    </div>
+	    <div class="modal-body">
+
+			<?php
+			$contact_form = 1; // set desired form number.
+			$contact_form_path = './contact-files/'; // set path to /contact-files/ with slash on end.
+			require $contact_form_path . 'contact-form-run.php';
+			?>	
+
+	    </div>
+	    <div class="modal-footer">
+	    <a href="#" class="btn" data-dismiss="modal">Close</a>
+    </div>
+</div>
 
 
 

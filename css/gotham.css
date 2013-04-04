@@ -221,3 +221,18 @@ font-size : 1.2em;
 	margin-top : 3em;
 }
 
+.disclaimer {
+	margin-top : 1.5em;
+	font-style : italic;
+	font-weight : 100;		
+}
+
+.disclaimer, 
+.geocoder-accuracy {
+font-weight : 100;	
+}
+
+.warn .geocoder-feedback {
+	color : #7D120A;
+}
+

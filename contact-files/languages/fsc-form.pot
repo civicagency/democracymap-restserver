@@ -1,0 +1,3350 @@
+# Translation of Fast Secure Contact Form - PHP Script by Mike Challis.
+# Copyright (C) 2011-1012 Mike Challis
+# This file is distributed under the same license as the Fast Secure Contact Form - PHP Script package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Fast Secure Contact Form - PHP Script 3.1\n"
+"Report-Msgid-Bugs-To: http://www.fastsecurecontactform.com/support\n"
+"POT-Creation-Date: 2012-02-21 19:01-0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: Akismet.class.php:192
+msgid ""
+"The API key passed to Akismet is invalid. Please obtain a valid one from "
+"http://akismet.com/"
+msgstr ""
+
+#: Akismet.class.php:354
+msgid "Error connecting to Akismet host: "
+msgstr ""
+
+#: admin/contact-form-admin.php:21 admin/contact-form-admin.php:2880
+#: admin/contact-form-admin.php:2905
+msgid "Backup Settings"
+msgstr ""
+
+#: admin/contact-form-admin.php:40 admin/contact-form-admin.php:49
+#: admin/contact-form-admin.php:51 admin/contact-form-lost-pw.php:30
+msgid "Admin"
+msgstr ""
+
+#: admin/contact-form-admin.php:40 admin/contact-form-admin.php:49
+#: admin/contact-form-admin.php:1111 admin/contact-form-admin.php:2306
+#: admin/contact-form-lost-pw.php:19 admin/contact-form-lost-pw.php:28
+#: admin/index.php:29 admin/lost-pw.php:29 contact-form-display.php:417
+#: install/index.php:142 install/index.php:143 install/index.php:151
+#: install/index.php:907
+msgid "Fast Secure Contact Form - PHP"
+msgstr ""
+
+#: admin/contact-form-admin.php:56
+msgid "Preview Form"
+msgstr ""
+
+#: admin/contact-form-admin.php:57
+msgid "Site Settings"
+msgstr ""
+
+#: admin/contact-form-admin.php:58
+msgid "Logout"
+msgstr ""
+
+#: admin/contact-form-admin.php:74
+msgid "This is where you login to configure your contact forms."
+msgstr ""
+
+#: admin/contact-form-admin.php:78
+msgid "Login:"
+msgstr ""
+
+#: admin/contact-form-admin.php:84
+msgid "User"
+msgstr ""
+
+#: admin/contact-form-admin.php:85
+msgid "Password"
+msgstr ""
+
+#: admin/contact-form-admin.php:86
+msgid "Login"
+msgstr ""
+
+#: admin/contact-form-admin.php:92
+msgid "I lost my password"
+msgstr ""
+
+#: admin/contact-form-admin.php:105 admin/contact-form-admin.php:2823
+#: admin/contact-form-admin.php:2868 admin/contact-form-settings-copy.php:17
+msgid "Copy Settings"
+msgstr ""
+
+#: admin/contact-form-admin.php:124 admin/contact-form-admin.php:2917
+#: admin/contact-form-admin.php:2946
+msgid "Restore Settings"
+msgstr ""
+
+#: admin/contact-form-admin.php:139 admin/contact-form-admin.php:2813
+msgid "Send Test"
+msgstr ""
+
+#: admin/contact-form-admin.php:176
+msgid "Preview"
+msgstr ""
+
+#: admin/contact-form-admin.php:178 admin/contact-form-admin.php:1230
+#: admin/contact-form-admin.php:1283 admin/contact-form-admin.php:1300
+#: admin/contact-form-admin.php:1626 admin/contact-form-admin.php:1691
+#: admin/contact-form-admin.php:1797 admin/contact-form-admin.php:1876
+#: admin/contact-form-admin.php:1935 admin/contact-form-admin.php:2314
+#: admin/contact-form-admin.php:2453 admin/contact-form-admin.php:2606
+#: admin/contact-form-admin.php:2694 admin/contact-form-admin.php:2740
+#: admin/contact-form-admin.php:2763
+#, php-format
+msgid "(form %d)"
+msgstr ""
+
+#: admin/contact-form-admin.php:178
+msgid "Preview Multi-Forms:"
+msgstr ""
+
+#: admin/contact-form-admin.php:187 admin/contact-form-admin.php:190
+#: admin/contact-form-admin.php:194 admin/contact-form-admin.php:197
+#: admin/contact-form-admin.php:1239 admin/contact-form-admin.php:1242
+#: admin/contact-form-admin.php:1246 admin/contact-form-admin.php:1249
+#: admin/contact-form-admin.php:2851 admin/contact-form-admin.php:2854
+#: admin/contact-form-admin.php:2890 admin/contact-form-admin.php:2893
+#: admin/contact-form-admin.php:2927 admin/contact-form-admin.php:2930
+#: contact-form-process.php:616 contact-form-process.php:995
+#, php-format
+msgid "Form: %d"
+msgstr ""
+
+#: admin/contact-form-admin.php:188 admin/contact-form-admin.php:195
+msgid "edit"
+msgstr ""
+
+#: admin/contact-form-admin.php:259 admin/contact-form-admin.php:1107
+msgid "Options saved"
+msgstr ""
+
+#: admin/contact-form-admin.php:273
+msgid "Update Site Settings"
+msgstr ""
+
+#: admin/contact-form-admin.php:274
+msgid "Edit the site settings and click the button below to update"
+msgstr ""
+
+#: admin/contact-form-admin.php:277 install/index.php:155
+#: install/index.php:323 install/index.php:843
+msgid "Path Settings"
+msgstr ""
+
+#: admin/contact-form-admin.php:281 install/index.php:330
+#: install/index.php:847
+msgid "Full URL to"
+msgstr ""
+
+#: admin/contact-form-admin.php:281 install/index.php:330
+#: install/index.php:847
+msgid "with http://"
+msgstr ""
+
+#: admin/contact-form-admin.php:282 admin/contact-form-admin.php:286
+msgid "no slash on end"
+msgstr ""
+
+#: admin/contact-form-admin.php:282 admin/contact-form-admin.php:286
+msgid "please check this carefully"
+msgstr ""
+
+#: admin/contact-form-admin.php:285 install/index.php:334
+#: install/index.php:851
+msgid "File Path to"
+msgstr ""
+
+#: admin/contact-form-admin.php:290 install/index.php:156
+#: install/index.php:344 install/index.php:345 install/index.php:857
+msgid "Basic Configuration"
+msgstr ""
+
+#: admin/contact-form-admin.php:294 install/index.php:355
+#: install/index.php:861
+msgid "Site Name"
+msgstr ""
+
+#: admin/contact-form-admin.php:295 install/index.php:355
+#: install/index.php:861
+msgid "the name of this web site"
+msgstr ""
+
+#: admin/contact-form-admin.php:298 install/index.php:360
+#: install/index.php:865
+msgid "Admin Name"
+msgstr ""
+
+#: admin/contact-form-admin.php:299
+msgid ""
+"for notifications, and set as recipient name in the emails sent from the site"
+msgstr ""
+
+#: admin/contact-form-admin.php:302 install/index.php:365
+#: install/index.php:869
+msgid "Email address"
+msgstr ""
+
+#: admin/contact-form-admin.php:305
+msgid "ERROR: Misconfigured E-mail address."
+msgstr ""
+
+#: admin/contact-form-admin.php:308
+msgid ""
+"for notifications, and set as recipient email in the emails sent from the "
+"site"
+msgstr ""
+
+#: admin/contact-form-admin.php:311 install/index.php:369
+#: install/index.php:873
+msgid "Admin Login User"
+msgstr ""
+
+#: admin/contact-form-admin.php:312
+msgid "needed to login to change settings"
+msgstr ""
+
+#: admin/contact-form-admin.php:315 install/index.php:373
+#: install/index.php:877
+msgid "Admin Login Password"
+msgstr ""
+
+#: admin/contact-form-admin.php:316
+msgid "leave blank unless you want to change it."
+msgstr ""
+
+#: admin/contact-form-admin.php:316
+msgid "write this down and remember!"
+msgstr ""
+
+#: admin/contact-form-admin.php:319 install/index.php:377
+#: install/index.php:881
+msgid "Site Character Encoding"
+msgstr ""
+
+#: admin/contact-form-admin.php:330
+msgid "The character encoding of your site (UTF-8 is recommended)"
+msgstr ""
+
+#: admin/contact-form-admin.php:334 install/index.php:885
+msgid "Site language"
+msgstr ""
+
+#: admin/contact-form-admin.php:352 install/index.php:206
+#: install/index.php:406 install/index.php:885
+msgid "you can add more languages in"
+msgstr ""
+
+#: admin/contact-form-admin.php:355 install/index.php:233
+msgid ""
+"Warning: Your PHP web server is lacking support for the function: "
+"mb_detect_encoding."
+msgstr ""
+
+#: admin/contact-form-admin.php:356 install/index.php:234
+msgid ""
+"You can ignore this warning if you are only going to use the en_US language."
+msgstr ""
+
+#: admin/contact-form-admin.php:357 install/index.php:235
+#, php-format
+msgid ""
+"In order to use languages other than en_US, you will have to add the <a href="
+"\"%s\">mbstring extension</a> to PHP."
+msgstr ""
+
+#: admin/contact-form-admin.php:362 install/index.php:409
+#: install/index.php:889
+msgid "Time Zone"
+msgstr ""
+
+#: admin/contact-form-admin.php:784
+msgid "Update"
+msgstr ""
+
+#: admin/contact-form-admin.php:1091 admin/contact-form-admin.php:1092
+msgid "Redirecting to Form 1"
+msgstr ""
+
+#: admin/contact-form-admin.php:1102 contact-form.php:294
+#: contact-form.php:1068
+msgid "<p>Comments or questions are welcome.</p>"
+msgstr ""
+
+#: admin/contact-form-admin.php:1111 admin/contact-form-admin.php:1228
+msgid "Options"
+msgstr ""
+
+#: admin/contact-form-admin.php:1176 admin/contact-form-admin.php:2802
+msgid "FAQ"
+msgstr ""
+
+#: admin/contact-form-admin.php:1177
+msgid "Support"
+msgstr ""
+
+#: admin/contact-form-admin.php:1178
+msgid "Changelog"
+msgstr ""
+
+#: admin/contact-form-admin.php:1179 admin/contact-form-admin.php:1187
+msgid "Donate"
+msgstr ""
+
+#: admin/contact-form-admin.php:1180 admin/contact-form-admin.php:2957
+msgid "Free PHP Scripts"
+msgstr ""
+
+#: admin/contact-form-admin.php:1181
+msgid "Contact"
+msgstr ""
+
+#: admin/contact-form-admin.php:1200
+msgid "Please Donate to keep this program FREE"
+msgstr ""
+
+#: admin/contact-form-admin.php:1201
+msgid ""
+"If you find this program useful to you, please consider making a small "
+"donation to help contribute to my time invested and to further development. "
+"Thanks for your kind support!"
+msgstr ""
+
+#: admin/contact-form-admin.php:1201
+msgid "More from Mike Challis"
+msgstr ""
+
+#: admin/contact-form-admin.php:1208
+msgid ""
+"Mike Challis says: \"Hello, I have spent hundreds of hours coding this "
+"program just for you. If you are satisfied with my programs and support "
+"please consider making a small donation. If you are not able to, that is OK."
+msgstr ""
+
+#: admin/contact-form-admin.php:1209
+msgid ""
+"Most people donate $3, $5, $10, $20, or more. Though no amount is too small. "
+"Donations can be made with your PayPal account, or securely using any of the "
+"major credit cards.\""
+msgstr ""
+
+#: admin/contact-form-admin.php:1211
+msgid "Close this message"
+msgstr ""
+
+#: admin/contact-form-admin.php:1223
+msgid ""
+"I have donated to help contribute for the development of this Contact Form."
+msgstr ""
+
+#: admin/contact-form-admin.php:1230
+msgid "Multi-Forms:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1240 admin/contact-form-admin.php:1247
+msgid "view"
+msgstr ""
+
+#: admin/contact-form-admin.php:1256 admin/contact-form-admin.php:1264
+#: admin/contact-form-admin.php:1272 admin/contact-form-admin.php:1289
+#: admin/contact-form-admin.php:1374 admin/contact-form-admin.php:1435
+#: admin/contact-form-admin.php:1454 admin/contact-form-admin.php:1462
+#: admin/contact-form-admin.php:1494 admin/contact-form-admin.php:1503
+#: admin/contact-form-admin.php:1538 admin/contact-form-admin.php:1548
+#: admin/contact-form-admin.php:1566 admin/contact-form-admin.php:1577
+#: admin/contact-form-admin.php:1585 admin/contact-form-admin.php:1594
+#: admin/contact-form-admin.php:1607 admin/contact-form-admin.php:1615
+#: admin/contact-form-admin.php:1641 admin/contact-form-admin.php:1648
+#: admin/contact-form-admin.php:1658 admin/contact-form-admin.php:1666
+#: admin/contact-form-admin.php:1698 admin/contact-form-admin.php:1717
+#: admin/contact-form-admin.php:1724 admin/contact-form-admin.php:1731
+#: admin/contact-form-admin.php:1738 admin/contact-form-admin.php:1755
+#: admin/contact-form-admin.php:1781 admin/contact-form-admin.php:1825
+#: admin/contact-form-admin.php:1858 admin/contact-form-admin.php:1883
+#: admin/contact-form-admin.php:1905 admin/contact-form-admin.php:1913
+#: admin/contact-form-admin.php:1921 admin/contact-form-admin.php:1941
+#: admin/contact-form-admin.php:1982 admin/contact-form-admin.php:2029
+#: admin/contact-form-admin.php:2038 admin/contact-form-admin.php:2185
+#: admin/contact-form-admin.php:2193 admin/contact-form-admin.php:2221
+#: admin/contact-form-admin.php:2228 admin/contact-form-admin.php:2249
+#: admin/contact-form-admin.php:2256 admin/contact-form-admin.php:2265
+#: admin/contact-form-admin.php:2283 admin/contact-form-admin.php:2291
+#: admin/contact-form-admin.php:2299 admin/contact-form-admin.php:2321
+#: admin/contact-form-admin.php:2329 admin/contact-form-admin.php:2336
+#: admin/contact-form-admin.php:2351 admin/contact-form-admin.php:2364
+#: admin/contact-form-admin.php:2383 admin/contact-form-admin.php:2407
+#: admin/contact-form-admin.php:2441 admin/contact-form-admin.php:2487
+#: admin/contact-form-admin.php:2505 admin/contact-form-admin.php:2517
+#: admin/contact-form-admin.php:2536 admin/contact-form-admin.php:2560
+#: admin/contact-form-admin.php:2594 admin/contact-form-admin.php:2619
+#: admin/contact-form-admin.php:2626 admin/contact-form-admin.php:2638
+#: admin/contact-form-admin.php:2661 admin/contact-form-admin.php:2668
+#: admin/contact-form-admin.php:2676 admin/contact-form-admin.php:2684
+#: admin/contact-form-admin.php:2700 admin/contact-form-admin.php:2745
+#: admin/contact-form-admin.php:2769 contact-form.php:2028
+msgid "Click for Help!"
+msgstr ""
+
+#: admin/contact-form-admin.php:1256
+msgid "Multi-forms help"
+msgstr ""
+
+#: admin/contact-form-admin.php:1258
+msgid ""
+"This multi-form feature allows you to have many different forms on your "
+"site. Each form has unique settings and shortcode. Select the form you want "
+"to edit using the links above, then edit the settings below for the form you "
+"selected. Be sure to use the correct shortcode to call the form."
+msgstr ""
+
+#: admin/contact-form-admin.php:1262
+msgid "Number of available Multi-forms"
+msgstr ""
+
+#: admin/contact-form-admin.php:1263
+msgid "Caution: Lowering this setting deletes forms."
+msgstr ""
+
+#: admin/contact-form-admin.php:1264 admin/contact-form-admin.php:1272
+#: admin/contact-form-admin.php:1289 admin/contact-form-admin.php:1374
+#: admin/contact-form-admin.php:1435 admin/contact-form-admin.php:1454
+#: admin/contact-form-admin.php:1462 admin/contact-form-admin.php:1494
+#: admin/contact-form-admin.php:1503 admin/contact-form-admin.php:1538
+#: admin/contact-form-admin.php:1548 admin/contact-form-admin.php:1566
+#: admin/contact-form-admin.php:1577 admin/contact-form-admin.php:1585
+#: admin/contact-form-admin.php:1594 admin/contact-form-admin.php:1607
+#: admin/contact-form-admin.php:1615 admin/contact-form-admin.php:1641
+#: admin/contact-form-admin.php:1648 admin/contact-form-admin.php:1658
+#: admin/contact-form-admin.php:1666 admin/contact-form-admin.php:1698
+#: admin/contact-form-admin.php:1717 admin/contact-form-admin.php:1724
+#: admin/contact-form-admin.php:1731 admin/contact-form-admin.php:1738
+#: admin/contact-form-admin.php:1755 admin/contact-form-admin.php:1781
+#: admin/contact-form-admin.php:1825 admin/contact-form-admin.php:1858
+#: admin/contact-form-admin.php:1883 admin/contact-form-admin.php:1905
+#: admin/contact-form-admin.php:1913 admin/contact-form-admin.php:1921
+#: admin/contact-form-admin.php:1942 admin/contact-form-admin.php:1982
+#: admin/contact-form-admin.php:2029 admin/contact-form-admin.php:2185
+#: admin/contact-form-admin.php:2193 admin/contact-form-admin.php:2221
+#: admin/contact-form-admin.php:2228 admin/contact-form-admin.php:2249
+#: admin/contact-form-admin.php:2256 admin/contact-form-admin.php:2265
+#: admin/contact-form-admin.php:2283 admin/contact-form-admin.php:2291
+#: admin/contact-form-admin.php:2299 admin/contact-form-admin.php:2321
+#: admin/contact-form-admin.php:2329 admin/contact-form-admin.php:2336
+#: admin/contact-form-admin.php:2351 admin/contact-form-admin.php:2364
+#: admin/contact-form-admin.php:2383 admin/contact-form-admin.php:2407
+#: admin/contact-form-admin.php:2441 admin/contact-form-admin.php:2489
+#: admin/contact-form-admin.php:2505 admin/contact-form-admin.php:2517
+#: admin/contact-form-admin.php:2536 admin/contact-form-admin.php:2560
+#: admin/contact-form-admin.php:2594 admin/contact-form-admin.php:2619
+#: admin/contact-form-admin.php:2626 admin/contact-form-admin.php:2638
+#: admin/contact-form-admin.php:2661 admin/contact-form-admin.php:2668
+#: admin/contact-form-admin.php:2676 admin/contact-form-admin.php:2684
+#: admin/contact-form-admin.php:2700 admin/contact-form-admin.php:2745
+#: admin/contact-form-admin.php:2769
+msgid "help"
+msgstr ""
+
+#: admin/contact-form-admin.php:1266
+msgid ""
+"Use this setting to increase or decrease the number of available forms. The "
+"most forms you can add is 99. Caution: lowering this number will delete "
+"forms of a higher number than the number you set."
+msgstr ""
+
+#: admin/contact-form-admin.php:1271
+#, php-format
+msgid "Form %d label"
+msgstr ""
+
+#: admin/contact-form-admin.php:1274
+msgid ""
+"Enter a label for your form. This is not used anywhere else, it just helps "
+"you keep track of what you are using it for."
+msgstr ""
+
+#: admin/contact-form-admin.php:1280 admin/contact-form-admin.php:1297
+#: admin/contact-form-admin.php:1623 admin/contact-form-admin.php:1688
+#: admin/contact-form-admin.php:1793 admin/contact-form-admin.php:1873
+#: admin/contact-form-admin.php:1932 admin/contact-form-admin.php:2311
+#: admin/contact-form-admin.php:2450 admin/contact-form-admin.php:2603
+#: admin/contact-form-admin.php:2691 admin/contact-form-admin.php:2737
+#: admin/contact-form-admin.php:2760 admin/contact-form-admin.php:2789
+msgid "Update Options"
+msgstr ""
+
+#: admin/contact-form-admin.php:1283 admin/contact-form-admin.php:1935
+msgid "Form:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1287
+msgid "Welcome introduction"
+msgstr ""
+
+#: admin/contact-form-admin.php:1291
+msgid "This is printed before the contact form. HTML is allowed."
+msgstr ""
+
+#: admin/contact-form-admin.php:1300
+msgid "E-mail:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1313 contact-form.php:295 contact-form.php:720
+#: contact-form.php:1073
+msgid "Webmaster"
+msgstr ""
+
+#: admin/contact-form-admin.php:1360
+msgid "E-mail To"
+msgstr ""
+
+#: admin/contact-form-admin.php:1364
+msgid "ERROR: Misconfigured \"E-mail To\" address."
+msgstr ""
+
+#: admin/contact-form-admin.php:1369 admin/contact-form-admin.php:2806
+msgid ""
+"Warning: Your web host has the mail() function disabled. PHP cannot send "
+"email. This program will not work."
+msgstr ""
+
+#: admin/contact-form-admin.php:1376
+msgid ""
+"E-mail address the messages are sent to (your email). Add as many contacts "
+"as you need, the drop down list on the contact form will be made "
+"automatically. Each contact has a name and an email address separated by a "
+"comma. Separate each contact by pressing enter. If you need to add more than "
+"one contact, follow this example:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1377
+msgid ""
+"If you need to use a comma in the name, escape it with a back slash, like "
+"this: \\,"
+msgstr ""
+
+#: admin/contact-form-admin.php:1381
+msgid ""
+"You can have multiple emails per contact using [cc]Carbon Copy. Separate "
+"each email with a semicolon. Follow this example:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1384
+msgid ""
+"You can specify [cc]Carbon Copy or [bcc]Blind Carbon Copy by using tags. "
+"Separate each email with a semicolon. Follow this example:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1392
+msgid "Warning: Your web host has PHP safe_mode turned on."
+msgstr ""
+
+#: admin/contact-form-admin.php:1393
+msgid ""
+"PHP safe_mode can cause problems like sending mail failures and file "
+"permission errors."
+msgstr ""
+
+#: admin/contact-form-admin.php:1394
+msgid "Contact your web host for support."
+msgstr ""
+
+#: admin/contact-form-admin.php:1418
+msgid "ERROR: Misconfigured \"E-mail From\" address."
+msgstr ""
+
+#: admin/contact-form-admin.php:1426
+#, php-format
+msgid ""
+"Warning: \"E-mail From\" is not set to an address from the same domain name "
+"as your web site (%s). This can sometimes cause mail not to send, or send "
+"but be delivered to a Spam folder. Be sure to test that your form is sending "
+"email and that you are receiving it, if not, fix this setting."
+msgstr ""
+
+#: admin/contact-form-admin.php:1433
+msgid "E-mail From (optional)"
+msgstr ""
+
+#: admin/contact-form-admin.php:1437
+msgid ""
+"E-mail address the messages are sent from. Some web hosts do not allow PHP "
+"to send email unless the envelope sender email address is on the same web "
+"domain as your web site. And they require it to be a real address on that "
+"domain, or mail will NOT SEND! (They do this to help prevent spam.) If your "
+"contact form does not send any email, then set this to a real email address "
+"on the SAME domain as your web site, then test the form."
+msgstr ""
+
+#: admin/contact-form-admin.php:1438
+msgid ""
+"If your form still does not send any email, also check the setting below: "
+"\"Enable when web host requires \"Mail From\" strictly tied to domain email "
+"account\". In some cases, this will resolve the problem. This setting is "
+"also recommended for gmail users to prevent email from going to spam folder."
+msgstr ""
+
+#: admin/contact-form-admin.php:1440 admin/contact-form-admin.php:1467
+msgid "Enter just an email: user1@example.com"
+msgstr ""
+
+#: admin/contact-form-admin.php:1441
+msgid "Or enter name and email: webmaster,user1@example.com "
+msgstr ""
+
+#: admin/contact-form-admin.php:1448
+msgid ""
+"Warning: Enabling this setting requires the \"E-mail From\" setting above to "
+"also be set."
+msgstr ""
+
+#: admin/contact-form-admin.php:1453
+msgid ""
+"Enable when web host requires \"Mail From\" strictly tied to domain email "
+"account."
+msgstr ""
+
+#: admin/contact-form-admin.php:1456
+msgid ""
+"If your form does not send any email, then set the \"E-mail From\" setting "
+"above to an address on the same web domain as your web site. If email still "
+"does not send, also check this setting. (ie: some users report this is "
+"required by yahoo small business web hosting, maybe others)"
+msgstr ""
+
+#: admin/contact-form-admin.php:1460
+msgid "Custom Reply To (optional)"
+msgstr ""
+
+#: admin/contact-form-admin.php:1464
+msgid ""
+"Leave this setting blank for most forms because the \"reply to\" is set "
+"automatically. Only use this setting if you are using the form for a mailing "
+"list and you do NOT want the reply going to the form user."
+msgstr ""
+
+#: admin/contact-form-admin.php:1465
+msgid ""
+"Defines the email address that is automatically inserted into the \"To:\" "
+"field when a user replies to an email message."
+msgstr ""
+
+#: admin/contact-form-admin.php:1474
+msgid ""
+"Warning: Send E-mail function: phpmailer is required when you have Mail With "
+"SMTP enabled."
+msgstr ""
+
+#: admin/contact-form-admin.php:1479
+msgid "Send E-mail function:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1485
+msgid "phpmailer"
+msgstr ""
+
+#: admin/contact-form-admin.php:1486
+msgid "PHP"
+msgstr ""
+
+#: admin/contact-form-admin.php:1496
+msgid ""
+"If your form does not send any email, first try setting the \"E-mail From\" "
+"setting above because some web hosts do not allow PHP to send email unless "
+"the \"From:\" email address is on the same web domain."
+msgstr ""
+
+#: admin/contact-form-admin.php:1497
+msgid ""
+"Note: attachments are only supported when using the \"phpmailer\" mail "
+"function."
+msgstr ""
+
+#: admin/contact-form-admin.php:1502
+msgid "Enable to receive email as HTML instead of plain text."
+msgstr ""
+
+#: admin/contact-form-admin.php:1505
+msgid ""
+"Enable if you want the email message sent as HTML format. HTML format is "
+"desired if you want to avoid a 70 character line wordwrap when you copy and "
+"paste the email message. Normally the email is sent in plain text "
+"wordwrapped 70 characters per line to comply with most email programs."
+msgstr ""
+
+#: admin/contact-form-admin.php:1531
+msgid "ERROR: Misconfigured \"Bcc E-mail\" address."
+msgstr ""
+
+#: admin/contact-form-admin.php:1536
+msgid "E-mail Bcc (optional)"
+msgstr ""
+
+#: admin/contact-form-admin.php:1540
+msgid ""
+"E-mail address(s) to receive Bcc (Blind Carbon Copy) messages. You can send "
+"to multiple or single, both methods are acceptable:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1547
+msgid "E-mail Subject Prefix"
+msgstr ""
+
+#: admin/contact-form-admin.php:1550
+msgid "This will become a prefix of the subject for the E-mail you receive."
+msgstr ""
+
+#: admin/contact-form-admin.php:1551 admin/contact-form-admin.php:1741
+msgid ""
+"Listed below is an optional list of field tags for fields you can add to the "
+"subject."
+msgstr ""
+
+#: admin/contact-form-admin.php:1552
+msgid ""
+"Example: to include the name of the form sender, include this tag in the E-"
+"mail Subject Prefix:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1553 admin/contact-form-admin.php:1743
+#: admin/contact-form-admin.php:1760
+msgid "Available field tags:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1564
+msgid "Optional E-mail Subject List"
+msgstr ""
+
+#: admin/contact-form-admin.php:1568
+msgid ""
+"Optional E-mail subject drop down list. Add as many subject options as you "
+"need, the drop down list on the contact form will be made automatically. "
+"Separate each subject option by pressing enter. Follow this example:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1576
+msgid "Enable double E-mail entry required on contact form."
+msgstr ""
+
+#: admin/contact-form-admin.php:1579
+msgid ""
+"Requires users to enter email address in two fields to help reduce mistakes."
+msgstr ""
+
+#: admin/contact-form-admin.php:1584
+msgid "Enable upper case alphabet correction."
+msgstr ""
+
+#: admin/contact-form-admin.php:1587
+msgid ""
+"Automatically corrects form input using a function knowing about alphabet "
+"case (example: correct caps on McDonald, or correct USING ALL CAPS)."
+msgstr ""
+
+#: admin/contact-form-admin.php:1588
+msgid ""
+"Enable on English language only because it can cause accent character "
+"problems if enabled on other languages."
+msgstr ""
+
+#: admin/contact-form-admin.php:1593
+msgid "Enable sender information in E-mail footer."
+msgstr ""
+
+#: admin/contact-form-admin.php:1596
+msgid ""
+"You will receive in the E-mail, detailed information about the sender. Such "
+"as IP Address, date, time, and which web browser they used."
+msgstr ""
+
+#: admin/contact-form-admin.php:1600
+msgid "Enable Form Post security by requiring domain name match for"
+msgstr ""
+
+#: admin/contact-form-admin.php:1605
+msgid "(recommended)."
+msgstr ""
+
+#: admin/contact-form-admin.php:1609
+msgid "Prevents automated spam bots posting from off-site forms."
+msgstr ""
+
+#: admin/contact-form-admin.php:1614
+msgid ""
+"Enable checking DNS records for the domain name when checking for a valid E-"
+"mail address."
+msgstr ""
+
+#: admin/contact-form-admin.php:1617
+msgid ""
+"Improves email address validation by checking that the domain of the email "
+"address actually has a valid DNS record."
+msgstr ""
+
+#: admin/contact-form-admin.php:1626
+msgid "Mail With SMTP(optional):"
+msgstr ""
+
+#: admin/contact-form-admin.php:1634
+msgid ""
+"Warning: SMTP Host and SMTP Port are required when you have SMTP enabled."
+msgstr ""
+
+#: admin/contact-form-admin.php:1640
+msgid "Enable SMTP for mail sending."
+msgstr ""
+
+#: admin/contact-form-admin.php:1643
+msgid ""
+"This setting reconfigures the mail() function to use SMTP instead. Enable if "
+"you have to use SMTP protocol to send email. Most users do not have to "
+"enable this setting, but sometimes it becomes necessary."
+msgstr ""
+
+#: admin/contact-form-admin.php:1647
+msgid "SMTP Host"
+msgstr ""
+
+#: admin/contact-form-admin.php:1650
+msgid ""
+"The SMTP server host address. Check with your provider's recommendations to "
+"be sure this is correct."
+msgstr ""
+
+#: admin/contact-form-admin.php:1651
+msgid "Example: smtp.gmail.com"
+msgstr ""
+
+#: admin/contact-form-admin.php:1655
+msgid "SMTP Port"
+msgstr ""
+
+#: admin/contact-form-admin.php:1657
+msgid "SMTP Encryption (optional)"
+msgstr ""
+
+#: admin/contact-form-admin.php:1660
+msgid ""
+"Some hosts require port 25, 465, 587 or others. Some hosts require SMTP "
+"encryption set to SSL, TLS, or left blank for none. Check with your "
+"provider's recommendations to be sure this is correct."
+msgstr ""
+
+#: admin/contact-form-admin.php:1665
+msgid "Enable when SMTP Authentication is required (optional)."
+msgstr ""
+
+#: admin/contact-form-admin.php:1668
+msgid ""
+"Enable when the SMTP server requires SMTP Authentication. When the SMTP "
+"server requires SMTP Authentication, you must also enter the correct "
+"Username and Password below. Check with your provider's recommendations to "
+"be sure this is correct."
+msgstr ""
+
+#: admin/contact-form-admin.php:1675
+msgid ""
+"Warning: SMTP Username and SMTP Password are required when you have SMTP "
+"Authentication enabled."
+msgstr ""
+
+#: admin/contact-form-admin.php:1680
+msgid "SMTP Username"
+msgstr ""
+
+#: admin/contact-form-admin.php:1683
+msgid "SMTP Password"
+msgstr ""
+
+#: admin/contact-form-admin.php:1691
+msgid "Autoresponder:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1697
+msgid "Enable autoresponder E-mail message."
+msgstr ""
+
+#: admin/contact-form-admin.php:1700
+msgid ""
+"Enable when you want the form to automatically answer with an autoresponder "
+"E-mail message."
+msgstr ""
+
+#: admin/contact-form-admin.php:1707
+msgid ""
+"Warning: Enabling this setting requires all the autoresponder fields below "
+"to also be set."
+msgstr ""
+
+#: admin/contact-form-admin.php:1712
+msgid ""
+"Warning: No email address field is set, you will not be able to reply to "
+"emails and the autoresponder will not work."
+msgstr ""
+
+#: admin/contact-form-admin.php:1716
+msgid "Autoresponder E-mail \"From\" name"
+msgstr ""
+
+#: admin/contact-form-admin.php:1719
+msgid ""
+"This sets the name in the \"from\" field when the autoresponder sends E-mail."
+msgstr ""
+
+#: admin/contact-form-admin.php:1723
+msgid "Autoresponder E-mail \"From\" address"
+msgstr ""
+
+#: admin/contact-form-admin.php:1726
+msgid ""
+"This sets the \"from\" E-mail address when the autoresponder sends email. If "
+"your autoresponder does not send any email, then set this setting to a real "
+"email address on the same web domain as your web site. (Same applies to the "
+"\"Email-From\" setting on this page)"
+msgstr ""
+
+#: admin/contact-form-admin.php:1730
+msgid "Autoresponder E-mail \"Reply To\" address"
+msgstr ""
+
+#: admin/contact-form-admin.php:1733
+msgid ""
+"This sets the \"reply to\" E-mail address when the autoresponder sends E-"
+"mail."
+msgstr ""
+
+#: admin/contact-form-admin.php:1737
+msgid "Autoresponder E-mail subject"
+msgstr ""
+
+#: admin/contact-form-admin.php:1740
+msgid ""
+"Type your autoresponder E-mail subject here, then enable it with the setting "
+"above."
+msgstr ""
+
+#: admin/contact-form-admin.php:1742
+msgid ""
+"Example: to include the name of the form sender, include this tag in the "
+"Autoresponder E-mail subject:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1754
+msgid "Autoresponder E-mail message"
+msgstr ""
+
+#: admin/contact-form-admin.php:1757
+msgid ""
+"Type your autoresponder E-mail message here, then enable it with the setting "
+"above."
+msgstr ""
+
+#: admin/contact-form-admin.php:1758
+msgid ""
+"Listed below is an optional list of field tags for fields you can add to the "
+"autoresponder email message."
+msgstr ""
+
+#: admin/contact-form-admin.php:1759
+msgid ""
+"Example: to include the name of the form sender, include this tag in the "
+"Autoresponder E-mail message:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1771
+msgid ""
+"Note: If you add any extra fields, they will show up in this list of "
+"available tags."
+msgstr ""
+
+#: admin/contact-form-admin.php:1772
+msgid ""
+"Note: The message fields are intentionally disabled to help prevent spammers "
+"from using this form to relay spam."
+msgstr ""
+
+#: admin/contact-form-admin.php:1773
+msgid ""
+"Try to limit this feature to just using the name field to personalize the "
+"message. Do not try to use it to send a copy of what was posted."
+msgstr ""
+
+#: admin/contact-form-admin.php:1780
+msgid "Enable using HTML in autoresponder E-mail message."
+msgstr ""
+
+#: admin/contact-form-admin.php:1783
+msgid "Enable when you want to use HTML in the autoresponder E-mail message."
+msgstr ""
+
+#: admin/contact-form-admin.php:1784
+msgid "Then you can use an HTML message. example:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1786
+msgid "Hello World!"
+msgstr ""
+
+#: admin/contact-form-admin.php:1797
+msgid "Akismet:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1809
+msgid ""
+"Akismet is enabled and the key is valid. This form will be checked with "
+"Akismet to help prevent spam"
+msgstr ""
+
+#: admin/contact-form-admin.php:1812
+msgid "Akismet plugin is enabled but key failed to verify"
+msgstr ""
+
+#: admin/contact-form-admin.php:1815
+msgid "Akismet plugin is enabled but key needs to be activated"
+msgstr ""
+
+#: admin/contact-form-admin.php:1818
+msgid "Akismet is deactivated"
+msgstr ""
+
+#: admin/contact-form-admin.php:1823
+msgid "Akismet Spam Prevention:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1827
+msgid ""
+"Akismet is a spam prevention plugin. When Akismet is installed and active, "
+"this form will be checked with Akismet to help prevent spam."
+msgstr ""
+
+#: admin/contact-form-admin.php:1832
+msgid "Enable Akismet."
+msgstr ""
+
+#: admin/contact-form-admin.php:1835
+msgid "Akismet API Key"
+msgstr ""
+
+#: admin/contact-form-admin.php:1836
+#, php-format
+msgid "If you do not have an Akismet API key yet, you can get one at %s"
+msgstr ""
+
+#: admin/contact-form-admin.php:1840
+msgid ""
+"Check this and click \"Update Options\" to determine if Akismet key is "
+"active."
+msgstr ""
+
+#: admin/contact-form-admin.php:1843
+msgid "What should happen if Akismet determines the message is spam?"
+msgstr ""
+
+#: admin/contact-form-admin.php:1847
+msgid "Block spam messages"
+msgstr ""
+
+#: admin/contact-form-admin.php:1848
+msgid "Tag as spam and send anyway"
+msgstr ""
+
+#: admin/contact-form-admin.php:1860
+msgid ""
+"If you select \"block spam messages\". If Akismet determines the message is "
+"spam: An error will display \"Invalid Input - Spam?\" and the form will not "
+"send."
+msgstr ""
+
+#: admin/contact-form-admin.php:1861
+msgid ""
+"If you select \"tag as spam and send anyway\". If Akismet determines the "
+"message is spam: The message will send and the subject will begin with "
+"\"Akismet: Spam\". This way you can have Akismet on and be sure not to miss "
+"a message."
+msgstr ""
+
+#: admin/contact-form-admin.php:1865
+msgid "Turn off Akismet for this form."
+msgstr ""
+
+#: admin/contact-form-admin.php:1867
+msgid "Akismet is turned off for this form"
+msgstr ""
+
+#: admin/contact-form-admin.php:1876
+msgid "CAPTCHA:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1882
+msgid "Enable CAPTCHA (recommended)."
+msgstr ""
+
+#: admin/contact-form-admin.php:1885
+msgid ""
+"Prevents automated spam bots by requiring that the user pass a CAPTCHA test "
+"before posting. You can disable CAPTCHA if you prefer, because the form also "
+"uses Akismet to prevent spam when Akismet plugin is installed with the key "
+"activated."
+msgstr ""
+
+#: admin/contact-form-admin.php:1889
+msgid "CAPTCHA difficulty level:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1893
+msgid "Low"
+msgstr ""
+
+#: admin/contact-form-admin.php:1894
+msgid "Medium"
+msgstr ""
+
+#: admin/contact-form-admin.php:1895
+msgid "High"
+msgstr ""
+
+#: admin/contact-form-admin.php:1907
+msgid "Changes level of distorion of the CAPTCHA image text."
+msgstr ""
+
+#: admin/contact-form-admin.php:1912
+msgid "Enable smaller size CAPTCHA image."
+msgstr ""
+
+#: admin/contact-form-admin.php:1915
+msgid "Makes the CAPTCHA image smaller."
+msgstr ""
+
+#: admin/contact-form-admin.php:1920
+msgid ""
+"Disable CAPTCHA transparent text (only if captcha text is missing on the "
+"image, try this fix)."
+msgstr ""
+
+#: admin/contact-form-admin.php:1923
+msgid ""
+"Sometimes fixes missing test on the CAPTCHA image. If this does not fix "
+"missing text, your PHP server is not compatible with the CAPTCHA functions. "
+"You can disable CAPTCHA or have your web server fixed."
+msgstr ""
+
+#: admin/contact-form-admin.php:1927
+msgid "Test if your PHP installation will support the CAPTCHA"
+msgstr ""
+
+#: admin/contact-form-admin.php:1940
+msgid "Standard Fields:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1944
+msgid ""
+"The standard fields can be set to be required or not, or even be disabled."
+msgstr ""
+
+#: admin/contact-form-admin.php:1948
+msgid "Name field:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1952
+msgid "Not Available"
+msgstr ""
+
+#: admin/contact-form-admin.php:1953
+msgid "Not Required"
+msgstr ""
+
+#: admin/contact-form-admin.php:1954
+msgid "Required"
+msgstr ""
+
+#: admin/contact-form-admin.php:1965
+msgid "Name field format:"
+msgstr ""
+
+#: admin/contact-form-admin.php:1969 admin/contact-form-admin.php:2718
+#: contact-form-display.php:182
+msgid "Name"
+msgstr ""
+
+#: admin/contact-form-admin.php:1970
+msgid "First Name, Last Name"
+msgstr ""
+
+#: admin/contact-form-admin.php:1971
+msgid "First Name, Middle Initial, Last Name"
+msgstr ""
+
+#: admin/contact-form-admin.php:1972
+msgid "First Name, Middle Name, Last Name"
+msgstr ""
+
+#: admin/contact-form-admin.php:1984
+msgid "Select how the name field is formatted on the form."
+msgstr ""
+
+#: admin/contact-form-admin.php:1988
+msgid "E-mail field:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2001
+msgid "Subject field:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2015
+msgid "Message field:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2028
+msgid "Preserve Message field spaces."
+msgstr ""
+
+#: admin/contact-form-admin.php:2031
+msgid ""
+"Normally the Message field will have all extra white space removed. Enabling "
+"this setting will allow all the Message field white space to be preserved."
+msgstr ""
+
+#: admin/contact-form-admin.php:2037
+msgid "Extra Fields:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2038
+msgid "Click here to see instructions for extra fields."
+msgstr ""
+
+#: admin/contact-form-admin.php:2041
+msgid "Instructions for how to use Extra Fields:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2043
+msgid ""
+"You can use extra contact form fields for phone number, company name, etc. "
+"To enable an extra field, just enter a label. Then check if you want the "
+"field to be required or not. To disable, empty the label."
+msgstr ""
+
+#: admin/contact-form-admin.php:2044
+msgid "Text and Textarea fields:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2045
+msgid ""
+"The text field is for single line text entry. The textarea field is for "
+"multiple line text entry."
+msgstr ""
+
+#: admin/contact-form-admin.php:2046
+msgid ""
+"Checkbox, Checkbox-multiple, Radio, Select, and Select-multiple extra fields:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2047
+msgid ""
+"To enable a checkbox field with a single option, just enter a label. Then "
+"check if you want the field to be required or not."
+msgstr ""
+
+#: admin/contact-form-admin.php:2048
+msgid ""
+"To enable fields with multiple options like checkbox-multiple, radio, "
+"select, or select-multiple field types; first enter the label and a comma, "
+"then include the options separating each one with a semicolon like this "
+"example: Color:,Red;Green;Blue."
+msgstr ""
+
+#: admin/contact-form-admin.php:2049
+msgid ""
+"If you need to use a comma besides the one needed to separate the label, "
+"escape it with a back slash, like this: \\,"
+msgstr ""
+
+#: admin/contact-form-admin.php:2050
+msgid ""
+"You can also use fields that allow multiple options to be checked at once, "
+"such as checkbox-multiple and select-multiple like in this example: Pizza "
+"Toppings:,olives;mushrooms;cheese;ham;tomatoes. Now multiple options can be "
+"checked for the \"Pizza Toppings\" label."
+msgstr ""
+
+#: admin/contact-form-admin.php:2051
+msgid ""
+"By default radio and checkboxes are displayed vertical. Here is how to make "
+"them display horizontal: add the tag {inline} before the label, like this: "
+"{inline}Pizza Toppings:,olives;mushrooms;cheese;ham;tomatoes."
+msgstr ""
+
+#: admin/contact-form-admin.php:2052
+msgid "Attachment:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2053
+msgid ""
+"The attachment is used to allow users to attach a file upload from the form. "
+"You can add multiple attachments. The attachment is sent with your email. "
+"Attachments are deleted from the server after the email is sent."
+msgstr ""
+
+#: admin/contact-form-admin.php:2054
+msgid "Date field:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2055
+msgid ""
+"The date is used to allow a date field with a calendar pop-up. The date "
+"field ensures that a date entry is in a standard format every time."
+msgstr ""
+
+#: admin/contact-form-admin.php:2056
+msgid "Time field:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2057
+msgid ""
+"The time is used to allow a time entry field with hours, minutes, and AM/PM. "
+"The time field ensures that a time entry is in a standard format."
+msgstr ""
+
+#: admin/contact-form-admin.php:2058
+msgid "Hidden field:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2059
+msgid ""
+"The hidden field is used if you need to pass a hidden value from the form to "
+"the email message. The hidden field does not show on the page. You must set "
+"the label and the value. First enter the label, a comma, then the value. "
+"Like in this example: Language,English"
+msgstr ""
+
+#: admin/contact-form-admin.php:2060
+msgid "Email field:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2061
+msgid ""
+"The email field is used to allow an email address entry field. The email "
+"field ensures that a email entry is in a valid email format."
+msgstr ""
+
+#: admin/contact-form-admin.php:2062
+msgid "URL field:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2063
+msgid ""
+"The URL field is used to allow a URL entry field. The URL field ensures that "
+"a URL entry is in a valid URL format."
+msgstr ""
+
+#: admin/contact-form-admin.php:2064
+msgid "Password field:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2065
+msgid ""
+"The password field is used for a text field where what is entered shows up "
+"as dots on the screen. The email you receive will have the entered value "
+"fully visible."
+msgstr ""
+
+#: admin/contact-form-admin.php:2066
+msgid "Fieldset:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2067
+msgid ""
+"The fieldset(box-open) is used to draw a box around related form elements. "
+"The fieldset label is used for a (legend) title of the group."
+msgstr ""
+
+#: admin/contact-form-admin.php:2069
+msgid ""
+"The fieldset(box-close) is used to close a box around related form elements. "
+"A label is not required for this type. If you do not close a fieldset box, "
+"it will close automatically when you add another fieldset box."
+msgstr ""
+
+#: admin/contact-form-admin.php:2070
+msgid "Optional HTML before field:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2071
+msgid ""
+"Use the Optional HTML before field to print some HTML before an extra field "
+"on the form. This is for the form display only, not E-mail. HTML is allowed."
+msgstr ""
+
+#: admin/contact-form-admin.php:2074
+msgid "Optional modifiers:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2076
+msgid "Default text:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2077
+msgid ""
+"Use to pre-fill a value for a text field. Can be used for text or textarea "
+"field types."
+msgstr ""
+
+#: admin/contact-form-admin.php:2078 admin/contact-form-admin.php:2146
+#, php-format
+msgid "Default option:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2079
+msgid ""
+"To make \"green\" the default selection for a red, green, blue select field: "
+"set \"Default option\" 2. Can be used for checkbox, radio, or select field "
+"types."
+msgstr ""
+
+#: admin/contact-form-admin.php:2080
+msgid "Max length:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2081
+msgid ""
+"Use to limit the number of allowed characters for a text field. The limit "
+"will be checked when the form is posted. Can be used for text, textarea, and "
+"password field types."
+msgstr ""
+
+#: admin/contact-form-admin.php:2082
+msgid "Required field:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2083
+msgid ""
+"Check this setting if you want the field to be required when the form is "
+"posted. Can be used for any extra field type."
+msgstr ""
+
+#: admin/contact-form-admin.php:2084
+msgid "Attributes:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2085
+msgid ""
+"Use to insert input field attributes. Example: To make a text field "
+"readonly, set to: readonly=\"readonly\" Can be used for any extra field type."
+msgstr ""
+
+#: admin/contact-form-admin.php:2086
+msgid "Validation regex:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2087
+msgid ""
+"Use to validate if form input is in a specific format. Example: If you want "
+"numbers in a text field type but do not allow text, use this regex: /^\\d+$/ "
+"Can be used for text, textarea, date and password field types."
+msgstr ""
+
+#: admin/contact-form-admin.php:2088
+msgid "Regex fail message:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2089
+msgid ""
+"Use to customize a message to alert the user when the form fails to validate "
+"a regex after post. Example: Please only enter numbers. For use with "
+"validation regex only."
+msgstr ""
+
+#: admin/contact-form-admin.php:2090
+msgid "Label CSS/Input CSS :"
+msgstr ""
+
+#: admin/contact-form-admin.php:2091
+msgid ""
+"Use to style individual form fields with CSS. CSS class names or style code "
+"are both acceptable. Note: If you do not need to style fields individually, "
+"you should use the CSS DIV settings instead."
+msgstr ""
+
+#: admin/contact-form-admin.php:2092
+msgid "HTML before/after field:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2093
+msgid ""
+"Use the HTML before/after field to print some HTML before or after an extra "
+"field on the form. This is for the form display only, not E-mail. HTML is "
+"allowed."
+msgstr ""
+
+#: admin/contact-form-admin.php:2104
+msgid "text"
+msgstr ""
+
+#: admin/contact-form-admin.php:2105
+msgid "textarea"
+msgstr ""
+
+#: admin/contact-form-admin.php:2106
+msgid "checkbox"
+msgstr ""
+
+#: admin/contact-form-admin.php:2107
+msgid "checkbox-multiple"
+msgstr ""
+
+#: admin/contact-form-admin.php:2108
+msgid "radio"
+msgstr ""
+
+#: admin/contact-form-admin.php:2109
+msgid "select"
+msgstr ""
+
+#: admin/contact-form-admin.php:2110
+msgid "select-multiple"
+msgstr ""
+
+#: admin/contact-form-admin.php:2111
+msgid "attachment"
+msgstr ""
+
+#: admin/contact-form-admin.php:2112
+msgid "date"
+msgstr ""
+
+#: admin/contact-form-admin.php:2113
+msgid "time"
+msgstr ""
+
+#: admin/contact-form-admin.php:2114
+msgid "email"
+msgstr ""
+
+#: admin/contact-form-admin.php:2115
+msgid "url"
+msgstr ""
+
+#: admin/contact-form-admin.php:2116
+msgid "hidden"
+msgstr ""
+
+#: admin/contact-form-admin.php:2117
+msgid "password"
+msgstr ""
+
+#: admin/contact-form-admin.php:2118
+msgid "fieldset(box-open)"
+msgstr ""
+
+#: admin/contact-form-admin.php:2119
+msgid "fieldset(box-close)"
+msgstr ""
+
+#: admin/contact-form-admin.php:2125
+#, php-format
+msgid "Extra field %d"
+msgstr ""
+
+#: admin/contact-form-admin.php:2127
+msgid "Label:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2130
+msgid "Field type:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2142
+msgid "Optional modifiers"
+msgstr ""
+
+#: admin/contact-form-admin.php:2143
+msgid "Default text"
+msgstr ""
+
+#: admin/contact-form-admin.php:2149
+msgid "Max length"
+msgstr ""
+
+#: admin/contact-form-admin.php:2153
+msgid "Required field"
+msgstr ""
+
+#: admin/contact-form-admin.php:2155
+msgid "Attributes"
+msgstr ""
+
+#: admin/contact-form-admin.php:2158
+msgid "Validation regex"
+msgstr ""
+
+#: admin/contact-form-admin.php:2161
+msgid "Regex fail message"
+msgstr ""
+
+#: admin/contact-form-admin.php:2164
+msgid "Label CSS"
+msgstr ""
+
+#: admin/contact-form-admin.php:2167
+msgid "Input CSS"
+msgstr ""
+
+#: admin/contact-form-admin.php:2170
+#, php-format
+msgid "HTML before form field %d:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2173
+#, php-format
+msgid "HTML after form field %d:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2183
+msgid "Number of available extra fields"
+msgstr ""
+
+#: admin/contact-form-admin.php:2184 admin/contact-form-admin.php:2187
+msgid ""
+"Caution: Increase the number of extra fields as needed, but make sure you do "
+"not change to a lower number than what is being used on this form."
+msgstr ""
+
+#: admin/contact-form-admin.php:2192
+msgid "Move extra fields to after the Message field."
+msgstr ""
+
+#: admin/contact-form-admin.php:2195
+msgid ""
+"Normally the extra fields are inserted into the form between the E-mail "
+"address and the Subject fields. Enabling this setting will move the extra "
+"fields to after the Message field."
+msgstr ""
+
+#: admin/contact-form-admin.php:2199
+msgid "Date field - Date format:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2204 contact-form-ex-fields.php:526
+#: contact-form-process.php:187
+msgid "mm/dd/yyyy"
+msgstr ""
+
+#: admin/contact-form-admin.php:2205 contact-form-ex-fields.php:527
+#: contact-form-process.php:188
+msgid "dd/mm/yyyy"
+msgstr ""
+
+#: admin/contact-form-admin.php:2206 contact-form-ex-fields.php:528
+#: contact-form-process.php:189
+msgid "mm-dd-yyyy"
+msgstr ""
+
+#: admin/contact-form-admin.php:2207 contact-form-ex-fields.php:529
+#: contact-form-process.php:190
+msgid "dd-mm-yyyy"
+msgstr ""
+
+#: admin/contact-form-admin.php:2208 contact-form-ex-fields.php:530
+#: contact-form-process.php:191
+msgid "mm.dd.yyyy"
+msgstr ""
+
+#: admin/contact-form-admin.php:2209 contact-form-ex-fields.php:531
+#: contact-form-process.php:192
+msgid "dd.mm.yyyy"
+msgstr ""
+
+#: admin/contact-form-admin.php:2210 contact-form-ex-fields.php:532
+#: contact-form-process.php:193
+msgid "yyyy/mm/dd"
+msgstr ""
+
+#: admin/contact-form-admin.php:2211 contact-form-ex-fields.php:533
+#: contact-form-process.php:194
+msgid "yyyy-mm-dd"
+msgstr ""
+
+#: admin/contact-form-admin.php:2212 contact-form-ex-fields.php:534
+#: contact-form-process.php:195
+msgid "yyyy.mm.dd"
+msgstr ""
+
+#: admin/contact-form-admin.php:2223
+msgid "Use to set the date format for the date field."
+msgstr ""
+
+#: admin/contact-form-admin.php:2227
+msgid "Date field - Calendar Start Day of the Week"
+msgstr ""
+
+#: admin/contact-form-admin.php:2230
+msgid ""
+"Use to set the day the week the date field calendar will start on: 0(Sun) to "
+"6(Sat)."
+msgstr ""
+
+#: admin/contact-form-admin.php:2234
+msgid "Time field - Time format:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2239
+msgid "12 Hour"
+msgstr ""
+
+#: admin/contact-form-admin.php:2240
+msgid "24 Hour"
+msgstr ""
+
+#: admin/contact-form-admin.php:2251
+msgid "Use to set the time format for the time field."
+msgstr ""
+
+#: admin/contact-form-admin.php:2255
+msgid "Attached files acceptable types"
+msgstr ""
+
+#: admin/contact-form-admin.php:2258
+msgid ""
+"Set the acceptable file types for the file attachment feature. Any file type "
+"not on this list will be rejected."
+msgstr ""
+
+#: admin/contact-form-admin.php:2259
+msgid "Separate each file type with a comma character. example:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2264
+msgid "Attached files maximum size allowed"
+msgstr ""
+
+#: admin/contact-form-admin.php:2267
+msgid "Set the acceptable maximum file size for the file attachment feature."
+msgstr ""
+
+#: admin/contact-form-admin.php:2268
+msgid "example: 1mb equals one Megabyte, 1kb equals one Kilobyte"
+msgstr ""
+
+#: admin/contact-form-admin.php:2274
+msgid ""
+"Note: Maximum size is limited to available server resources and various PHP "
+"settings. Very few servers will accept more than 2mb. Sizes under 1mb will "
+"usually have best results. examples:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2276
+msgid ""
+"Note: If you set the value higher than your server can handle, users will "
+"have problems uploading big files. The form can time out and may not even "
+"show an error."
+msgstr ""
+
+#: admin/contact-form-admin.php:2277
+msgid "Your server will not allow uploading files larger than than:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2282
+msgid "Enable users to send HTML code in the textarea extra field types."
+msgstr ""
+
+#: admin/contact-form-admin.php:2285
+msgid ""
+"Enable only if you want users to be able to send HTML code in the textarea "
+"extra field types. This is disabled by default for better security. HTML "
+"code is only needed for sharing embedded video links, PHP code samples, etc."
+msgstr ""
+
+#: admin/contact-form-admin.php:2290
+msgid "Enable an \"Are you sure?\" popup for the submit button."
+msgstr ""
+
+#: admin/contact-form-admin.php:2293
+msgid ""
+"When a visitor clicks the form submit button, a popup message will ask \"Are "
+"you sure?\". This message can be changed in the \"change field labels\" "
+"settings below."
+msgstr ""
+
+#: admin/contact-form-admin.php:2298
+msgid "Enable a \"Reset\" button on the form."
+msgstr ""
+
+#: admin/contact-form-admin.php:2301
+msgid ""
+"When a visitor clicks a reset button, the form entries are reset to the "
+"default values."
+msgstr ""
+
+#: admin/contact-form-admin.php:2306
+msgid "Enable plugin credit link:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2306 contact-form-display.php:417
+msgid "Powered by"
+msgstr ""
+
+#: admin/contact-form-admin.php:2314
+msgid "Redirect:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2320
+msgid "Enable redirect after the message sends"
+msgstr ""
+
+#: admin/contact-form-admin.php:2323
+msgid ""
+"If enabled: After a user sends a message, the web browser will display "
+"\"message sent\" for x seconds, then redirect to the redirect URL. This can "
+"be used to redirect to the blog home page, or a custom \"Thank You\" page."
+msgstr ""
+
+#: admin/contact-form-admin.php:2327
+msgid "Redirect delay in seconds"
+msgstr ""
+
+#: admin/contact-form-admin.php:2331
+msgid ""
+"How many seconds the web browser will display \"message sent\" before "
+"redirecting to the redirect URL. Values of 0-60 are allowed."
+msgstr ""
+
+#: admin/contact-form-admin.php:2335
+msgid "Redirect URL"
+msgstr ""
+
+#: admin/contact-form-admin.php:2338
+msgid ""
+"The form will redirect to this URL after success. This can be used to "
+"redirect to the site home page, or a custom \"Thank You\" page."
+msgstr ""
+
+#: admin/contact-form-admin.php:2339 admin/contact-form-admin.php:2508
+msgid "Use FULL URL including http:// for best results."
+msgstr ""
+
+#: admin/contact-form-admin.php:2345
+msgid ""
+"Warning: Enabling this setting requires the \"Enable redirect\" to also be "
+"set."
+msgstr ""
+
+#: admin/contact-form-admin.php:2350
+msgid "Enable posted data to be sent as a query string on the redirect URL."
+msgstr ""
+
+#: admin/contact-form-admin.php:2353
+msgid ""
+"If enabled: The posted data is sent to the redirect URL. This can be used to "
+"send the posted data via GET query string to a another form."
+msgstr ""
+
+#: admin/contact-form-admin.php:2356
+msgid "FAQ: Posted data can be sent as a query string on the redirect URL"
+msgstr ""
+
+#: admin/contact-form-admin.php:2363
+msgid "Query string fields to ignore"
+msgstr ""
+
+#: admin/contact-form-admin.php:2366
+msgid ""
+"Optional list of field names for fields you do not want included in the "
+"query string."
+msgstr ""
+
+#: admin/contact-form-admin.php:2367 admin/contact-form-admin.php:2386
+#: admin/contact-form-admin.php:2411 admin/contact-form-admin.php:2520
+#: admin/contact-form-admin.php:2539 admin/contact-form-admin.php:2564
+msgid "Start each entry on a new line."
+msgstr ""
+
+#: admin/contact-form-admin.php:2368 admin/contact-form-admin.php:2392
+#: admin/contact-form-admin.php:2521 admin/contact-form-admin.php:2545
+msgid "Available fields on this form:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2382
+msgid "Query string fields to rename"
+msgstr ""
+
+#: admin/contact-form-admin.php:2385
+msgid ""
+"Optional list of field names for fields that need to be renamed for the "
+"query string."
+msgstr ""
+
+#: admin/contact-form-admin.php:2387 admin/contact-form-admin.php:2540
+msgid ""
+"Type the old field name separated by the equals character, then type the new "
+"name, like this: oldname=newname"
+msgstr ""
+
+#: admin/contact-form-admin.php:2388 admin/contact-form-admin.php:2413
+#: admin/contact-form-admin.php:2541 admin/contact-form-admin.php:2566
+msgid "Examples:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2406
+msgid "Query string key value pairs to add"
+msgstr ""
+
+#: admin/contact-form-admin.php:2409 admin/contact-form-admin.php:2562
+msgid "Optional list of key value pairs that need to be added."
+msgstr ""
+
+#: admin/contact-form-admin.php:2410 admin/contact-form-admin.php:2563
+msgid ""
+"Sometimes the outgoing connection will require fields that were not posted "
+"on your form."
+msgstr ""
+
+#: admin/contact-form-admin.php:2412
+msgid ""
+"Type the key separated by the equals character, then type the value, like "
+"this key=value"
+msgstr ""
+
+#: admin/contact-form-admin.php:2429
+msgid ""
+"Warning: Enabling this setting requires the \"Enable redirect\" and \"Enable "
+"posted data to be sent as a query string\" to also be set."
+msgstr ""
+
+#: admin/contact-form-admin.php:2436 admin/contact-form-admin.php:2589
+msgid ""
+"Warning: You have turned off email sending in the setting below. This is "
+"just a reminder in case that was a mistake. If that is what you intended, "
+"then ignore this message."
+msgstr ""
+
+#: admin/contact-form-admin.php:2440
+msgid ""
+"Disable email sending (use only when required while you have enabled query "
+"string on the redirect URL)."
+msgstr ""
+
+#: admin/contact-form-admin.php:2443
+msgid ""
+"No email will be sent to you!! The posted data will ONLY be sent to the "
+"redirect URL. This can be used to send the posted data via GET query string "
+"to a another form. Note: the autoresponder will still send email if it is "
+"enabled."
+msgstr ""
+
+#: admin/contact-form-admin.php:2453 admin/contact-form-admin.php:2470
+msgid "Silent Remote Sending:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2457
+msgid ""
+"Posted form data can be sent silently to a remote form using CURL and the "
+"method GET or POST."
+msgstr ""
+
+#: admin/contact-form-admin.php:2462
+msgid ""
+"Warning: Enabling this setting will not work because your PHP server does "
+"not have CURL support."
+msgstr ""
+
+#: admin/contact-form-admin.php:2466
+msgid "FAQ: Send the posted form data to another site."
+msgstr ""
+
+#: admin/contact-form-admin.php:2474
+msgid "Off"
+msgstr ""
+
+#: admin/contact-form-admin.php:2475
+msgid "Enabled: Method GET"
+msgstr ""
+
+#: admin/contact-form-admin.php:2476
+msgid "Enabled: Method POST"
+msgstr ""
+
+#: admin/contact-form-admin.php:2491
+msgid ""
+"If enabled: After a user sends a message, the form can silently send the "
+"posted data to a third party remote URL. This can be used for a third party "
+"service such as a mailing list API."
+msgstr ""
+
+#: admin/contact-form-admin.php:2492
+msgid "Select method GET or POST based on the remote API requirement."
+msgstr ""
+
+#: admin/contact-form-admin.php:2499
+msgid ""
+"Warning: Enabling this setting requires the \"Silent Remote URL\" to also be "
+"set."
+msgstr ""
+
+#: admin/contact-form-admin.php:2504
+msgid "Silent Remote URL"
+msgstr ""
+
+#: admin/contact-form-admin.php:2507
+msgid ""
+"The form will silently send the form data to this URL after success. This "
+"can be used for a third party service such as a mailing list API."
+msgstr ""
+
+#: admin/contact-form-admin.php:2516
+msgid "Silent send fields to ignore"
+msgstr ""
+
+#: admin/contact-form-admin.php:2519
+msgid "Optional list of field names for fields you do not want included."
+msgstr ""
+
+#: admin/contact-form-admin.php:2535
+msgid "Silent send fields to rename"
+msgstr ""
+
+#: admin/contact-form-admin.php:2538
+msgid "Optional list of field names for fields that need to be renamed."
+msgstr ""
+
+#: admin/contact-form-admin.php:2559
+msgid "Silent send key value pairs to add"
+msgstr ""
+
+#: admin/contact-form-admin.php:2565
+msgid ""
+"Type the key separated by the equals character, then type the value, like "
+"this: key=value"
+msgstr ""
+
+#: admin/contact-form-admin.php:2582
+msgid ""
+"Warning: Enabling this setting requires the \"Silent Remote Send\" and "
+"\"Silent Remote URL\" to also be set."
+msgstr ""
+
+#: admin/contact-form-admin.php:2593
+msgid ""
+"Disable email sending (use only when required while you have enabled silent "
+"remote sending)."
+msgstr ""
+
+#: admin/contact-form-admin.php:2596
+msgid ""
+"No email will be sent to you!! The posted data will ONLY be sent to the "
+"silent remote URL. This can be used for a third party service such as a "
+"mailing list API. Note: the autoresponder will still send email if it is "
+"enabled."
+msgstr ""
+
+#: admin/contact-form-admin.php:2606
+msgid "Style:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2612
+msgid "Reset the styles to labels on top (default)."
+msgstr ""
+
+#: admin/contact-form-admin.php:2615
+msgid "Reset the styles to labels on left."
+msgstr ""
+
+#: admin/contact-form-admin.php:2618
+msgid "Enable border on contact form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2621
+msgid ""
+"Enable to draw a fieldset box around all the form elements. The default "
+"label for the fieldset is \"Contact Form:\", but you can change it in the "
+"\"Fields:\" section below."
+msgstr ""
+
+#: admin/contact-form-admin.php:2625
+msgid "Modifiable CSS Style Feature:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2628
+msgid "Use to adjust the font colors or other styling of the contact form."
+msgstr ""
+
+#: admin/contact-form-admin.php:2629
+msgid ""
+"You can use inline css, or add a class property to be used by your own "
+"stylsheet."
+msgstr ""
+
+#: admin/contact-form-admin.php:2630
+msgid "Acceptable Examples:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2637
+msgid "CSS style for form DIV on the contact form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2640
+msgid ""
+"Use to adjust the style of the contact form border (if border is enabled)."
+msgstr ""
+
+#: admin/contact-form-admin.php:2643
+msgid "CSS style for border on the contact form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2644
+msgid "CSS style for required field text on the contact form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2645
+msgid "CSS style for extra field HTML on the contact form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2646
+msgid "CSS style for form input titles on the contact form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2647
+msgid "CSS style for form input fields on the contact form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2648
+msgid "CSS style for form input fields DIV on the contact form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2649
+msgid "CSS style for form input errors on the contact form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2650
+msgid "CSS style for contact drop down select on the contact form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2651
+msgid "CSS style for Small CAPTCHA DIV on the contact form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2652
+msgid "CSS style for CAPTCHA DIV on the contact form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2653
+msgid "CSS style for CAPTCHA input field on the contact form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2654
+msgid "CSS style for Submit DIV on the contact form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2655
+msgid "CSS style for Submit button on the contact form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2656
+msgid "CSS style for Reset button on the contact form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2657
+msgid "CSS style for \"Powered by\" message on the contact form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2660
+msgid "Input Text Field Size"
+msgstr ""
+
+#: admin/contact-form-admin.php:2663
+msgid "Use to adjust the size of the contact form text input fields."
+msgstr ""
+
+#: admin/contact-form-admin.php:2667
+msgid "Input CAPTCHA Field Size"
+msgstr ""
+
+#: admin/contact-form-admin.php:2670
+msgid "Use to adjust the size of the contact form CAPTCHA input field."
+msgstr ""
+
+#: admin/contact-form-admin.php:2674
+msgid "Input Textarea Field Cols"
+msgstr ""
+
+#: admin/contact-form-admin.php:2675
+msgid "Rows"
+msgstr ""
+
+#: admin/contact-form-admin.php:2678
+msgid "Use to adjust the size of the contact form message textarea."
+msgstr ""
+
+#: admin/contact-form-admin.php:2683
+msgid "Enable aria-required tags for screen readers"
+msgstr ""
+
+#: admin/contact-form-admin.php:2686
+msgid ""
+"aria-required is a form input WAI ARIA tag. Screen readers use it to "
+"determine which fields are required. Enabling this is good for "
+"accessability, but will cause the HTML to fail the W3C Validation (there is "
+"no attribute \"aria-required\"). WAI ARIA attributes are soon to be accepted "
+"by the HTML validator, so you can safely ignore the validation error it will "
+"cause."
+msgstr ""
+
+#: admin/contact-form-admin.php:2694
+msgid "Fields:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2699
+msgid "Change field labels:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2702 admin/contact-form-admin.php:2747
+msgid ""
+"Some people wanted to change the labels for the contact form. These fields "
+"can be filled in to override the standard labels."
+msgstr ""
+
+#: admin/contact-form-admin.php:2707 admin/contact-form-admin.php:2714
+#: contact-form-display.php:96
+msgid "(denotes required field)"
+msgstr ""
+
+#: admin/contact-form-admin.php:2707
+msgid "Enable required field label on contact form:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2710
+msgid "Enable required field indicators on contact form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2712
+msgid "Required field indicator:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2715 contact-form-display.php:40
+#: contact-form-process.php:722
+msgid "Contact Form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2716 contact-form-display.php:106
+msgid "Department to Contact"
+msgstr ""
+
+#: admin/contact-form-admin.php:2717 contact-form-display.php:115
+#: contact-form-display.php:305
+msgid "Select"
+msgstr ""
+
+#: admin/contact-form-admin.php:2719 contact-form-display.php:153
+#: contact-form-process.php:444 contact-form-process.php:452
+#: contact-form-process.php:465
+msgid "First Name"
+msgstr ""
+
+#: admin/contact-form-admin.php:2720 contact-form-display.php:165
+#: contact-form-process.php:446 contact-form-process.php:460
+#: contact-form-process.php:473
+msgid "Last Name"
+msgstr ""
+
+#: admin/contact-form-admin.php:2721 contact-form-display.php:223
+#: contact-form-process.php:469
+msgid "Middle Name"
+msgstr ""
+
+#: admin/contact-form-admin.php:2722 contact-form-display.php:206
+#: contact-form-process.php:456
+msgid "Middle Initial"
+msgstr ""
+
+#: admin/contact-form-admin.php:2723 contact-form-display.php:240
+#: contact-form-display.php:266
+msgid "E-Mail Address"
+msgstr ""
+
+#: admin/contact-form-admin.php:2724 contact-form-display.php:251
+msgid "E-Mail Address again"
+msgstr ""
+
+#: admin/contact-form-admin.php:2725 contact-form-display.php:256
+msgid "Please enter your E-mail Address a second time."
+msgstr ""
+
+#: admin/contact-form-admin.php:2726 contact-form-display.php:295
+#: contact-form-display.php:334
+msgid "Subject"
+msgstr ""
+
+#: admin/contact-form-admin.php:2727 contact-form-display.php:352
+#: contact-form-process.php:483 contact-form-process.php:604
+msgid "Message"
+msgstr ""
+
+#: admin/contact-form-admin.php:2728 contact-form.php:1571
+msgid "CAPTCHA Code"
+msgstr ""
+
+#: admin/contact-form-admin.php:2729 contact-form-display.php:388
+msgid "Submit"
+msgstr ""
+
+#: admin/contact-form-admin.php:2730 contact-form-display.php:398
+msgid "Reset"
+msgstr ""
+
+#: admin/contact-form-admin.php:2731 contact-form-display.php:392
+msgid "Are you sure?"
+msgstr ""
+
+#: admin/contact-form-admin.php:2732 contact-form.php:920
+msgid "Your message has been sent, thank you."
+msgstr ""
+
+#: admin/contact-form-admin.php:2740
+msgid "Tooltips:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2744
+msgid "Change tooltips labels:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2751 contact-form.php:1514
+#: contact-form.php:1516
+msgid "CAPTCHA Image"
+msgstr ""
+
+#: admin/contact-form-admin.php:2752 contact-form.php:1547
+#: contact-form.php:1550
+msgid "CAPTCHA Audio"
+msgstr ""
+
+#: admin/contact-form-admin.php:2753 contact-form.php:1559
+#: contact-form.php:1562
+msgid "Refresh Image"
+msgstr ""
+
+#: admin/contact-form-admin.php:2754 contact-form-ex-fields.php:511
+msgid "Acceptable file types:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2755 contact-form-ex-fields.php:513
+msgid "Maximum file size:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2763
+msgid "Errors:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2768
+msgid "Change error labels:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2771
+msgid ""
+"Some people wanted to change the error messages for the contact form. These "
+"fields can be filled in to override the standard included error messages."
+msgstr ""
+
+#: admin/contact-form-admin.php:2774 contact-form-process.php:19
+msgid "Selecting a contact is required."
+msgstr ""
+
+#: admin/contact-form-admin.php:2775 contact-form-process.php:129
+#: contact-form-process.php:135 contact-form-process.php:139
+msgid "Your name is required."
+msgstr ""
+
+#: admin/contact-form-admin.php:2776 contact-form-process.php:151
+#: contact-form-process.php:155
+msgid "A proper e-mail address is required."
+msgstr ""
+
+#: admin/contact-form-admin.php:2777 contact-form-process.php:159
+msgid "The two e-mail addresses did not match, please enter again."
+msgstr ""
+
+#: admin/contact-form-admin.php:2778 contact-form-process.php:201
+#: contact-form-process.php:228 contact-form-process.php:277
+#: contact-form-process.php:321 contact-form-process.php:338
+#: contact-form-process.php:360 contact-form.php:1185
+msgid "This field is required."
+msgstr ""
+
+#: admin/contact-form-admin.php:2779 contact-form-process.php:379
+msgid "Subject text is required."
+msgstr ""
+
+#: admin/contact-form-admin.php:2780 contact-form-process.php:384
+msgid "Message text is required."
+msgstr ""
+
+#: admin/contact-form-admin.php:2781
+msgid "Contact Form has Invalid Input"
+msgstr ""
+
+#: admin/contact-form-admin.php:2782 contact-form-process.php:394
+msgid "Please complete the CAPTCHA."
+msgstr ""
+
+#: admin/contact-form-admin.php:2783 contact-form-process.php:411
+msgid "That CAPTCHA was incorrect."
+msgstr ""
+
+#: admin/contact-form-admin.php:2784 contact-form-display.php:74
+msgid "Please make corrections below and try again."
+msgstr ""
+
+#: admin/contact-form-admin.php:2799
+msgid "Send a Test E-mail"
+msgstr ""
+
+#: admin/contact-form-admin.php:2800
+msgid ""
+"If you are not receiving email from your form, try this test because it can "
+"display troubleshooting information."
+msgstr ""
+
+#: admin/contact-form-admin.php:2801
+msgid ""
+"There are settings you can use to try to fix email delivery problems, see "
+"this FAQ for help:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2803
+msgid ""
+"Type an email address here and then click Send Test to generate a test email."
+msgstr ""
+
+#: admin/contact-form-admin.php:2810
+msgid "To:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2824
+msgid ""
+"This tool can copy your contact form settings from this form number to any "
+"of your other forms."
+msgstr ""
+
+#: admin/contact-form-admin.php:2825
+msgid ""
+"Use to copy just the style settings, or all the settings from this form."
+msgstr ""
+
+#: admin/contact-form-admin.php:2826
+msgid ""
+"It is a good idea to backup all forms with the backup tool before you use "
+"this copy tool. Changes are permanent!"
+msgstr ""
+
+#: admin/contact-form-admin.php:2828
+msgid "What to copy:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2832
+#, php-format
+msgid "Form %d - all settings"
+msgstr ""
+
+#: admin/contact-form-admin.php:2833
+#, php-format
+msgid "Form %d - style settings"
+msgstr ""
+
+#: admin/contact-form-admin.php:2845
+#, php-format
+msgid "Select a form to copy form %d settings to:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2849 admin/contact-form-admin.php:2888
+#: admin/contact-form-admin.php:2925
+msgid "All Forms"
+msgstr ""
+
+#: admin/contact-form-admin.php:2868 admin/contact-form-admin.php:2946
+msgid "Are you sure you want to permanently make this change?"
+msgstr ""
+
+#: admin/contact-form-admin.php:2881
+msgid "This tool can save a backup of your contact form settings."
+msgstr ""
+
+#: admin/contact-form-admin.php:2882
+msgid ""
+"Use to transfer one, or all, of your forms from one site to another. Or just "
+"make a backup to save."
+msgstr ""
+
+#: admin/contact-form-admin.php:2883
+msgid "Select a form to backup:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2918
+msgid ""
+"This tool can restore a backup of your contact form settings. If you have "
+"previously made a backup, you can restore one or all your forms."
+msgstr ""
+
+#: admin/contact-form-admin.php:2919
+msgid ""
+"It is a good idea to backup all forms with the backup tool before you "
+"restore any. Changes are permanent!"
+msgstr ""
+
+#: admin/contact-form-admin.php:2920
+msgid "Select a form to restore:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2942
+msgid "Upload Backup File:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2952
+msgid "PHP scripts by Mike Challis:"
+msgstr ""
+
+#: admin/contact-form-admin.php:2954
+msgid "Fast Secure Contact Form"
+msgstr ""
+
+#: admin/contact-form-admin.php:2955
+msgid "SI CAPTCHA Anti-Spam"
+msgstr ""
+
+#: admin/contact-form-admin.php:2956
+msgid "Visitor Maps and Who's Online"
+msgstr ""
+
+#: admin/contact-form-backup.php:72
+msgid "Requested form to backup is not found."
+msgstr ""
+
+#: admin/contact-form-do-test-mail.php:22
+msgid "Contact Form Test"
+msgstr ""
+
+#: admin/contact-form-do-test-mail.php:25
+msgid "Test mail to "
+msgstr ""
+
+#: admin/contact-form-do-test-mail.php:26
+#: admin/contact-form-do-test-mail.php:148
+#, php-format
+msgid "Sent with %s"
+msgstr ""
+
+#: admin/contact-form-do-test-mail.php:26
+msgid ""
+"This is a test mail generated by the Fast Secure Contact Form PHP script."
+msgstr ""
+
+#: admin/contact-form-do-test-mail.php:141
+msgid "Test Message Sent"
+msgstr ""
+
+#: admin/contact-form-do-test-mail.php:144
+msgid "The result was:"
+msgstr ""
+
+#: admin/contact-form-do-test-mail.php:148
+msgid "Be sure to check your email to see if you received it."
+msgstr ""
+
+#: admin/contact-form-do-test-mail.php:149
+#: admin/contact-form-do-test-mail.php:154
+msgid "See FAQ"
+msgstr ""
+
+#: admin/contact-form-do-test-mail.php:153
+msgid "The E-mail debugging output is shown below:"
+msgstr ""
+
+#: admin/contact-form-do-test-mail.php:159
+msgid "Test failed: Invalid E-mail address"
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:19 admin/contact-form-lost-pw.php:28
+msgid "Lost Password"
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:45
+msgid "Invalid key"
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:51
+msgid "Invalid login"
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:69
+msgid ""
+"Your new password has been reset. Be sure to remember it. Go to <a href="
+"\"index.php\">admin page</a>."
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:73
+msgid "This is where you reset your password."
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:76 admin/contact-form-lost-pw.php:79
+msgid "Password mismatch"
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:84
+msgid "Reset Password:"
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:93
+msgid "Please enter your new password."
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:98
+msgid "New Password:"
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:103
+msgid "Confirm New Password:"
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:108
+msgid "Reset Password"
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:118 admin/contact-form-lost-pw.php:212
+msgid "This is where you retrieve a lost password."
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:122 admin/contact-form-lost-pw.php:216
+msgid "Lost Password:"
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:131 admin/contact-form-lost-pw.php:225
+msgid ""
+"Please enter your username or email address. You will receive a link to "
+"create a new password via email."
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:132
+msgid "Password recovery failed:"
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:134 admin/contact-form-lost-pw.php:228
+msgid "Username or E-mail:"
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:138 admin/contact-form-lost-pw.php:232
+msgid "Get New Password"
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:155
+msgid "Enter a username or e-mail address."
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:162
+msgid "There is no user registered with that email address."
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:169
+msgid "There is no user registered with that user name."
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:190
+msgid "Someone requested that the password be reset for the following account:"
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:192
+#, php-format
+msgid "Username: %s"
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:193
+msgid "If this was a mistake, just ignore this email and nothing will happen."
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:194
+msgid "To reset your password, visit the following address:"
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:199
+#, php-format
+msgid "[%s] Password Reset"
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:202
+msgid "Possible reason: your host may have disabled the mail() function..."
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:202
+msgid "The e-mail could not be sent."
+msgstr ""
+
+#: admin/contact-form-lost-pw.php:205
+msgid ""
+"A link to create a new password has been sent via email. Check your email."
+msgstr ""
+
+#: admin/contact-form-restore.php:17 admin/contact-form-restore.php:23
+msgid "Restore failed: Backup file is required"
+msgstr ""
+
+#: admin/contact-form-restore.php:20
+msgid "Restore failed: Backup file upload failed"
+msgstr ""
+
+#: admin/contact-form-restore.php:28
+msgid "Restore failed: Backup file type not allowed"
+msgstr ""
+
+#: admin/contact-form-restore.php:33
+msgid "Restore failed: Backup file size is too large"
+msgstr ""
+
+#: admin/contact-form-restore.php:41
+msgid "Restore failed: Backup file contains invalid data"
+msgstr ""
+
+#: admin/contact-form-restore.php:51 admin/contact-form-restore.php:59
+msgid ""
+"Restore failed: Selected All to restore, but backup file is a single form"
+msgstr ""
+
+#: admin/contact-form-restore.php:92
+msgid "All form settings have been restored from the backup file"
+msgstr ""
+
+#: admin/contact-form-restore.php:100
+msgid "Restore failed: Form to restore to does not exist"
+msgstr ""
+
+#: admin/contact-form-restore.php:137
+#, php-format
+msgid "Form %d settings have been restored from the backup file"
+msgstr ""
+
+#: admin/contact-form-settings-copy.php:89
+msgid "Requested form to copy settings from is not found."
+msgstr ""
+
+#: admin/contact-form-settings-copy.php:94
+#, php-format
+msgid "Form %d settings have been copied to all forms."
+msgstr ""
+
+#: admin/contact-form-settings-copy.php:96
+#, php-format
+msgid "Form %d settings have been copied to form %d."
+msgstr ""
+
+#: admin/index.php:30 admin/lost-pw.php:30 install/index.php:908
+msgid "GNU General Public License"
+msgstr ""
+
+#: contact-form-display.php:56
+msgid ""
+"This contact form has file attachment fields. Attachments are only supported "
+"when the Send E-Mail function is set to phpmailer. You can find this setting "
+"on the contact form settings page."
+msgstr ""
+
+#: contact-form-display.php:60 contact-form-process.php:169
+#, php-format
+msgid ""
+"This contact form has file attachment fields, but the temporary folder for "
+"the files (%s) does not exist or is not writable. Create the folder or "
+"change its permission manually."
+msgstr ""
+
+#: contact-form-display.php:63 contact-form-process.php:172
+#, php-format
+msgid ""
+"This contact form has file attachment fields, but the temporary folder for "
+"the files (%s) is not writable. Fix the permissions."
+msgstr ""
+
+#: contact-form-display.php:89
+msgid "ERROR: Misconfigured E-mail address in options."
+msgstr ""
+
+#: contact-form-display.php:400
+msgid "Do you really want to reset the form?"
+msgstr ""
+
+#: contact-form-ex-fields.php:59
+msgid "Error: A hidden field is not configured properly in settings."
+msgstr ""
+
+#: contact-form-ex-fields.php:164 contact-form-ex-fields.php:173
+msgid "Error: A select field is not configured properly in settings."
+msgstr ""
+
+#: contact-form-ex-fields.php:237 contact-form-ex-fields.php:247
+#: contact-form-process.php:291
+msgid "Error: A select-multiple field is not configured properly in settings."
+msgstr ""
+
+#: contact-form-ex-fields.php:326 contact-form-process.php:253
+msgid "Error: A checkbox field is not configured properly in settings."
+msgstr ""
+
+#: contact-form-ex-fields.php:431 contact-form-ex-fields.php:440
+msgid "Error: A radio field is not configured properly in settings."
+msgstr ""
+
+#: contact-form-ex-fields.php:618
+msgid "AM"
+msgstr ""
+
+#: contact-form-ex-fields.php:618
+msgid "PM"
+msgstr ""
+
+#: contact-form-ex-fields.php:660
+msgid "Fr"
+msgstr ""
+
+#: contact-form-ex-fields.php:660
+msgid "Mo"
+msgstr ""
+
+#: contact-form-ex-fields.php:660
+msgid "Sa"
+msgstr ""
+
+#: contact-form-ex-fields.php:660
+msgid "Su"
+msgstr ""
+
+#: contact-form-ex-fields.php:660
+msgid "Th"
+msgstr ""
+
+#: contact-form-ex-fields.php:660
+msgid "Tu"
+msgstr ""
+
+#: contact-form-ex-fields.php:660
+msgid "We"
+msgstr ""
+
+#: contact-form-ex-fields.php:661
+msgid "Apr"
+msgstr ""
+
+#: contact-form-ex-fields.php:661
+msgid "Aug"
+msgstr ""
+
+#: contact-form-ex-fields.php:661
+msgid "Dec"
+msgstr ""
+
+#: contact-form-ex-fields.php:661
+msgid "Feb"
+msgstr ""
+
+#: contact-form-ex-fields.php:661
+msgid "Jan"
+msgstr ""
+
+#: contact-form-ex-fields.php:661
+msgid "Jul"
+msgstr ""
+
+#: contact-form-ex-fields.php:661
+msgid "Jun"
+msgstr ""
+
+#: contact-form-ex-fields.php:661
+msgid "Mar"
+msgstr ""
+
+#: contact-form-ex-fields.php:661
+msgid "May"
+msgstr ""
+
+#: contact-form-ex-fields.php:661
+msgid "Nov"
+msgstr ""
+
+#: contact-form-ex-fields.php:661
+msgid "Oct"
+msgstr ""
+
+#: contact-form-ex-fields.php:661
+msgid "Sep"
+msgstr ""
+
+#: contact-form-ex-fields.php:662
+msgid "Go to the next month"
+msgstr ""
+
+#: contact-form-ex-fields.php:663
+msgid "Go to the previous month"
+msgstr ""
+
+#: contact-form-ex-fields.php:664
+msgid "Clear"
+msgstr ""
+
+#: contact-form-ex-fields.php:665
+msgid "Clears any dates selected on the calendar"
+msgstr ""
+
+#: contact-form-ex-fields.php:666
+msgid "This is the maximum range"
+msgstr ""
+
+#: contact-form-process.php:23
+msgid "Requested Contact not found."
+msgstr ""
+
+#: contact-form-process.php:79
+msgid "Selecting a subject is required."
+msgstr ""
+
+#: contact-form-process.php:83
+msgid "Requested subject not found."
+msgstr ""
+
+#: contact-form-process.php:119
+msgid "Your IP is Banned"
+msgstr ""
+
+#: contact-form-process.php:206 contact-form-process.php:326
+#: contact-form-process.php:343 contact-form-process.php:365
+#, php-format
+msgid "Maximum of %d characters exceeded."
+msgstr ""
+
+#: contact-form-process.php:211 contact-form-process.php:370
+msgid "Invalid input."
+msgstr ""
+
+#: contact-form-process.php:270 contact-form-process.php:309
+msgid "At least one item in this field is required."
+msgstr ""
+
+#: contact-form-process.php:314
+msgid ""
+"Error: A checkbox-multiple field is not configured properly in settings."
+msgstr ""
+
+#: contact-form-process.php:331
+msgid "Invalid e-mail address."
+msgstr ""
+
+#: contact-form-process.php:348
+msgid "Invalid URL."
+msgstr ""
+
+#: contact-form-process.php:397
+msgid "Could not find CAPTCHA token."
+msgstr ""
+
+#: contact-form-process.php:415
+msgid "Could not read CAPTCHA token file. Try again."
+msgstr ""
+
+#: contact-form-process.php:433
+msgid "To"
+msgstr ""
+
+#: contact-form-process.php:435
+msgid "From"
+msgstr ""
+
+#: contact-form-process.php:509 contact-form-process.php:510
+msgid "File is attached:"
+msgstr ""
+
+#: contact-form-process.php:579 contact-form-process.php:580
+msgid "selected"
+msgstr ""
+
+#: contact-form-process.php:655 contact-form-process.php:687
+#: contact-form-process.php:691
+msgid "Sent from (ip address)"
+msgstr ""
+
+#: contact-form-process.php:657 contact-form-process.php:658
+msgid "Location"
+msgstr ""
+
+#: contact-form-process.php:660
+msgid "Date/Time"
+msgstr ""
+
+#: contact-form-process.php:661
+msgid "Coming from (referer)"
+msgstr ""
+
+#: contact-form-process.php:662
+msgid "Using (user agent)"
+msgstr ""
+
+#: contact-form-process.php:683
+msgid "Invalid Input - Spam?"
+msgstr ""
+
+#: contact-form-process.php:686
+msgid "Akismet: Spam"
+msgstr ""
+
+#: contact-form-process.php:687
+msgid "Akismet Spam Check: probably spam"
+msgstr ""
+
+#: contact-form-process.php:688
+msgid "probably spam"
+msgstr ""
+
+#: contact-form-process.php:691
+msgid "Akismet Spam Check: passed"
+msgstr ""
+
+#: contact-form-process.php:692
+msgid "passed"
+msgstr ""
+
+#: contact-form-run.php:36
+msgid "Fast Secure Contact Form requires PHP version 5.1 or higher"
+msgstr ""
+
+#: contact-form-run.php:37 install/index.php:228
+msgid "Please upgrade PHP in order to proceed"
+msgstr ""
+
+#: contact-form.php:121
+msgid "Invalid Login"
+msgstr ""
+
+#: contact-form.php:242
+msgid ""
+"Install completed successfully. Go to <a href=\"../admin/index.php\">admin "
+"page</a>."
+msgstr ""
+
+#: contact-form.php:246
+msgid "Nothing changed because this install has already been done before."
+msgstr ""
+
+#: contact-form.php:248
+msgid ""
+"You can change settings on the admin page. Go to <a href=\"../admin/index.php"
+"\">admin page</a>."
+msgstr ""
+
+#: contact-form.php:274
+msgid "Fast Secure Contact Form - PHP has not been completely installed."
+msgstr ""
+
+#: contact-form.php:276
+msgid "The basic configuration file is missing or not readable."
+msgstr ""
+
+#: contact-form.php:278
+msgid ""
+"The administrator will have to visit the installer page, see instructions."
+msgstr ""
+
+#: contact-form.php:279
+msgid "Go to <a href=\"../install/index.php\">install page</a>."
+msgstr ""
+
+#: contact-form.php:301 contact-form.php:1078
+msgid "Contact:"
+msgstr ""
+
+#: contact-form.php:979 contact-form.php:980
+msgid "Redirecting"
+msgstr ""
+
+#: contact-form.php:1173
+msgid "Attachments not supported."
+msgstr ""
+
+#: contact-form.php:1179
+msgid "Attachment upload failed."
+msgstr ""
+
+#: contact-form.php:1201
+msgid "Attachment file type not allowed."
+msgstr ""
+
+#: contact-form.php:1218
+msgid "Attachment file size is too large."
+msgstr ""
+
+#: contact-form.php:1236
+msgid "Attachment upload failed while moving file."
+msgstr ""
+
+#: contact-form.php:1439
+msgid "ERROR: GD image support not detected in PHP!"
+msgstr ""
+
+#: contact-form.php:1440
+msgid "Contact your web host to enable GD image support for PHP."
+msgstr ""
+
+#: contact-form.php:1444
+msgid "ERROR: imagepng function not detected in PHP!"
+msgstr ""
+
+#: contact-form.php:1445
+msgid "Contact your web host to enable imagepng support for PHP."
+msgstr ""
+
+#: contact-form.php:1449
+msgid "ERROR: captcha_library not found."
+msgstr ""
+
+#: contact-form.php:1742
+msgid "Invalid User Agent"
+msgstr ""
+
+#: contact-form.php:1748
+msgid "Invalid POST"
+msgstr ""
+
+#: contact-form.php:1773
+#, php-format
+msgid ""
+"Invalid HTTP_REFERER domain. See FAQ. The domain name posted from does not "
+"match the allowed domain names of this form: %s"
+msgstr ""
+
+#: contact-form.php:1789
+msgid "Illegal characters in POST. Possible email injection attempt"
+msgstr ""
+
+#: contact-form.php:1864
+msgid "version update check failed."
+msgstr ""
+
+#: contact-form.php:1872
+#, php-format
+msgid "a new version %s is available."
+msgstr ""
+
+#: contact-form.php:2025
+msgid "Usage"
+msgstr ""
+
+#: contact-form.php:2027
+msgid "To display a form on your web page: Just add a few lines of PHP code."
+msgstr ""
+
+#: contact-form.php:2028
+msgid "Show PHP code"
+msgstr ""
+
+#: contact-form.php:2030
+msgid "Edit the HTML of a PHP page on your web site and add this code:"
+msgstr ""
+
+#: contact-form.php:2033
+msgid "Put this code in the HTML head section:"
+msgstr ""
+
+#: contact-form.php:2038
+msgid ""
+"Put this code in the HTML body section anywhere you want your form to show:"
+msgstr ""
+
+#: contact-form.php:2041
+msgid "set desired form number."
+msgstr ""
+
+#: contact-form.php:2042
+#, php-format
+msgid "set path to %s with slash on end."
+msgstr ""
+
+#: contact-form.php:2046
+msgid ""
+"Notes: The code is highlighted in the color green. The &lt;?php ?&gt; tags "
+"may not be needed if you are putting the code in a part of your page that "
+"already has an open PHP tag."
+msgstr ""
+
+#: contact-form.php:2048
+msgid ""
+"You must set the path correctly or you will get a PHP error: \"No such file "
+"or directory\"."
+msgstr ""
+
+#: contact-form.php:2050
+msgid ""
+"You can add more than one form on a page, just repeat the complete PHP code "
+"block using a different form number."
+msgstr ""
+
+#: install/index.php:142 install/index.php:151 install/index.php:894
+msgid "Install"
+msgstr ""
+
+#: install/index.php:153
+msgid "Welcome"
+msgstr ""
+
+#: install/index.php:154 install/index.php:213
+msgid "Requirements"
+msgstr ""
+
+#: install/index.php:157 install/index.php:827
+msgid "Review & Install"
+msgstr ""
+
+#: install/index.php:169
+msgid "This install has already been performed."
+msgstr ""
+
+#: install/index.php:171
+msgid ""
+"You can change settings on the <a href=\"../admin/index.php\">admin page</a>."
+msgstr ""
+
+#: install/index.php:176
+msgid "Welcome to the installation"
+msgstr ""
+
+#: install/index.php:178
+msgid "Welcome to the super easy and fast installation"
+msgstr ""
+
+#: install/index.php:179
+msgid "If you need any help please contact"
+msgstr ""
+
+#: install/index.php:179
+msgid "support"
+msgstr ""
+
+#: install/index.php:182 install/index.php:183
+msgid ""
+"Please read the following license agreement and accept the terms to continue"
+msgstr ""
+
+#: install/index.php:189
+msgid "I accept the license terms"
+msgstr ""
+
+#: install/index.php:192 install/index.php:388
+msgid "Site Language"
+msgstr ""
+
+#: install/index.php:209 install/index.php:307 install/index.php:340
+#: install/index.php:822
+msgid "Continue"
+msgstr ""
+
+#: install/index.php:214
+msgid "Please carefully review the requirements check list below"
+msgstr ""
+
+#: install/index.php:215
+msgid "Server software"
+msgstr ""
+
+#: install/index.php:218
+msgid "or higher"
+msgstr ""
+
+#: install/index.php:218
+msgid "version"
+msgstr ""
+
+#: install/index.php:225
+msgid "Yes"
+msgstr ""
+
+#: install/index.php:228
+msgid "No"
+msgstr ""
+
+#: install/index.php:241
+msgid "Writable folders"
+msgstr ""
+
+#: install/index.php:247
+msgid "OK - Writable"
+msgstr ""
+
+#: install/index.php:252
+msgid "File not found"
+msgstr ""
+
+#: install/index.php:257
+msgid "Unwritable (check permissions)"
+msgstr ""
+
+#: install/index.php:261
+msgid "mandatory to perform installation"
+msgstr ""
+
+#: install/index.php:304
+msgid ""
+"Please correct the items described above then click the button below to run "
+"the requirements check again"
+msgstr ""
+
+#: install/index.php:324
+msgid "Check your path settings"
+msgstr ""
+
+#: install/index.php:331 install/index.php:335 install/index.php:847
+#: install/index.php:851
+msgid "please check this carefully, no slash on end"
+msgstr ""
+
+#: install/index.php:345
+msgid "More settings available in the contact form admin"
+msgstr ""
+
+#: install/index.php:361 install/index.php:865
+msgid ""
+"for notifications, and used as recipient name in the emails sent from the "
+"forms"
+msgstr ""
+
+#: install/index.php:366 install/index.php:869
+msgid ""
+"for notifications, and used as recipient email in the emails sent from the "
+"forms"
+msgstr ""
+
+#: install/index.php:369 install/index.php:873
+msgid "needed to login and configure forms"
+msgstr ""
+
+#: install/index.php:373 install/index.php:877
+msgid "write this down and remember it!"
+msgstr ""
+
+#: install/index.php:384 install/index.php:881
+msgid "The character encoding of your site, (UTF-8 is recommended)"
+msgstr ""
+
+#: install/index.php:385
+msgid "Setting the HTTP charset parameter."
+msgstr ""
+
+#: install/index.php:819 install/index.php:889
+msgid "used to format the time in the email footer message"
+msgstr ""
+
+#: install/index.php:828
+msgid ""
+"Please review the following summary and click the button below to install"
+msgstr ""
