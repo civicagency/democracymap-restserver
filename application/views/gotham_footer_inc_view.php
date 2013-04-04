@@ -1,6 +1,6 @@
 
 	<div class="footer-colophon">
-		Powered by <a href="https://www.democracymap.org">DemocracyMap</a>
+		Powered by <a href="http://www.democracymap.org">DemocracyMap</a>
 	</div>		
 			
 

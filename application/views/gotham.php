@@ -38,6 +38,12 @@
 <script>
 var ri = responsiveIframe();
 ri.allowResponsiveEmbedding();
+
+/** since this is an iframe and we have a base target of _parent for all the links, we need to override that for the forms **/
+$(document).ready(function(){
+	$('form').attr("target", "_self");
+});
+
 </script>
 
 
@@ -59,7 +65,7 @@ ri.allowResponsiveEmbedding();
 
 
 <div id="searchbox">
-	<form action="/gotham/" method="get" target="_self">
+	<form action="/gotham/" method="get">
 		<input type="text" name="location" id="addressid" placeholder="250 Broadway, New York, NY 10007" />
 	</form>
 </div>
