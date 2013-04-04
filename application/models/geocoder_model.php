@@ -36,13 +36,28 @@ class Geocoder_model extends CI_Model {
 		
 		if(!empty($location['results'][0]['locations'][0])) {
     
-			$data['latitude'] 			= $location['results'][0]['locations'][0]['latLng']['lat'];
-			$data['longitude'] 			= $location['results'][0]['locations'][0]['latLng']['lng'];
-			$data['city_geocoded'] 		= $location['results'][0]['locations'][0]['adminArea5'];
-			$data['state_geocoded'] 	= $location['results'][0]['locations'][0]['adminArea3'];
+			$data['latitude'] 				= $location['results'][0]['locations'][0]['latLng']['lat'];
+			$data['longitude'] 				= $location['results'][0]['locations'][0]['latLng']['lng'];
+		 
+			$data['geocoded_city'] 			= $location['results'][0]['locations'][0]['adminArea5'];
+			$data['geocoded_state'] 		= $location['results'][0]['locations'][0]['adminArea3'];
 
 			// Convert state abbreviation to full name
-			$data['state_geocoded']		= $this->state_abbr($data['state_geocoded']); 
+			$data['geocoded_state']		= $this->state_abbr($data['geocoded_state']);
+			
+			$data['geocoded_postalcode'] 	= $location['results'][0]['locations'][0]['postalCode'];
+			$data['geocoded_street'] 		= $location['results'][0]['locations'][0]['street'];
+
+
+			// These are probably pretty specific to MapQuest; consider abstracting?
+
+				$data['geocoded_map_url'] 		= $location['results'][0]['locations'][0]['mapUrl'];									
+				$data['geocoded_precision'] 		= $location['results'][0]['locations'][0]['geocodeQuality'];									
+				
+				// This should be parsed out. Explained here: http://www.mapquestapi.com/geocoding/geocodequality.html
+				$data['geocoded_quality'] 		= $location['results'][0]['locations'][0]['geocodeQualityCode'];									
+				
+
 
 			return $data;
 
@@ -78,8 +93,8 @@ class Geocoder_model extends CI_Model {
 		
 			$data['latitude'] 			= $location->latitude;
 			$data['longitude'] 			= $location->longitude;
-			$data['city_geocoded'] 		= $location->city;
-			$data['state_geocoded'] 	= $location->state;
+			$data['geocoded_city'] 		= $location->city;
+			$data['geocoded_state'] 	= $location->state;
 
 			return $data;		
 			

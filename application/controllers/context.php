@@ -11,14 +11,17 @@ class Context extends REST_Controller {
 		parent::__construct();
 		
 	   	$this->load->helper('phone/PhoneNumberUtil');			
-	   	$this->phoneUtil = PhoneNumberUtil::getInstance();			
+	   	$this->phoneUtil = PhoneNumberUtil::getInstance();	
+	
+		$this->load->model('geocoder_model', 'geocoder');	
+			
 		
 	    $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
 	}
 
 	public function index_get()	{
 		
-		// $this->cache->clean();
+		//$this->cache->clean();
 		
 		if (empty($_GET)) {
 			$this->load->helper('url');			
@@ -58,9 +61,7 @@ class Context extends REST_Controller {
 							
 			}
 			else {
-			
-				$this->load->model('geocoder_model', 'geocoder');			
-				
+						
 				if ($location 	= $this->geocoder->geocode(urlencode($data['input']))) {
 					$data 		= array_merge($data, $location);			
 					$latlong 	= $data['latitude'] . " " . $data['longitude'];					
@@ -164,10 +165,38 @@ class Context extends REST_Controller {
 			}
 			
 			
-			// State data
-			if (!empty($data['state_geocoded'])) {
+			// Make sure we know what State we're in
+			if (empty($data['geocoded_state'])) {
+						
+			 	// $data['state'] should be set if we were able to get city data 
+			 	// $data['counties']['state'] should be set if we were able to get county data
+
+				if(empty($data['state'])) {								
+					if(!empty($data['counties']['state'])) {
+						$data['state'] = $data['counties']['state'];
+					} else {
+						$data['state'] = null;
+					}
+				}
 				
-				$data['state_data'] = $this->get_state($data['state_geocoded']);
+				if($data['state']) {
+					$data['state_full'] = $this->geocoder->state_abbr($data['state']);
+				}
+			
+			} else {
+				$data['state_full'] = $data['geocoded_state'];
+			}
+			
+			if(empty($data['state'])) {
+				$data['state'] = null;
+			}
+			
+			
+			
+			// State data
+			if (!empty($data['state_full'])) {
+				
+				$data['state_data'] = $this->get_state($data['state_full']);
 								
 				if(!empty($data['state_data']['phone_primary'])) {
 					$data['state_data']['phone_primary'] = $this->format_phone($data['state_data']['phone_primary']);
@@ -175,25 +204,27 @@ class Context extends REST_Controller {
 
 				
 								
-				$governor = $this->get_governor($data['state_geocoded']);
+				$governor = $this->get_governor($data['state_full']);
 				
 				if(!empty($governor)) {
 					$data['governor_data'] = $governor;				
 				}	
 				
-				$governor_socialmedia = $this->get_governor_sm($data['state_geocoded']);			
+				$governor_socialmedia = $this->get_governor_sm($data['state_full']);			
 				
 				if(!empty($governor_socialmedia)) {
 					$data['governor_sm'] = $governor_socialmedia;				
 				}				
 				
+			} else {
+				$data['state_full'] = null;
 			}			
 			
 			
 			// If we didn't get state abbreviation from the city lookup, see if we can get it elsewhere
 			if (empty($data['state']) && !empty($data['counties']['state'])) {
 				$data['state'] = $data['counties']['state'];
-				// $data['state'] = $data['state_geocoded']; this is more reliable, but isn't the abbreviation	
+				// $data['state'] = $data['geocoded_state']; this is more reliable, but isn't the abbreviation	
 			}	
 			if (empty($data['state']) && !empty($data['governor_data']['address_state'])) {
 				$data['state'] = $data['governor_data']['address_state'];
@@ -983,8 +1014,24 @@ function re_schema($data) {
 	$new_data['longitude']			= $data['longitude'];
 	$new_data['input_location']		= $data['input'];	
 
-			
 
+	if(!empty($data['geocoded_state'])) {
+
+		$geocoded_street 		= !empty($data['geocoded_street']) ? $data['geocoded_street'] : '';	
+		$geocoded_city 			= !empty($data['geocoded_city']) ? $data['geocoded_city'] : '';
+		$geocoded_state 		= !empty($data['state_geocoded']) ? $data['state_geocoded'] : '';
+		$geocoded_postalcode 	= !empty($data['geocoded_postalcode']) ? $data['geocoded_postalcode'] : '';
+		
+		$geocoded_address = "$geocoded_street, $geocoded_city, $geocoded_state $geocoded_postalcode";		
+		$new_data['geocoded_address'] = $geocoded_address;
+		
+		$new_data['geocoded_map_url'] = $data['geocoded_map_url'];
+		$new_data['geocoded_precision'] = $data['geocoded_precision'];
+		$new_data['geocoded_quality'] = $data['geocoded_quality'];				
+		
+	}
+				
+			
  // ############################################################################################################
  // Hyperlocal
 
@@ -1377,7 +1424,7 @@ if ($data['state'] == 'NY') {
 
 
 
-	$new_data['jurisdictions'][] = $this->jurisdiction_model('government', 'State', 'regional', 'State', $data['state_geocoded'], $data['state'], $data['state_data']['official_name_url'], $data['state_data']['information_url'], $data['state_data']['email'], $data['state_data']['phone_primary'], null, null, null, null, null, null, null, $state_metadata, null, $elected, null);
+	$new_data['jurisdictions'][] = $this->jurisdiction_model('government', 'State', 'regional', 'State', $data['state_full'], $data['state'], $data['state_data']['official_name_url'], $data['state_data']['information_url'], $data['state_data']['email'], $data['state_data']['phone_primary'], null, null, null, null, null, null, null, $state_metadata, null, $elected, null);
 	
 
 }
@@ -1491,7 +1538,7 @@ if (!empty($data['state_chambers']['upper']) && (!empty($data['national_chambers
 	
 // Jurisdiction 
 	
-$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Senate', 'national', 'United States', $data['state_geocoded'], $data['state'], null, null, null, null, null, null, null, null, null, null, null, null, null, $elected, null);	
+$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Senate', 'national', 'United States', $data['state_full'], $data['state'], null, null, null, null, null, null, null, null, null, null, null, null, null, $elected, null);	
 	
 
 }
