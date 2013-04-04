@@ -59,8 +59,9 @@ class Gotham extends CI_Controller {
 			$data['ganalytics_id'] = $this->config->item('ganalytics_id');
 		}	
 		
-
-			
+		
+		// Futureproofing to ensure the right logic in constructing the header
+		$data['view'] = 'demo';
 		
 		$this->load->view('gotham', $data);
 	}

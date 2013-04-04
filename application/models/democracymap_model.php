@@ -30,6 +30,7 @@ class democracymap_model extends CI_Model {
 			
 		$this->protected_fields	= $this->restricted();		
 		$this->jurisdictions	= array($this->jurisdiction());
+		$this->officials		= array($this->official());		
 
 	}
 	

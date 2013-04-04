@@ -18,6 +18,11 @@ class Account extends CI_Controller {
 	
 	function register() {
 		
+		// Redirect to dashboard if they're already logged in
+		if ($this->session->userdata('email')) {
+			redirect('account/dashboard');		
+		}		
+		
 		if($this->input->post('email', TRUE)) {
 			$user_form = $this->input->post();
 			
@@ -57,6 +62,12 @@ class Account extends CI_Controller {
 	function login() {
 		
 		// TODO make sure they provided both username and password
+		
+		
+		// Redirect to dashboard if they're already logged in
+		if ($this->session->userdata('email')) {
+			redirect('account/dashboard');		
+		}
 		
 		
 		// Assume they provided both email and pass, authenticate it
@@ -239,6 +250,18 @@ class Account extends CI_Controller {
 		$this->session->sess_destroy();
 		$this->load->view('logout_view');
 	}	
+	
+	function dashboard() {
+		
+		// load user data
+		// anything to load?
+		$data = null;
+		
+		
+		// load view
+		$this->load->view('dashboard', $data);		
+		
+	}
 	
 
 	

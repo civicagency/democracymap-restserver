@@ -51,6 +51,32 @@ class Editor extends CI_Controller {
 		return $jurisdiction;
 	}
 	
+	function official($official_id = null) {
+
+		// TODO Check to see if the person is logged in
+	
+		if ($official_id) {
+			// TODO: load existing baseline data for this jurisdiction id
+			$data = array();			
+		} else {
+			// Construct the Jurisdiction Model
+			$this->load->model('democracymap_model', 'democracymap');
+			$official = $this->democracymap->officials[0];
+			
+			// TODO sanitize non-editable fields
+			//$official = $this->sanitize_official($official);
+			
+			$data = array('official' => $official);					
+		}
+		
+		$this->load->view('edit_official', $data);		
+
+	}	
+	
+	
+	
+	
+	
 	
 }
 

@@ -19,9 +19,12 @@ class Demo extends CI_Controller {
 			
 			$jurisdictions = $this->get_jurisdictions($location);
 			
-			$data['jurisdictions'] = (!empty($jurisdictions)) ? $jurisdictions : null;
+			$data['jurisdictions'] = (!empty($jurisdictions)) ? $jurisdictions : null;			
 			
 		}
+		
+		
+		$data['view'] = 'demo';
 		
 		
 			
