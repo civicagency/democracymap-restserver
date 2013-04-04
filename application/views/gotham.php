@@ -215,11 +215,15 @@ foreach ($jurisdiction['elected_office'] as $elected) {
 					
 					if(!empty($twitter_id)):
 				?>
+						<h5 class="twitter-heading">Recent Tweets</h5>
 						<div id="<?php echo $twitter_id?>" class="twitter-feed"></div>
 
 				
-					<?php endif; ?>			
-				
+					<?php 
+						unset($twitter_id);
+						endif; 
+					?>		
+							
 			<?php endif; ?>			
 			
 			

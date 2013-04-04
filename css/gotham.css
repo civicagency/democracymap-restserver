@@ -126,6 +126,14 @@ width : 100%;
 display : inline-block;
 }
 
+.jurisdictions .elected-list li .twitter-heading {
+clear : both;
+margin : 0;
+padding-top: 2em;
+color : #666;
+}
+
+
 
 .jurisdictions .elected-list .tweet_list li {
 display : block;	
