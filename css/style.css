@@ -207,3 +207,8 @@ background: rgba(27, 181, 224, 0.2);
 .footer-colophon a {
 	color : #00274A;
 }
+
+
+.map {
+	height : 400px;
+}

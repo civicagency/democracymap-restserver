@@ -11,14 +11,18 @@ class Nyc_model extends CI_Model {
 	
 	public function get_city_council($latlong, $democracymap) {
 			
-		$this->load->helper('api');	
+		$this->load->helper('api');		
+		if($community_board = get_cartodb_layer('output', $this->config->item('cartodb_domain'), 'nyc_council_districts', 'coundist', 'json', $latlong)) {
 		
-		if ($council = layer_data($this->config->item('geoserver_root'), 'census:city_council', 'coundist,gid', $latlong)) {
-			$data['council_district'] 	= (!empty($council['features'])) ? $council['features'][0]['properties']['coundist'] : '';
-			$data['council_district_fid'] 	= (!empty($council['features'])) ? $council['features'][0]['properties']['gid'] : '';			
+			$data['council_district'] = (!empty($community_board['rows'])) ? $community_board['rows'][0]['coundist'] : '';
+			$geojson = get_cartodb_layer('url', $this->config->item('cartodb_domain'), 'nyc_council_districts', '*', 'geoJSON', $latlong);
+			
+			
 		} else {
-			return false;
+			return null;
 		}
+
+
 
 
 
@@ -105,6 +109,11 @@ class Nyc_model extends CI_Model {
 			//$jurisdiction['address_state']  =  $council['state'];					
 			//$jurisdiction['address_zip']    =  $council['zip'];
 
+			$jurisdiction['metadata']					=  array(
+														array("key" => 'geojson', "value" => $geojson)																													 
+														);
+
+
 		
 			$jurisdiction['id'] 			= $council['district'];	
 		
@@ -163,12 +172,22 @@ class Nyc_model extends CI_Model {
 	
 	function get_community_board($latlong, $democracymap) {
 		
-		$this->load->helper('api');					
-		if($community_board = layer_data($this->config->item('geoserver_root'), 'census:community_district', 'borocd,gid', $latlong)) {
-			$data['community_board'] = (!empty($community_board['features'])) ? $community_board['features'][0]['properties']['borocd'] : '';
-			$data['community_board_fid'] = (!empty($community_board['features'])) ? "community_district." . $community_board['features'][0]['properties']['gid'] : '';			
+		// $this->load->helper('api');					
+		// if($community_board = layer_data($this->config->item('geoserver_root'), 'census:community_district', 'borocd,gid', $latlong)) {
+		// 	$data['community_board'] = (!empty($community_board['features'])) ? $community_board['features'][0]['properties']['borocd'] : '';
+		// 	$data['community_board_fid'] = (!empty($community_board['features'])) ? "community_district." . $community_board['features'][0]['properties']['gid'] : '';			
+		// 
+
+
+		$this->load->helper('api');		
+		if($community_board = get_cartodb_layer('output', $this->config->item('cartodb_domain'), 'nyc_community_districts', 'borocd', 'json', $latlong)) {
+		
+			$data['community_board'] = (!empty($community_board['rows'])) ? $community_board['rows'][0]['borocd'] : '';
+			$geojson = get_cartodb_layer('url', $this->config->item('cartodb_domain'), 'nyc_community_districts', '*', 'geoJSON', $latlong);
+			
+			
 		} else {
-			return false;
+			return null;
 		}
 
 		$jurisdiction = $democracymap->jurisdiction();
@@ -213,11 +232,12 @@ class Nyc_model extends CI_Model {
 			$jurisdiction['metadata']					=  array(
 														array("key" => 'neighborhoods', "value" => $community_board['neighborhoods']),
 														array("key" => 'cabinet_meeting', "value" => $community_board['cabinet_meeting']),																
-														array("key" => 'board_meeting', "value" => $community_board['board_meeting'])															 
+														array("key" => 'board_meeting', "value" => $community_board['board_meeting']),
+														array("key" => 'geojson', "value" => $geojson)																													 
 														);			
 
 
-			$jurisdiction['id'] 			= $community_board['community_board'];	
+			$jurisdiction['id'] 			= urlify($jurisdiction['name']);	
 
 			// Attach official to jurisdiction
 			$jurisdiction['elected_office'] = array($official, $official2);

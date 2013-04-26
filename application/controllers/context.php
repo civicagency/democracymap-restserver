@@ -770,6 +770,36 @@ function get_dc_anc_members($anc)	{
 		
 	}
 	
+	function state_leg_district_get($boundary_id_1, $boundary_id_2) {
+		$id = $boundary_id_1 . '/' . $boundary_id_2;
+			
+		$url = 'http://openstates.org/api/v1/districts/boundary/' . $id . '/' . "?apikey=" . $this->config->item('sunlight_api_key');
+		
+		$boundary_data = curl_to_json($url);
+		$geometry = array(
+						"type" => "MultiPolygon",
+						"coordinates" => $boundary_data['shape']
+					);							
+		
+		$feature = array(array(
+		         'type' => 'Feature',
+				 'properties' => array('id' => $id),
+		         'geometry' => $geometry
+		    ));		
+		
+		
+		# Build GeoJSON feature collection array
+		$geojson = array(
+		   'type' => 'FeatureCollection',
+		   'features' => $feature
+		);		
+		
+		header("Access-Control-Allow-Origin: *");
+		header('Content-type: application/json');	    
+		echo json_encode($geojson);
+		return true;
+		
+	}
 
 	
 	function state_boundaries($state, $chamber) {
@@ -865,7 +895,7 @@ function process_state_legislators($representatives) {
 				$chamber = $repdata['chamber'];
 				$district = $repdata['district'];
 		
-					
+				$chambers[$chamber][$district]['boundary_id'] = $repdata['boundary_id'];	
 				$chambers[$chamber][$district]['reps'][] = $rep;	
 			
 		}	
@@ -1313,11 +1343,15 @@ if (!empty($data['state_chambers']['lower'])) {
 
 
 	// jurisdiction 
+	
+	$boundary_id = $data['state_chambers']['lower'][$rep_id]['boundary_id'];
+	$geojson_url = $this->config->item('democracymap_root') . '/context/state-district/' . $boundary_id; 
+	$metadata = array(array('key' => 'geojson', 'value' => $geojson_url));	
 
 	$district = 'District ' . $rep_id;
-	$type_name = (strtoupper($slc_rep['state']) == 'NY') ? 'Assembly' : 'House of Representatives';		
-	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', $type_name, 'regional', 'State', $district, $rep_id, null, null, null, null, null, null, null, null, strtoupper($slc_rep['state']), null, null, null, null, $reps, null);
-
+	$type_name = (strtoupper($slc_rep['state']) == 'NY') ? 'Assembly' : 'House of Representatives';	
+	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', $type_name, 'regional', 'State', $district, $rep_id, null, null, null, null, null, null, null, null, strtoupper($slc_rep['state']), null, null, $metadata, null, $reps, null);
+	
 }
 	
 
@@ -1344,10 +1378,13 @@ if (!empty($data['state_chambers']['upper']) && (!empty($data['national_chambers
 			
 	// Jurisdiction						
 
+	$boundary_id = $data['state_chambers']['upper'][$rep_id]['boundary_id'];
+	$geojson_url = $this->config->item('democracymap_root') . '/context/state-district/' . $boundary_id; 
+	$metadata = array(array('key' => 'geojson', 'value' => $geojson_url));
 
 	$district = 'District ' . $rep_id;
 
-		$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Senate', 'regional', 'State', $district, $rep_id, null, null, null, null, null, null, null, null, null, null, null, null, null, $reps, null);
+		$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Senate', 'regional', 'State', $district, $rep_id, null, null, null, null, null, null, null, null, null, null, null, $metadata, null, $reps, null);
 
 }	
 

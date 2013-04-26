@@ -20,6 +20,7 @@ function curl_to_json($url) {
 }
 
 
+
 /**
  * This mashes together two arrays with the same keys
  * It fills in any empty values, but gives precedence to the $primary array
@@ -70,6 +71,39 @@ function layer_data($server, $layer, $properties, $latlong) {
 	}
 
 }
+
+
+
+function get_cartodb_layer ($return_type, $cartodb_domain, $table, $columns, $format, $latlong) {
+	
+	$latlong = explode(' ', $latlong);
+	$latlong = $latlong[1] . '%20' . $latlong[0];
+	
+	$url = $cartodb_domain . '/api/v2/sql?format=' . $format . '&q=SELECT%20' . $columns . '%20FROM%20' . $table . "%20WHERE%20ST_Contains(the_geom%2C%20%20ST_GeomFromText('POINT(" . $latlong . ")'%2C%204326))";
+	
+	if ($return_type == 'url') {
+		return $url;
+	} else {
+		$layer_data = curl_to_json($url);
+		return $layer_data;		
+	}
+
+	
+}
+
+function urlify($str) {                                                                                                                        
+     // FIXME: unicode                                                                                                    
+     // String gets converted to all lowercase                                                                            
+     // Everything that isnt a-Z 0-9 space, tab or - gets replaced by nothing                                              
+     // space and tab gets replaced by -                                                                                  
+     // multiple --s get replaced by a single -                                                                                        
+	 // - at the start of a string gets replaced by nothing                                                                
+     // - at the end of a string gets replaced by nothing
+     return preg_replace(array('/[^a-zA-Z0-9 \t-]/', '/[ \t]/', '/-+/', '/^-/', '/-$/'), array('', '-', '-', '', ''), strtolower($str));                                                                                                                    
+ }
+
+
+
 
 
 ?>

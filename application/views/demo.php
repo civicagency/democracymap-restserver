@@ -29,7 +29,7 @@ foreach ($jurisdictions['jurisdictions'] as $jurisdiction) {
 	
 	<?php 
 	
-	
+	// Format Names
 	$jurisdiction['name'] = $jurisdiction['type_name'] . ': ' . $jurisdiction['name'];
 	
 	if ($jurisdiction['type'] == 'legislative' && $jurisdiction['level'] == 'regional') { 
@@ -44,9 +44,6 @@ foreach ($jurisdictions['jurisdictions'] as $jurisdiction) {
 			<?php echo $jurisdiction['name']?> <!-- data->jurisdictions->elected_office->title -->
 		</a>
 	</h2>
-		<a href="<?php echo $jurisdiction['url']?>"> <!-- data->jurisdictions->elected_office->url OR data->jurisdictions->elected_office->url_contact -->
-			<?php echo $jurisdiction['url']?> <!-- data->jurisdictions->elected_office->title -->
-		</a>	
 	<?php
 	} else {
 	?>	
@@ -56,12 +53,58 @@ foreach ($jurisdictions['jurisdictions'] as $jurisdiction) {
 	</h2>		
 		
 	<?php
-	}?>
+	}
+
+	// Set up the map if we have one
+	
+	if (!empty($jurisdiction['metadata'])) {
+		
+		$uid = 'type:' . $jurisdiction['type'] . '/level:' . $jurisdiction['level'] . '/id:' . $jurisdiction['id'];
+		
+		foreach($jurisdiction['metadata'] as $metadata) {
+			if ($metadata['key'] == 'geojson') {
+				
+				$mapdata[] = array (
+					'map_id' => $uid,
+					'url' => $metadata['value'],
+				 	'lat' => $jurisdictions['latitude'],
+				 	'long' => $jurisdictions['longitude'], 
+					'zoom' => '13'
+				 )
+				
+				?>	
+				
+					<div id="<?php echo $uid ?>" class="map"></div>
+				
+				<?php	
+				break;
+			}
+		}
+		$value = null;
+		$uid = null;
+		
+	}	
+	
+	
+	if (!empty($jurisdiction['url'])):
+	?>
+		<a href="<?php echo $jurisdiction['url']?>"> <!-- data->jurisdictions->elected_office->url OR data->jurisdictions->elected_office->url_contact -->
+			<?php echo $jurisdiction['url']?> <!-- data->jurisdictions->elected_office->title -->
+		</a>
+	<?php endif;?>
+	
 	
 	
 	<?php if (!empty($jurisdiction['phone'])) : ?>
 		<div class="phone"><?php echo $jurisdiction['phone']; ?></div>
 	<?php endif; ?>
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

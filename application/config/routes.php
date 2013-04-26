@@ -42,6 +42,8 @@ $route['default_controller'] = "docs";
 $route['404_override'] = '';
 $route['geowebdns/endpoints'] = "context";
 
+$route['context/state-district/(:any)/(:any)'] = "context/state_leg_district/$1/$2";
+
 
 
 

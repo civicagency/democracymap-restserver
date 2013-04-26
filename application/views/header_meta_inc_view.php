@@ -9,6 +9,7 @@
 
   <!-- Le styles -->
   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+  <link href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" rel="stylesheet">
   <link href="/css/style.css" rel="stylesheet">
 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->

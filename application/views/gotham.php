@@ -10,6 +10,7 @@
   <!-- Le styles -->
   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
   <link href="/css/gotham.css" rel="stylesheet">
+  <link href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" rel="stylesheet">
 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
@@ -158,6 +159,39 @@ foreach ($region as $jurisdiction) {
 			 echo $jurisdiction['name'];
 			}?>			
 	</h2>
+	
+	<?php
+	// Set up the map if we have one
+	
+	if (!empty($jurisdiction['metadata'])) {
+		
+		$uid = 'type:' . $jurisdiction['type'] . '/level:' . $jurisdiction['level'] . '/id:' . $jurisdiction['id'];
+		
+		foreach($jurisdiction['metadata'] as $metadata) {
+			if ($metadata['key'] == 'geojson') {
+				
+				$mapdata[] = array (
+					'map_id' => $uid,
+					'url' => $metadata['value'],
+				 	'lat' => $latitude,
+				 	'long' => $longitude, 
+					'zoom' => '13'
+				 )
+				
+				?>	
+				
+					<div id="<?php echo $uid ?>" class="map"></div>
+				
+				<?php	
+				break;
+			}
+		}
+		$value = null;
+		$uid = null;
+		
+	}	
+	
+	?>
 	
 	
 	<?php if (!empty($jurisdiction['phone'])) : ?>
