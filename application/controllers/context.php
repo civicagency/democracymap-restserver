@@ -775,6 +775,14 @@ function get_dc_anc_members($anc)	{
 	function state_leg_district_get($boundary_id_1, $boundary_id_2) {
 		$id = $boundary_id_1 . '/' . $boundary_id_2;
 			
+		$key = md5( serialize("$id")) . '_state_leg_district';
+
+		// Check in cache
+		if ( $cache = $this->cache->get( $key ) ) {
+			return $cache;
+		}			
+			
+			
 		$url = 'http://openstates.org/api/v1/districts/boundary/' . $id . '/' . "?apikey=" . $this->config->item('sunlight_api_key');
 		
 		$boundary_data = curl_to_json($url);
@@ -802,7 +810,17 @@ function get_dc_anc_members($anc)	{
 		return true;
 	}
 	
+	
+	
 	function state_boundary_get($state) {
+	
+		$key = md5( serialize("$state")) . '_state_boundary';
+
+		// Check in cache
+		if ( $cache = $this->cache->get( $key ) ) {
+			return $cache;
+		}	
+	
 	
 		$state = strtolower($state);
 		
@@ -834,6 +852,14 @@ function get_dc_anc_members($anc)	{
 	function congressional_boundary_get($id) {
 	
 		$id = strtolower($id);
+	
+		$key = md5( serialize("$id")) . '_congressional_boundary';
+
+		// Check in cache
+		if ( $cache = $this->cache->get( $key ) ) {
+			return $cache;
+		}
+	
 		
 		$url = "http://gis.govtrack.us/boundaries/2012-cd/$id/simple_shape";	
 		
@@ -956,7 +982,7 @@ function process_state_legislators($representatives) {
 				$chamber = $repdata['chamber'];
 				$district = $repdata['district'];
 		
-				$chambers[$chamber][$district]['boundary_id'] = $repdata['boundary_id'];	
+				$chambers[$chamber][$district]['boundary_id'] = (!empty($repdata['boundary_id'])) ? $repdata['boundary_id'] : null;	
 				$chambers[$chamber][$district]['reps'][] = $rep;	
 			
 		}	
