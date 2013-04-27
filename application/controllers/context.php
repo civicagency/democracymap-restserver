@@ -221,6 +221,8 @@ class Context extends REST_Controller {
 			}			
 			
 			
+			
+			// TODO: I'm pretty sure this state abbreviation stuff is obsoluted by what's above
 			// If we didn't get state abbreviation from the city lookup, see if we can get it elsewhere
 			if (empty($data['state']) && !empty($data['counties']['state'])) {
 				$data['state'] = $data['counties']['state'];
@@ -798,8 +800,67 @@ function get_dc_anc_members($anc)	{
 		header('Content-type: application/json');	    
 		echo json_encode($geojson);
 		return true;
-		
 	}
+	
+	function state_boundary_get($state) {
+	
+		$state = strtolower($state);
+		
+		$url = "http://gis.govtrack.us/boundaries/2012-states/$state/simple_shape";
+		
+		$geometry = curl_to_json($url);		
+		
+		$feature = array(array(
+		         'type' => 'Feature',
+				 'properties' => array('state' => $state),
+		         'geometry' => $geometry
+		    ));		
+		
+		
+		# Build GeoJSON feature collection array
+		$geojson = array(
+		   'type' => 'FeatureCollection',
+		   'features' => $feature
+		);		
+		
+		header("Access-Control-Allow-Origin: *");
+		header('Content-type: application/json');	    
+		echo json_encode($geojson);
+		return true;	
+	
+	}	
+	
+	
+	function congressional_boundary_get($id) {
+	
+		$id = strtolower($id);
+		
+		$url = "http://gis.govtrack.us/boundaries/2012-cd/$id/simple_shape";	
+		
+		$geometry = curl_to_json($url);		
+		
+		$feature = array(array(
+		         'type' => 'Feature',
+				 'properties' => array('id' => $id),
+		         'geometry' => $geometry
+		    ));		
+		
+		
+		# Build GeoJSON feature collection array
+		$geojson = array(
+		   'type' => 'FeatureCollection',
+		   'features' => $feature
+		);		
+		
+		header("Access-Control-Allow-Origin: *");
+		header('Content-type: application/json');	    
+		echo json_encode($geojson);
+		return true;	
+	
+	}	
+	
+	
+	
 
 	
 	function state_boundaries($state, $chamber) {
@@ -1350,7 +1411,7 @@ if (!empty($data['state_chambers']['lower'])) {
 
 	$district = 'District ' . $rep_id;
 	$type_name = (strtoupper($slc_rep['state']) == 'NY') ? 'Assembly' : 'House of Representatives';	
-	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', $type_name, 'regional', 'State', $district, $rep_id, null, null, null, null, null, null, null, null, strtoupper($slc_rep['state']), null, null, $metadata, null, $reps, null);
+	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', $type_name, 'regional', 'State', $district, 'lower-' . $rep_id, null, null, null, null, null, null, null, null, strtoupper($slc_rep['state']), null, null, $metadata, null, $reps, null);
 	
 }
 	
@@ -1384,7 +1445,7 @@ if (!empty($data['state_chambers']['upper']) && (!empty($data['national_chambers
 
 	$district = 'District ' . $rep_id;
 
-		$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Senate', 'regional', 'State', $district, $rep_id, null, null, null, null, null, null, null, null, null, null, null, $metadata, null, $reps, null);
+		$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Senate', 'regional', 'State', $district, 'upper-' . $rep_id, null, null, null, null, null, null, null, null, null, null, null, $metadata, null, $reps, null);
 
 }	
 
@@ -1396,8 +1457,21 @@ if (!empty($data['state_chambers']['upper']) && (!empty($data['national_chambers
 		
 if (!empty($data['state_data'])) {
 
+	$state_metadata = array();
 
-	$state_metadata = (!empty($data['state_id'])) ? array(array("key" => "state_id", "value" => $data['state_id'])) : null;
+	if (!empty($data['state_id'])) {		
+		$state_metadata[] = array("key" => "state_id", "value" => $data['state_id']);
+	} 
+
+	if (!empty($data['state'])) {			
+		$boundary_url = $this->config->item('democracymap_root') . '/context/state-boundary/' . strtolower($data['state']);
+		$state_metadata[] = array("key" => "geojson", "value" => $boundary_url);
+	}
+	
+	if(empty($state_metadata)) {
+		$state_metadata = null;
+	}
+
 	
 // Governor
 	$elected = array($this->elected_official_model('executive', 'Governor', null, null, null, $data['state_data']['governor'], $data['state_data']['governor_url'], null, null, null, null, null, null, null, null, null, null, null, null, null, null));
@@ -1510,8 +1584,17 @@ $nhr = $data['national_chambers']['house']['reps'][0];
 	
 	$title = null;
 	$district = "District " . $nhr['district'];
+	
+	$district_number = (strlen($nhr['district']) == 1) ? '0' . $nhr['district'] : $nhr['district'];
+	$district_id = strtolower($data['state']) . '-' . $district_number;
+	
+	$boundary_url = $this->config->item('democracymap_root') . '/context/congressional-boundary/' . $district_id;
+	
+	$metadata = array(
+					array('key' => 'geojson', 'value' => $boundary_url)
+	);
 
-	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'House of Representatives', 'national', 'United States', $district, $nhr['district'], null, null, null, null, null, null, null, null, null, null, null, null, null, $elected, null);
+	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'House of Representatives', 'national', 'United States', $district, $nhr['district'], null, null, null, null, null, null, null, null, null, null, null, $metadata, null, $elected, null);
 
 }
 

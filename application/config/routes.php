@@ -43,8 +43,8 @@ $route['404_override'] = '';
 $route['geowebdns/endpoints'] = "context";
 
 $route['context/state-district/(:any)/(:any)'] = "context/state_leg_district/$1/$2";
-
-
+$route['context/state-boundary/(:any)'] = "context/state_boundary/$1";
+$route['context/congressional-boundary/(:any)'] = "context/congressional_boundary/$1";
 
 
 
