@@ -23,8 +23,26 @@ function set_map(map_id, lat, long, zoom, url) {
     }
 
     function onEachFeature(feature, layer) {
+	
+		if ( feature.geometry.type === "MultiPolygon" ) {
+		  // get the bounds for the first polygon that makes up the multipolygon
+		  var bounds = layer.getBounds();
+		  // loop through coordinates array
+		  // skip first element as the bounds var represents the bounds for that element
+		  for ( var i = 1, il = feature.geometry.coordinates[0].length; i < il; i++ ) {
+		    var ring = feature.geometry.coordinates[0][i];
+		    var latLngs = ring.map(function(pair) {
+		      return new L.LatLng(pair[1], pair[0]);
+		    });
+		    var nextBounds = new L.LatLngBounds(latLngs);
+		    bounds.extend(nextBounds);
+		  }
+		  map.fitBounds(bounds);
+		}				
+	
+	
         layer.on({
-            click: zoomToFeature
+			click: zoomToFeature
         });
     }
 
