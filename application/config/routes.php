@@ -45,7 +45,9 @@ $route['geowebdns/endpoints'] = "context";
 $route['context/state-district/(:any)/(:any)'] = "context/state_leg_district/$1/$2";
 $route['context/state-boundary/(:any)'] = "context/state_boundary/$1";
 $route['context/congressional-boundary/(:any)'] = "context/congressional_boundary/$1";
-$route['context/city-placens/(:any)'] = "context/city_boundary/$1";
+$route['context/city-boundary/(:any)'] = "context/city_boundary/$1";
+$route['context/county-boundary/(:any)'] = "context/county_boundary/$1";
+
 
 
 

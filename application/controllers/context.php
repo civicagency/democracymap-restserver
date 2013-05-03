@@ -899,6 +899,50 @@ function get_dc_anc_members($anc)	{
 	
 		$url = "http://tigerweb.geo.census.gov/ArcGIS/rest/services/Census2010/tigerWMS/MapServer/58/query?text=&geometryType=esriGeometryPoint&inSR=4326&outSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&objectIds=&where=PLACENS=$placens&time=&returnCountOnly=false&returnIdsOnly=false&returnGeometry=true&maxAllowableOffset=&outSR=&outFields=*&f=json";
 		
+		
+		$geometry = curl_to_json($url);	
+		$geometry = $geometry['features'][0]['geometry']['rings']; 
+		
+		$geometry = array(
+						"type" => "MultiPolygon",
+						"coordinates" => array($geometry)
+					);		
+		
+		
+		$feature = array(array(
+		         'type' => 'Feature',
+				 'properties' => array('placens' => $placens),
+		         'geometry' => $geometry
+		    ));		
+		
+		
+		# Build GeoJSON feature collection array
+		$geojson = array(
+		   'type' => 'FeatureCollection',
+		   'features' => $feature
+		);		
+		
+		header("Access-Control-Allow-Origin: *");
+		header('Content-type: application/json');	    
+		echo json_encode($geojson);
+		return true;		
+		
+		
+	}
+	
+	function county_boundary_get($placens) {
+		
+
+	   $key = md5( serialize("$placens")) . '_county_boundary';
+       
+	   // Check in cache
+	   if ( $cache = $this->cache->get( $key ) ) {
+	   	return $cache;
+	   }
+	
+	
+		$url = "http://tigerweb.geo.census.gov/ArcGIS/rest/services/Census2010/tigerWMS/MapServer/115/query?text=&geometry=&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&objectIds=&where=COUNTYNS=$placens&time=&returnCountOnly=false&returnIdsOnly=false&returnGeometry=true&maxAllowableOffset=&outSR=4326&outFields=&f=json";
+		
 		$geometry = curl_to_json($url);	
 		$geometry = $geometry['features'][0]['geometry']['rings']; 
 		
@@ -1408,11 +1452,11 @@ if(!empty($data['zip'])) {
 	
 	$municipal_zip 		= ($data['zip4']) ? $data['zip'] . '-' . $data['zip4'] : $data['zip'];	
 
-	$geojson_url = $this->config->item('democracymap_root') . '/context/city-placens/' . $data['gnis_fid']; 
+	$geojson_url = $this->config->item('democracymap_root') . '/context/city-boundary/' . $data['gnis_fid']; 
 	$metadata = array(array('key' => 'geojson', 'value' => $geojson_url));
 
 	$municipal_metadata = array(array("key" => "place_id", "value" => $data['place_id']), 
-									array("key" => "gnis_fid", "value" => $data['gnis_fid']), 
+									array("key" => "gnis_id", "value" => $data['gnis_fid']), 
 									array('key' => 'geojson', 'value' => $geojson_url));											
 	
 
@@ -1439,13 +1483,16 @@ if (!empty($data['counties'])) {
 	}
 		
 		
-	
+	$gnis_id = $data['county_data']['COUNTYNS'];
+	$geojson_url = $this->config->item('democracymap_root') . '/context/county-boundary/' . $gnis_id; 
 
 	$county_zip 		=  ($data['counties']['zip4']) ? $data['counties']['zip'] . '-' . $data['counties']['zip4'] : $data['counties']['zip'];		
 
 	$county_metadata = array(array("key" => "fips_id", "value" => $data['counties']['fips_county']), 
 							array("key" => 'county_id', "value" => $data['counties']['county_id']), 
-							array("key" => 'population', "value" => $data['counties']['population_2006']));										
+							array("key" => 'population', "value" => $data['counties']['population_2006']), 
+							array('key' => 'gnis_id', 'value' => $gnis_id),																	
+							array('key' => 'geojson', 'value' => $geojson_url));										
 	
 
 	$new_data['jurisdictions'][] = 	$this->jurisdiction_model('government', 'County', 'sub_regional', 'County', $data['counties']['name'], $data['counties']['county_id'], $data['counties']['website_url'], null, null, null, $data['counties']['title'], $data['counties']['address1'], $data['counties']['address2'], $data['counties']['city'], $data['counties']['state'], $county_zip, null, $county_metadata, null, $elected, null);
