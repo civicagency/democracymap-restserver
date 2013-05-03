@@ -886,7 +886,48 @@ function get_dc_anc_members($anc)	{
 	}	
 	
 	
+	function city_boundary_get($placens) {
+		
+
+	   $key = md5( serialize("$placens")) . '_city_boundary';
+       
+	   // Check in cache
+	   if ( $cache = $this->cache->get( $key ) ) {
+	   	return $cache;
+	   }
 	
+	
+		$url = "http://tigerweb.geo.census.gov/ArcGIS/rest/services/Census2010/tigerWMS/MapServer/58/query?text=&geometryType=esriGeometryPoint&inSR=4326&outSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&objectIds=&where=PLACENS=$placens&time=&returnCountOnly=false&returnIdsOnly=false&returnGeometry=true&maxAllowableOffset=&outSR=&outFields=*&f=json";
+		
+		$geometry = curl_to_json($url);	
+		$geometry = $geometry['features'][0]['geometry']['rings']; 
+		
+		$geometry = array(
+						"type" => "MultiPolygon",
+						"coordinates" => array($geometry)
+					);		
+		
+		
+		$feature = array(array(
+		         'type' => 'Feature',
+				 'properties' => array('placens' => $placens),
+		         'geometry' => $geometry
+		    ));		
+		
+		
+		# Build GeoJSON feature collection array
+		$geojson = array(
+		   'type' => 'FeatureCollection',
+		   'features' => $feature
+		);		
+		
+		header("Access-Control-Allow-Origin: *");
+		header('Content-type: application/json');	    
+		echo json_encode($geojson);
+		return true;		
+		
+		
+	}
 
 	
 	function state_boundaries($state, $chamber) {
@@ -1367,8 +1408,12 @@ if(!empty($data['zip'])) {
 	
 	$municipal_zip 		= ($data['zip4']) ? $data['zip'] . '-' . $data['zip4'] : $data['zip'];	
 
+	$geojson_url = $this->config->item('democracymap_root') . '/context/city-placens/' . $data['gnis_fid']; 
+	$metadata = array(array('key' => 'geojson', 'value' => $geojson_url));
+
 	$municipal_metadata = array(array("key" => "place_id", "value" => $data['place_id']), 
-									array("key" => "gnis_fid", "value" => $data['gnis_fid']));											
+									array("key" => "gnis_fid", "value" => $data['gnis_fid']), 
+									array('key' => 'geojson', 'value' => $geojson_url));											
 	
 
 	$new_data['jurisdictions'][] = $this->jurisdiction_model('government', 'City', 'municipal', 'City', $data['city'], null, $data['place_url_updated'], null, null, null, $data['title'], $data['address1'], $data['address2'], $data['city'], $data['state'], $municipal_zip, null, $municipal_metadata, null, $elected, $data['service_discovery']);
