@@ -1456,6 +1456,8 @@ if(!empty($data['zip'])) {
 	$metadata = array(array('key' => 'geojson', 'value' => $geojson_url));
 
 	$municipal_metadata = array(array("key" => "place_id", "value" => $data['place_id']), 
+									array("key" => "geoid", "value" => $data['geoid']), 
+									array("key" => "ocd_id", "value" => $data['ocd']),
 									array("key" => "gnis_id", "value" => $data['gnis_fid']), 
 									array('key' => 'geojson', 'value' => $geojson_url));											
 	
