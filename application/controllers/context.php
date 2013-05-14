@@ -1550,7 +1550,8 @@ if (!empty($data['state_chambers']['upper']) && (!empty($data['national_chambers
 	$reps = null;
 
 	foreach($slc_reps as $slc_rep) {
-		$slc_rep['photo_url'] = (!empty($slc_rep['photo_url'])) ? $slc_rep['photo_url'] : null;	
+		$slc_rep['photo_url'] 	= (!empty($slc_rep['photo_url'])) ? $slc_rep['photo_url'] : null;	
+		$slc_rep['url']			= (!empty($slc_rep['url'])) ? $slc_rep['url'] : null;	
 		$reps[] = $this->elected_official_model('legislative', 'Senator', null, null, null, $slc_rep['full_name'], $slc_rep['url'], $slc_rep['photo_url'], null, null, null, null, null, null, null, null, null, null, null, null, null);
 
 	}			
