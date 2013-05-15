@@ -571,6 +571,42 @@ function get_dc_ward($lat, $long)	{
 }
 
 
+function dc_ward_boundary_get($id) {
+
+	$id = strtolower($id);
+
+	$key = md5( serialize("$id")) . '_dc_ward_boundary';
+
+	// Check in cache
+	if ( $cache = $this->cache->get( $key ) ) {
+		return $cache;
+	}
+
+	$url = "http://gis.govtrack.us/boundaries/dc-ward-2013/$id/shape";	
+	
+	$geometry = curl_to_json($url);		
+	
+	$feature = array(array(
+	         'type' => 'Feature',
+			 'properties' => array('id' => $id),
+	         'geometry' => $geometry
+	    ));		
+	
+	
+	# Build GeoJSON feature collection array
+	$geojson = array(
+	   'type' => 'FeatureCollection',
+	   'features' => $feature
+	);		
+	
+	header("Access-Control-Allow-Origin: *");
+	header('Content-type: application/json');	    
+	echo json_encode($geojson);
+	return true;	
+
+}
+
+
 function get_dc_anc($lat, $long)	{
 	
 
@@ -584,6 +620,41 @@ function get_dc_anc($lat, $long)	{
 
 	return $data;
 	
+}
+
+function dc_anc_boundary_get($id) {
+
+	$id = strtolower($id);
+
+	$key = md5( serialize("$id")) . '_dc_anc_boundary';
+
+	// Check in cache
+	if ( $cache = $this->cache->get( $key ) ) {
+		return $cache;
+	}
+
+	$url = "http://gis.govtrack.us/boundaries/dc-anc-2013/$id/shape";	
+	
+	$geometry = curl_to_json($url);		
+	
+	$feature = array(array(
+	         'type' => 'Feature',
+			 'properties' => array('id' => $id),
+	         'geometry' => $geometry
+	    ));		
+	
+	
+	# Build GeoJSON feature collection array
+	$geojson = array(
+	   'type' => 'FeatureCollection',
+	   'features' => $feature
+	);		
+	
+	header("Access-Control-Allow-Origin: *");
+	header('Content-type: application/json');	    
+	echo json_encode($geojson);
+	return true;	
+
 }
 
 
@@ -600,6 +671,41 @@ function get_dc_smd($lat, $long)	{
 	
 }
 
+
+function dc_smd_boundary_get($id) {
+
+	$id = strtolower($id);
+
+	$key = md5( serialize("$id")) . '_dc_smd_boundary';
+
+	// Check in cache
+	if ( $cache = $this->cache->get( $key ) ) {
+		return $cache;
+	}
+
+	$url = "http://gis.govtrack.us/boundaries/dc-smd-2013/$id/shape";	
+	
+	$geometry = curl_to_json($url);		
+	
+	$feature = array(array(
+	         'type' => 'Feature',
+			 'properties' => array('id' => $id),
+	         'geometry' => $geometry
+	    ));		
+	
+	
+	# Build GeoJSON feature collection array
+	$geojson = array(
+	   'type' => 'FeatureCollection',
+	   'features' => $feature
+	);		
+	
+	header("Access-Control-Allow-Origin: *");
+	header('Content-type: application/json');	    
+	echo json_encode($geojson);
+	return true;	
+
+}
 
 
 
@@ -1255,7 +1361,10 @@ if (!empty($data['city_smd']) && !empty($data['smd_rep'])) {
 
  // Jurisdiction
 
- 	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Single Member District', 'sub-municipal', 'Single Member District', $data['city_smd']['external_id'], $data['city_smd']['external_id'], null, null, $data['smd_rep']['email'], $data['smd_rep']['phone'], null, null, null, null, null, null, null, null, null, $elected, null);
+	$geojson_url = $this->config->item('democracymap_root') . '/context/dc-smd-boundary/' . strtolower($data['city_smd']['external_id']); 
+	$metadata = array(array('key' => 'geojson', 'value' => $geojson_url));
+
+ 	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Single Member District', 'sub-municipal', 'Single Member District', $data['city_smd']['external_id'], $data['city_smd']['external_id'], null, null, $data['smd_rep']['email'], $data['smd_rep']['phone'], null, null, null, null, null, null, null, $metadata, null, $elected, null);
 
  }
 
@@ -1275,10 +1384,15 @@ if (!empty($data['city_smd']) && !empty($data['smd_rep'])) {
 
 	}
 
+
+
+	$geojson_url = $this->config->item('democracymap_root') . '/context/dc-anc-boundary/' . strtolower($data['city_anc']['external_id']); 
+	$metadata = array(array('key' => 'geojson', 'value' => $geojson_url));
+	
  
  // Jurisdiction
 
- 	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Advisory Neighborhood Commission', 'sub-municipal', 'Advisory Neighborhood Commission', $data['city_anc']['external_id'], $data['city_anc']['external_id'], null, null, null, null, null, null, null, null, null, null, null, null, null, $elected, null);
+ 	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Advisory Neighborhood Commission', 'sub-municipal', 'Advisory Neighborhood Commission', $data['city_anc']['external_id'], $data['city_anc']['external_id'], null, null, null, null, null, null, null, null, null, null, null, $metadata, null, $elected, null);
  }
 
 
@@ -1327,7 +1441,10 @@ if(!empty($data['nyc_council'])) {
  
  // Jurisdiction
 
- 	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'City Council', 'municipal', 'City', $myrep['ward_name'], $data['city_ward']['external_id'], $myrep['ward_url'], null, null, null, null, null, null, null, null, null, null, null, null, $elected, null);
+	$geojson_url = $this->config->item('democracymap_root') . '/context/dc-ward-boundary/' . $data['city_ward']['external_id']; 
+	$metadata = array(array('key' => 'geojson', 'value' => $geojson_url));
+
+ 	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'City Council', 'municipal', 'City', $myrep['ward_name'], $data['city_ward']['external_id'], $myrep['ward_url'], null, null, null, null, null, null, null, null, null, null, $metadata, null, $elected, null);
  }
  
  

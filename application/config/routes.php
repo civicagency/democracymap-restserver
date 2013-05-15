@@ -48,6 +48,12 @@ $route['context/congressional-boundary/(:any)'] = "context/congressional_boundar
 $route['context/city-boundary/(:any)'] = "context/city_boundary/$1";
 $route['context/county-boundary/(:any)'] = "context/county_boundary/$1";
 
+$route['context/dc-ward-boundary/(:any)'] = "context/dc_ward_boundary/$1";
+$route['context/dc-anc-boundary/(:any)'] = "context/dc_anc_boundary/$1";
+$route['context/dc-smd-boundary/(:any)'] = "context/dc_smd_boundary/$1";
+
+
+
 
 
 
