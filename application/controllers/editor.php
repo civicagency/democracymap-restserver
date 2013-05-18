@@ -5,19 +5,29 @@ class Editor extends CI_Controller {
 	function __construct()
 	{
 		parent::__construct();
+		
+		// Load the Library
+		$this->load->library(array('user', 'user_manager'));
+				
 	}
 
 	function index()
 	{
 		$this->load->helper('url');
 		
-		$data = array();		
 		
-		$this->load->view('editor', $data);
+		redirect('dashboard');	
 	}
 	
 	
 	function jurisdiction($jurisdiction_id = null) {
+
+		// Must be logged in
+		if(!$this->user->validate_session()) {		
+			$this->session->set_flashdata('error_message', 'You must be logged in to view this.');			
+			redirect('login');			
+		}
+
 
 		// TODO Check to see if the person is logged in
 	

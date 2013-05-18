@@ -1,255 +1,107 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 
+/**
+ * User Controller
+ * This controller fully demonstrates the user class.
+ *
+ * @package User
+ * @author Waldir Bertazzi Junior
+ * @link http://waldir.org/
+ **/
 class Account extends CI_Controller {
-
-	function __construct()
-	{
+	
+	function __construct(){
 		parent::__construct();
-	}
-
-	function index()
-	{
-		//$this->load->helper('url');
-		redirect('account/register');		
 		
-		//$this->load->view('demo', $data);
+		// Load the Library
+		$this->load->library(array('user', 'user_manager'));
+        $this->load->helper('url');
+
 	}
 	
+	function index()
+	{		
+		// If user is already logged in, send it to main
+		$this->user->on_valid_session('account/private_page');
+		
+		// Loads the login view
+		$this->load->view('login');
+	}
+	
+	function private_page(){
+		// if user tries to direct access it will be sent to index
+		$this->user->on_invalid_session('login');
+		
+		// ... else he will view home
+		$this->load->view('docs');
+	}
+	
+	function validate()
+	{
+		// Receives the login data
+		$login = $this->input->post('login');
+		$password = $this->input->post('password');
+		
+		/* 
+		 * Validates the user input
+		 * The user->login returns true on success or false on fail.
+		 * It also creates the user session.
+		*/
+		if($this->user->login($login, $password)){
+			// Success
+			redirect('dashboard');
+		} else {
+			// Oh, holdon sir.
+			$this->session->set_flashdata('error_message', 'Invalid login or password.');
+			redirect('login');
+		}
+	}
+	
+	
+
 	
 	function register() {
 		
 		// Redirect to dashboard if they're already logged in
-		if ($this->session->userdata('email')) {
-			redirect('account/dashboard');		
+		if ($this->session->userdata('login')) {
+			redirect('dashboard');		
 		}		
 		
 		if($this->input->post('email', TRUE)) {
 			$user_form = $this->input->post();
 			
-			
-			// $user_form['password']
-			// $user_form['name'] 		
-			// $user_form['role'] 	
-			// $user_form['email'] 							
-		
+			$fullname 		= $user_form['name'];
+			$login 			= $user_form['email'];
+			$password 		= $user_form['password'];
+			$active 		= true;
+			$permissions 	= array(1, 3);
+						
 			//Check to see if all fields are complete
 		
 			//Check to see if this user is already in the system
 			
 			// If they're not add them				 	
 			
-				$this->new_user($user_form);
-				
-				// load success message
-				$data['messages']['success'] = 'User added';
-				$this->load->view('register', $data);
+			$new_user_id 	= $this->user_manager->save_user($fullname, $login, $password, $active, $permissions);						
 			
-			if(isset($data['messages']['error'])) {
-				$this->load->view('register', $data);				
+			// Success
+			if($new_user_id) {
+				$this->session->set_flashdata('success_message', 'User added');				
 			}
 			
+			$this->load->view('register', $data);
+
 				
 		} 
 		
 		else {
+			$this->session->set_flashdata('error_message', 'Error submitting form');				
+			
 			$this->load->view('register');					
 		}		
 		
 	}
 	
-	
-	
-	function login() {
-		
-		// TODO make sure they provided both username and password
-		
-		
-		// Redirect to dashboard if they're already logged in
-		if ($this->session->userdata('email')) {
-			redirect('account/dashboard');		
-		}
-		
-		
-		// Assume they provided both email and pass, authenticate it
-		if($this->check_user($this->input->post('email', TRUE), $this->input->post('password', TRUE))) {
-							
-							
-				// Load details of account
-				$user['email'] = $this->input->post('email', TRUE);
-				//$user['name'] = ;
-				
-				// Set session
-				$this->session->set_userdata($user); // email retreivable with $this->session->userdata('email')
-								
-				$data['user']['email'] = $user['email'];											
-							
-				// load success message
-				$data['messages']['success'] = 'Logged in';
-				$this->load->view('login', $data);
-				
-		} 
-		
-		else {
-			$data['messages']['success'] = 'Login failed';
-			$this->load->view('login');					
-		}		
-		
-	}	
-
-	
-	
-	function user_update() {
-
-		if($this->input->post('email', TRUE)) {
-			
-			$user = $this->check_user($this->input->post('email', TRUE), $this->input->post('password', TRUE));
-
-			// Make sure editor has admin privileges
-			if ($user) {			
-				
-				$user = $this->input->post();
-				$user['password'] = $user['new_password'];
-				unset($user['new_password']);
-
-				if($this->update_user($user)) {
-					// load success message
-					$data['messages']['success'] = 'Password updated';
-					$this->load->view('user_update', $data);					
-				} else {				
-					// updating user failed
-					$data['messages']['error'] = 'Updating user failed';											
-				}
-
-			} else {				
-				// submitted user/pass didn't validate
-				$data['messages']['error'] = "Email or password didn't validate";		
-			}
-			
-			// submitted fields didn't validate			
-			if (empty($data['messages'])) {
-				$data['messages']['error'] = "Fields didn't validate";
-			}
-			
-			if(isset($data['messages']['error'])) {
-				$this->load->view('user_update', $data);
-			}											
-
-		}
-		
-		else {
-			$this->load->view('user_update');
-		}			
-		
-	}
-	
-	
-	function update_user($user) {
-	
-		$user = $this->pass_to_hash($user);
-		
-		$this->db->where('email', $user['email']);		
-		if($this->db->update('user', $user)) {
-			return true;
-		} else {
-			return false;
-		}
-	
-		
-
-		
-	}
-	
-	
-	function new_user($user) {
-
-		// $user['name'] = 'John Doe';
-		// $user['email'] = 'me@john.com';
-		// $user['password'] = 'password';
-		// $user['role'] = 'admin';
-
-		$user = $this->pass_to_hash($user);
-		
-		$this->db->insert('user', $user);		
-		
-	}
-	
-	
-	function pass_to_hash($user) {
-		// borrowed from: http://alias.io/2010/01/store-passwords-safely-with-php-and-mysql/
-
-		// Create a 256 bit (64 characters) long random salt
-		// Let's add 'something random' and the username
-		// to the salt as well for added security
-		$salt = hash('sha256', uniqid(mt_rand(), true) . 'sandy school finder abracadabra' . strtolower($user['email']));
-
-		// Prefix the password with the salt
-		$hash = $salt . $user['password'];
-
-		// Hash the salted password a bunch of times
-		for ( $i = 0; $i < 100000; $i ++ ) {
-		  $hash = hash('sha256', $hash);
-		}
-
-		// Prefix the hash with the salt so we can find it back later
-		$hash = $salt . $hash;	
-		
-		$user['hash'] = $hash;
-		
-		//remove original password from array
-		unset($user['password']);
-		
-		return $user;		
-	}
-	
-	
-	function check_user($email, $password) {
-
-		$search = array('email' => $email);
-		$query = $this->db->get_where('user', $search);
-
-		if ($query->num_rows() > 0) {
-		   foreach ($query->result() as $rows)  {	
-
-				$user['id']							= $rows->id		 ;
-				$user['name']							= $rows->name		 ;
-				$user['email']							= $rows->email		 ;
-				$user['hash']							= $rows->hash		 ;
-				$user['role']							= $rows->role		 ;				
-
-
-		   }
-		
-			// The first 64 characters of the hash is the salt
-			$salt = substr($user['hash'], 0, 64);
-
-			$hash = $salt . $password;
-
-			// Hash the password as we did before
-			for ( $i = 0; $i < 100000; $i ++ ) {
-			  $hash = hash('sha256', $hash);
-			}
-
-			$hash = $salt . $hash;
-
-			if ( $hash == $user['hash'] ) {
-				return $user;
-			} else {
-				return false;
-			}		
-		
-		
-		} else {
-			return false;
-		}
-		
-		
-	}
-	
-	
-	function logout() {
-		$this->session->sess_destroy();
-		$this->load->view('logout_view');
-	}	
 	
 	function dashboard() {
 		
@@ -259,14 +111,28 @@ class Account extends CI_Controller {
 		
 		
 		// load view
-		$this->load->view('dashboard', $data);		
+		if($this->user->validate_session()) {		
+			$this->load->view('dashboard', $data);		
+		} 
+		else {
+			$this->session->set_flashdata('error_message', 'You must be logged in to view this.');			
+			$this->load->view('login');
+		}
 		
+		
+	}	
+	
+	
+	
+	// Simple logout function
+	function logout()
+	{
+		// Remove user session.
+		$this->user->destroy_user();
+		
+		// Bye, thanks! :)
+		$this->session->set_flashdata('success_message', 'You are now logged out.');
+		redirect('login');
 	}
-	
-
-	
-	
 }
-
-/* End of file welcome.php */
-/* Location: ./system/application/controllers/welcome.php */
+?>

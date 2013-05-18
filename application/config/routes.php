@@ -53,6 +53,12 @@ $route['context/dc-anc-boundary/(:any)'] = "context/dc_anc_boundary/$1";
 $route['context/dc-smd-boundary/(:any)'] = "context/dc_smd_boundary/$1";
 
 
+$route['login'] = "account";
+$route['logout'] = "account/logout";
+$route['dashboard'] = "account/dashboard";
+
+
+
 
 
 

@@ -5,6 +5,10 @@ class Demo extends CI_Controller {
 	function __construct()
 	{
 		parent::__construct();
+		
+		// Load the Library
+		$this->load->library(array('user', 'user_manager'));		
+		
 	}
 
 	function index()

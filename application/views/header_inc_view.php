@@ -7,5 +7,17 @@
 	      <div class="pull-right">
 	        <a href="/" role="button" class="btn btn-info">About</a>
 	        <a href="/" role="button" class="btn btn-info">API</a>
+	
+		<?php
+		 if($this->user->validate_session()):
+		?>
+		       	<a href="/logout" role="button" class="btn btn-info">Logout</a>
+		<?php
+	 	 else:
+		?>		
+				 <a href="/login" role="button" class="btn btn-info">Login</a>
+		<?php
+		 endif;
+		?>	
 	      </div>
     </header>
