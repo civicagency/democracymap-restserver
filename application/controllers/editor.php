@@ -28,9 +28,52 @@ class Editor extends CI_Controller {
 			redirect('login');			
 		}
 
+		// Save a Jurisdiction
 
-		// TODO Check to see if the person is logged in
+		// collect post data
+		// Validation
+		// insert into db
+		
+		if($this->input->post('name', TRUE)) {
+			
+			$post = $this->input->post();
+						
+
+			$posted_jurisdiction = $post;
+
+			// adjust for current datamodel mismatch with db. TODO: Fix this
+			if(!empty($post['address_city']))	$posted_jurisdiction['address_locality'] 	= $post['address_city']; unset($posted_jurisdiction['address_city']);
+			if(!empty($post['address_state']))  $posted_jurisdiction['address_region'] 		= $post['address_state']; unset($posted_jurisdiction['address_state']);
+			if(!empty($post['address_zip']))  $posted_jurisdiction['address_postcode'] 		= $post['address_zip']; unset($posted_jurisdiction['address_zip']);
+			$posted_jurisdiction['address_country'] 	= 'US';
+			
+			//$posted_jurisdiction['meta_internal_id'] 	= '';			
+			$posted_jurisdiction['meta_validated_source'] 	= 'false';			
+			$posted_jurisdiction['uid'] 					= 'ocd:temp';			
+			$posted_jurisdiction['type'] 					= 'government';			
+			$posted_jurisdiction['level'] 					= 'municipal';									
+			$posted_jurisdiction['last_updated']			= gmdate("Y-m-d H:i:s");
+			
+																								
+			
+
+			if ( $this->db->insert('jurisdictions', $posted_jurisdiction) ) {		
+				$this->session->set_flashdata('success_message', 'You successfully updated that jurisdiction');
+				redirect('dashboard');				
+			}
+			else {
+				$this->session->set_flashdata('error_message', 'There was an error updating that jurisdiction');
+				redirect('dashboard');
+			}			
+			
+
+		}
+		
+
+		
+		// redirect to dashboard with success message. 
 	
+		// Edit a Jurisdiction
 		if ($jurisdiction_id) {
 			// TODO: load existing baseline data for this jurisdiction id
 			$data = array();			
