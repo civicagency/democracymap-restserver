@@ -7,7 +7,7 @@
 	<form action="/demo/" method="get">
 		<input type="text" name="location" id="addressid" placeholder="Address or Location" />
 	</form>
-	<button id="setLocation" value="x">x</button>
+	<button style="display:none" id="setLocation" value="x">x</button>
 	
 </div>
 
