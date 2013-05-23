@@ -367,6 +367,9 @@ class Context extends REST_Controller {
 			if(!empty($data_errors)) {
 				$new_data['errors'] = $data_errors;
 			}
+			
+			// Merge entities with custom edits
+			$this->merge_custom($new_data);
 				
 			// Save to cache	
 			if (!empty($latlong)) {				
@@ -2037,10 +2040,17 @@ function test_latlong($query) {
 }
 
 // Force clear the whole cache
-public function clear_get()	{
+public function clear_get($cache_item_id = null)	{
 	
-	$this->cache->clean();
-	//var_dump($this->cache->cache_info());
+
+	//var_dump($this->cache->cache_info()); exit;
+	
+	if(!empty($cache_item_id)) {
+		$this->cache->delete($cache_item_id);
+	} else {
+		$this->cache->clean();
+	}
+	
 	
 	if (empty($_GET)) {
 		$this->load->helper('url');			
@@ -2048,6 +2058,77 @@ public function clear_get()	{
 	}
 }
 
+
+public function ocd_get() {
+	
+	if($ocd = $this->input->get('id', TRUE)) {
+		
+		if ($output = $this->cache->get( 'ocdid_' . $ocd )) {
+			$this->response($output, 200);
+		} else {
+			$this->response('Not found', 404);
+		}		
+				
+	}
+	else {
+		$this->response('Not found', 404);
+	}	 
+	
+}
+
+
+private function merge_custom($data) {
+
+	$new_jurisdictions = array();
+	$match = false;
+	
+	foreach ($data['jurisdictions'] as $jurisdiction) {
+
+		if (!empty($jurisdiction['metadata'])) {
+
+			foreach($jurisdiction['metadata'] as $metadata) {
+				if ($metadata['key'] == 'ocd_id') {					
+					$ocd_id = $metadata['value'];
+					
+					$key = 'ocdid_' . $ocd_id;
+					
+					// Save to cache if not already there	
+					// This is simply because we don't currently have a way to get 
+					// data packaged like this from the db and need it here to be able to edit
+					if ( !$this->cache->get( $key )) {
+						$this->cache->save( $key, $jurisdiction, $this->ttl);	
+					}	
+					
+					
+					// check database for any matching entries that can be merged. 
+					
+					// if matching					
+					// array mash
+					//$match = true;
+					//array_mash($primary, $secondary);
+					//$new_jurisdictions[] = $jurisdiction;
+					
+				}
+			}
+
+		} 
+		
+		if (!$match) {
+			$new_jurisdictions[] = $jurisdiction;
+		} 
+		
+		$match = false;
+		
+
+	}
+	
+	$data['jurisdictions'] = $new_jurisdictions;
+	
+	return $data;	
+	
+
+
+}
 
 
 }
