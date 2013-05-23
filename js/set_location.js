@@ -1,43 +1,68 @@
 	$(document).ready(function(){
 
 
-
-		if (navigator.geolocation) 
+		$("#setLocation").click(function() {
+			getLocation();
+		});
+		
+		if(!GetURLParameter('location')) {
+			getLocation();
+		}
+		
+		
+		function GetURLParameter(sParam)
 		{
-			navigator.geolocation.getCurrentPosition( 
+		    var sPageURL = window.location.search.substring(1);
+		    var sURLVariables = sPageURL.split('&');
+		    for (var i = 0; i < sURLVariables.length; i++)
+		    {
+		        var sParameterName = sURLVariables[i].split('=');
+		        if (sParameterName[0] == sParam)
+		        {
+		            return sParameterName[1];
+		        }
+		    }
+		};
+		
 
-				function (position) {  
+		function getLocation() {
+			if (navigator.geolocation) 
+			{
+				navigator.geolocation.getCurrentPosition( 
 
-				// Did we get the position correctly?
-			 	// alert (position.coords.latitude);
+					function (position) {  
 
-				// To see everything available in the position.coords array:
-				// for (key in position.coords) {alert(key)}
+					// Did we get the position correctly?
+				 	// alert (position.coords.latitude);
 
-				$('#addressid').attr("value", position.coords.latitude + ',' + position.coords.longitude);
-				$("form:first").submit();
+					// To see everything available in the position.coords array:
+					// for (key in position.coords) {alert(key)}
 
-				}, 
-				// next function is the error callback
-				function (error)
-				{
-					switch(error.code) 
+					$('#addressid').attr("value", position.coords.latitude + ',' + position.coords.longitude);
+					$("form:first").submit();
+
+					}, 
+					// next function is the error callback
+					function (error)
 					{
-						case error.TIMEOUT:
-							alert ('Timeout');
-							break;
-						case error.POSITION_UNAVAILABLE:
-							alert ('Position unavailable');
-							break;
-						case error.PERMISSION_DENIED:
-							alert ('Permission denied');
-							break;
-						case error.UNKNOWN_ERROR:
-							alert ('Unknown error');
-							break;
+						switch(error.code) 
+						{
+							case error.TIMEOUT:
+								alert ('Timeout');
+								break;
+							case error.POSITION_UNAVAILABLE:
+								alert ('Position unavailable');
+								break;
+							case error.PERMISSION_DENIED:
+								alert ('Permission denied');
+								break;
+							case error.UNKNOWN_ERROR:
+								alert ('Unknown error');
+								break;
+						}
 					}
+					);
 				}
-				);
-			}
+		}
 
  });
