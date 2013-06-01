@@ -1496,7 +1496,7 @@ if(!empty($data['nyc_council'])) {
 
 
 
- 	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'City Council', 'municipal', 'City', $myrep['ward_name'], $data['city_ward']['external_id'], $myrep['ward_url'], null, null, null, null, null, null, null, null, null, null, $metadata, null, $elected, null);
+ 	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'City Council', 'sub-municipal', 'City', $myrep['ward_name'], $data['city_ward']['external_id'], $myrep['ward_url'], null, null, null, null, null, null, null, null, null, null, $metadata, null, $elected, null);
  }
  
  
@@ -2125,6 +2125,9 @@ public function ocd_get() {
 	
 }
 
+// merge_custom actually combines two functions 
+// 1) it saves a version of the scraped data to the cache and 
+// 2) checks in the db for custom data and merges as needed
 
 private function merge_custom($data) {
 

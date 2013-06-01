@@ -44,7 +44,7 @@
 	
     <div class="control-group">
       <label class="control-label" for="input-<?php echo $fieldname?>"><?php echo $fieldtitle?></label>
-      <div class="controls"><input type="text" id="input<?php echo $fieldname?>" name="<?php echo $fieldname?>" value="<?php echo $value ?>"></div>
+      <div class="controls"><input type="text" id="input-<?php echo $fieldname?>" name="<?php echo $fieldname?>" value="<?php echo $value ?>"></div>
     </div>		
 		
 	<?php
@@ -54,6 +54,21 @@
      <input type="submit" class="btn btn-success" value="Save" /> 
     
     </fieldset>
+
+	<?php
+	
+	foreach ($metadata as $fieldname => $value) {
+		
+		$fieldtitle = ucwords(str_replace('_', ' ', $fieldname));
+		
+	?>
+
+		<input type="hidden" id="input-<?php echo $fieldname?>" name="<?php echo $fieldname?>" value="<?php echo $value ?>">
+
+	<?php
+	}	
+	?>
+
   </div>
 </div>
 

@@ -56,6 +56,29 @@ foreach ($jurisdictions['jurisdictions'] as $jurisdiction) {
 		
 	<?php
 	}
+	
+	
+
+
+	// If we're logged in and we have an ocd_id for this jurisdiction, provide an edit link
+	if($this->user->validate_session()) {
+
+		if (!empty($jurisdiction['metadata'])) {
+
+			foreach($jurisdiction['metadata'] as $metadata) {
+				if ($metadata['key'] == 'ocd_id'):
+				?>	
+
+					<a href="/editor/jurisdiction/?id=<?php echo $metadata['value']; ?>" role="button" class="btn btn-info">Edit Jurisdiction</a>
+
+				<?php	
+				endif;
+			}
+		}
+	}
+	
+	
+	
 
 	// Set up the map if we have one
 	
@@ -101,9 +124,7 @@ foreach ($jurisdictions['jurisdictions'] as $jurisdiction) {
 		<div class="phone"><?php echo $jurisdiction['phone']; ?></div>
 	<?php endif; ?>
 	
-	
-	
-	
+
 	
 	
 	
