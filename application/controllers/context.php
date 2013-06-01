@@ -1364,8 +1364,35 @@ if (!empty($data['city_smd']) && !empty($data['smd_rep'])) {
 
  // Jurisdiction
 
+
+	preg_match_all("/\d{1,2}[a-zA-Z]{1}/", $data['city_smd']['external_id'], $matches);
+
+	if($matches[0][0]) {
+		$anc_id = $matches[0][0];				
+	}
+	
+	$matches = null;
+
+	preg_match_all("/\d{1,2}/", $data['city_smd']['external_id'], $matches);
+
+	if($matches[0][0]) {
+		$ward_id = $matches[0][0];	
+	}
+	
+	$matches = null;
+
+
+ 	if($data['ocd'] && !empty($ward_id)) {
+		$ocd_id = strtolower($data['ocd'] . '/ward:' . $ward_id . '/anc:' . $anc_id . '/smd:' . $data['city_smd']['external_id']);
+	}
+
+	$ward_id = null;
+
+
 	$geojson_url = $this->config->item('democracymap_root') . '/context/dc-smd-boundary/' . strtolower($data['city_smd']['external_id']); 
 	$metadata = array(array('key' => 'geojson', 'value' => $geojson_url));
+	if($ocd_id) $metadata[] = array('key' => 'ocd_id', 'value' => $ocd_id);
+	$ocd_id = null;
 
  	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Single Member District', 'sub-municipal', 'Single Member District', $data['city_smd']['external_id'], $data['city_smd']['external_id'], null, null, $data['smd_rep']['email'], $data['smd_rep']['phone'], null, null, null, null, null, null, null, $metadata, null, $elected, null);
 
@@ -1386,14 +1413,28 @@ if (!empty($data['city_smd']) && !empty($data['smd_rep'])) {
 		$elected[] = $this->elected_official_model('legislative', $title, null, $anc_rep['first_name'], $anc_rep['last_name'], $name_full, null, null, null, null, $anc_rep['email'], $anc_rep['phone'], null, $anc_rep['address'], null, null, null, $anc_rep['zip'], null, null, null);
 
 	}
+	
+	
+ // Jurisdiction
+	
+	preg_match_all("/\d{1,2}/", $data['city_anc']['external_id'], $matches);
+
+	if($matches[0][0]) {
+		$ward_id = $matches[0][0];		
+	}
 
 
+    if($data['ocd'] && !empty($ward_id)) {
+		$ocd_id = strtolower($data['ocd'] . '/ward:' . $ward_id . '/anc:' . $data['city_anc']['external_id']);
+	}
 
+	
 	$geojson_url = $this->config->item('democracymap_root') . '/context/dc-anc-boundary/' . strtolower($data['city_anc']['external_id']); 
 	$metadata = array(array('key' => 'geojson', 'value' => $geojson_url));
 	
+	if($ocd_id) $metadata[] = array('key' => 'ocd_id', 'value' => $ocd_id);
  
- // Jurisdiction
+
 
  	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'Advisory Neighborhood Commission', 'sub-municipal', 'Advisory Neighborhood Commission', $data['city_anc']['external_id'], $data['city_anc']['external_id'], null, null, null, null, null, null, null, null, null, null, null, $metadata, null, $elected, null);
  }
@@ -1444,8 +1485,16 @@ if(!empty($data['nyc_council'])) {
  
  // Jurisdiction
 
+	if($data['ocd']) {
+		$ocd_id = strtolower($data['ocd'] . '/ward:' . $data['city_ward']['external_id']);
+	}
+
+
 	$geojson_url = $this->config->item('democracymap_root') . '/context/dc-ward-boundary/' . $data['city_ward']['external_id']; 
 	$metadata = array(array('key' => 'geojson', 'value' => $geojson_url));
+	if($ocd_id) $metadata[] = array('key' => 'ocd_id', 'value' => $ocd_id);
+
+
 
  	$new_data['jurisdictions'][] = $this->jurisdiction_model('legislative', 'City Council', 'municipal', 'City', $myrep['ward_name'], $data['city_ward']['external_id'], $myrep['ward_url'], null, null, null, null, null, null, null, null, null, null, $metadata, null, $elected, null);
  }
