@@ -21,7 +21,7 @@ class Context extends REST_Controller {
 
 	public function index_get()	{
 		
-		//$this->cache->clean();
+		// $this->cache->clean();
 		
 		if (empty($_GET)) {
 			$this->load->helper('url');			
@@ -40,6 +40,11 @@ class Context extends REST_Controller {
 			$key 						= $data['input'] . '_context';
 
 
+			/* ############
+			
+			commenting this out for now since there's no way to know if 
+			this needs to be cleared based on custom edits
+			
 			if (!$this->test_latlong($data['input'])) {
 				
 				// Check in cache		
@@ -49,6 +54,7 @@ class Context extends REST_Controller {
 				
 			}
 			
+			############ */
 		
 			
 			// Geocode our address (if needed)
@@ -369,7 +375,11 @@ class Context extends REST_Controller {
 			}
 			
 			// Merge entities with custom edits
-			$this->merge_custom($new_data);
+			// This should include some permission/trust logic parameters passed by the user
+			// eg merge_custom($new_data, $this->input->get('trust', TRUE);)
+			if(!empty($new_data['jurisdictions'])) {
+				$new_data = $this->merge_custom($new_data);				
+			}
 				
 			// Save to cache	
 			if (!empty($latlong)) {				
@@ -2140,25 +2150,54 @@ private function merge_custom($data) {
 
 			foreach($jurisdiction['metadata'] as $metadata) {
 				if ($metadata['key'] == 'ocd_id') {					
+	
 					$ocd_id = $metadata['value'];
+					$mashed_jurisdiction = null;
+					$custom_jurisdiction = null;
 					
-					$key = 'ocdid_' . $ocd_id;
+					// check database for any matching entries that can be merged. 
+					// assumes the last edited copy is the one we want to work with
+
+					$this->db->order_by('last_updated', 'DESC');
+					$this->db->limit(1);
+					$query = $this->db->get_where('jurisdictions', array('uid' => $ocd_id));
+
+					foreach ($query->result() as $row) {
+							$custom_jurisdiction = $row;					
+					}
 					
+					
+					if ($custom_jurisdiction) {
+						$match = true;
+							
+						// normalize custom jurisdiction with data model
+						$this->load->model('democracymap_model', 'democracymap');
+						$template_jurisdiction = $this->democracymap->jurisdiction();						
+						$custom_jurisdiction = array_mash($template_jurisdiction, $custom_jurisdiction);
+						
+
+						// merge custom with original
+						$mashed_jurisdiction = array_mash($custom_jurisdiction, $jurisdiction);
+												
+						$new_jurisdictions[] = $mashed_jurisdiction;						
+						
+					}
+					
+	
 					// Save to cache if not already there	
 					// This is simply because we don't currently have a way to get 
 					// data packaged like this from the db and need it here to be able to edit
-					if ( !$this->cache->get( $key )) {
-						$this->cache->save( $key, $jurisdiction, $this->ttl);	
-					}	
+					$key = 'ocdid_' . $ocd_id;
+					
+					// probably only need a conditional to only save for mashed_jurisdictions
+					//if ( !$this->cache->get( $key )) {
+						$save = ($mashed_jurisdiction) ? $mashed_jurisdiction : $jurisdiction;
+						$this->cache->save( $key, $save, $this->ttl);	
+					//}					
 					
 					
-					// check database for any matching entries that can be merged. 
-					
-					// if matching					
-					// array mash
-					//$match = true;
-					//array_mash($primary, $secondary);
-					//$new_jurisdictions[] = $jurisdiction;
+					break;					
+
 					
 				}
 			}
@@ -2173,6 +2212,11 @@ private function merge_custom($data) {
 		
 
 	}
+	
+	   // header('Content-type: application/json');
+	   // print json_encode($new_jurisdictions);						
+	   // exit;	
+	
 	
 	$data['jurisdictions'] = $new_jurisdictions;
 	
