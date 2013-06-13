@@ -69,12 +69,12 @@ class Context extends REST_Controller {
 			else {
 						
 				if ($location 	= $this->geocoder->geocode(urlencode($data['input']))) {
-					$data 		= array_merge($data, $location);			
+					$data 		= array_merge($data, $location);		
 					$latlong 	= $data['latitude'] . " " . $data['longitude'];					
 				}			
 
 			} 
-			
+						
 			if (empty($latlong)) {
 				$data_errors[] = 'The location could not be geocoded';
 			}					
@@ -1172,14 +1172,11 @@ function process_state_legislators($representatives) {
 							'state' => $repdata['state'], 
 							);
 				
-				// there are some missing fields on some entries, check for that
-				if(isset($repdata['photo_url'])){
-					$rep['photo_url'] = $repdata['photo_url'];
-				}
-				
-				if(isset($repdata['url'])){
-					$rep['url'] = $repdata['url'];
-				}				
+				// there are some missing fields on some entries, check for that				
+				$rep['photo_url'] = (!empty($repdata['photo_url'])) ? $repdata['photo_url'] : null;
+				$rep['url'] 	  = (!empty($repdata['url'])) ? $repdata['url'] : null;							
+				$rep['email'] 	  = (!empty($repdata['email'])) ? $repdata['email'] : null;											
+				$rep['phone'] 	  = (!empty($repdata['+phone'])) ? $repdata['+phone'] : (!empty($repdata['offices'][0]['phone'])) ? $repdata['offices'][0]['phone']: null;								
 				
 							
 		
@@ -1694,9 +1691,10 @@ if (!empty($data['state_chambers']['lower'])) {
 
 	$slc_reps = $data['state_chambers']['lower'][$rep_id]['reps'];	
 	foreach($slc_reps as $slc_rep) { 		
-		$slc_rep['photo_url'] = (!empty($slc_rep['photo_url'])) ? $slc_rep['photo_url'] : null;
-		$reps[] = $this->elected_official_model('legislative', 'Representative', null, null, null, $slc_rep['full_name'], $slc_rep['url'], $slc_rep['photo_url'], null, null, null, null, null, null, null, null, strtoupper($slc_rep['state']), null, null, null, null);		
+		$reps[] = $this->elected_official_model('legislative', 'Representative', null, null, null, $slc_rep['full_name'], $slc_rep['url'], $slc_rep['photo_url'], null, null, $slc_rep['email'], $slc_rep['phone'], null, null, null, null, strtoupper($slc_rep['state']), null, null, null, null);		
 	}
+
+	# $this->elected_official_model($type, $title, $description, $name_given, $name_family, $name_full, $url, $url_photo, $url_schedule, $url_contact, $email, $phone, $address_name, $address_1, $address_2, $address_city, $address_state, $address_zip, $current_term_enddate, $last_updated, $social_media);
 
 	# $this->jurisdiction_model($type, $type_name, $level, $level_name, $name, $id, $url, $url_contact, $email, $phone, $address_name, $address_1, $address_2, $address_city, $address_state, $address_zip, $last_updated, $metadata, $social_media, $elected_office, $service_discovery);
 
@@ -1731,11 +1729,12 @@ if (!empty($data['state_chambers']['upper']) && (!empty($data['national_chambers
 	$reps = null;
 
 	foreach($slc_reps as $slc_rep) {
-		$slc_rep['photo_url'] 	= (!empty($slc_rep['photo_url'])) ? $slc_rep['photo_url'] : null;	
-		$slc_rep['url']			= (!empty($slc_rep['url'])) ? $slc_rep['url'] : null;	
-		$reps[] = $this->elected_official_model('legislative', 'Senator', null, null, null, $slc_rep['full_name'], $slc_rep['url'], $slc_rep['photo_url'], null, null, null, null, null, null, null, null, null, null, null, null, null);
+		$reps[] = $this->elected_official_model('legislative', 'Senator', null, null, null, $slc_rep['full_name'], $slc_rep['url'], $slc_rep['photo_url'], null, null, $slc_rep['email'], $slc_rep['phone'], null, null, null, null, null, null, null, null, null);
 
 	}			
+
+	# $this->elected_official_model($type, $title, $description, $name_given, $name_family, $name_full, $url, $url_photo, $url_schedule, $url_contact, $email, $phone, $address_name, $address_1, $address_2, $address_city, $address_state, $address_zip, $current_term_enddate, $last_updated, $social_media);
+
 			
 	// Jurisdiction						
 
