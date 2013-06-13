@@ -28,9 +28,11 @@ class democracymap_model extends CI_Model {
 		
 		//$this->jurisdictions	= array($this->jurisdiction($metadata, $social_media, $officials, $service_discovery));
 			
-		$this->protected_fields	= $this->restricted();		
-		$this->jurisdictions	= array($this->jurisdiction());
-		$this->officials		= array($this->official());		
+		$this->protected_fields				= $this->restricted();	
+		$this->protected_fields_officials	= $this->restricted_officials();		
+			
+		$this->jurisdictions				= array($this->jurisdiction());
+		$this->officials					= array($this->official());		
 
 	}
 	
@@ -72,6 +74,16 @@ class democracymap_model extends CI_Model {
 	public function restricted() {
 		
 		$restricted = array('type', 'type_name', 'level_name', 'level', 'id', 'last_updated', 'metadata', 'social_media', 'elected_office', 'service_discovery');
+		
+		return $restricted;
+		
+	}		
+		
+		
+	// non-editable fields
+	public function restricted_officials() {
+		
+		$restricted = array('type','last_updated');
 		
 		return $restricted;
 		
