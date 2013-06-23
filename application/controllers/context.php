@@ -338,7 +338,23 @@ class Context extends REST_Controller {
 					$data['nyc_council'] 			= $this->nyc->get_city_council($latlong, $this->democracymap);
 					$data['nyc_community_boards'] 	= $this->nyc->get_community_board($latlong, $this->democracymap);								
 					$data['nyc_officials']			= $this->nyc->get_officials($this->democracymap);
+			}		
+			
+			
+			// Boston Hyperlocal data
+			// https://djq.cartodb.com/ council_districts
+			// place_id = 07000
+			// state_id = 25	
+			if (!empty($data['place_id']) && !empty($data['state_id']) && $data['place_id'] == '07000' && $data['state_id'] == '25') {
+					$this->load->model('boston_model', 'boston');
+					$this->load->model('democracymap_model', 'democracymap');
+				
+					$data['boston_council'] 			= $this->boston->get_city_council('https://djq.cartodb.com', $latlong, $this->democracymap);
+					//$data['boston_officials']			= $this->boston->get_officials($this->democracymap);
 			}			
+			
+			
+			
 			
 
 			
@@ -1470,6 +1486,15 @@ if(!empty($data['nyc_council'])) {
 	$new_data['jurisdictions'][] = $data['nyc_council'];
 	
 }
+
+if(!empty($data['boston_council'])) {
+
+	$new_data['jurisdictions'][] = $data['boston_council'];
+	
+}
+
+
+
 
 	
 
