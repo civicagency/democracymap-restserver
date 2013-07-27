@@ -21,7 +21,6 @@ if (!empty($load_open311)):
 </script>
 
 <script type="text/javascript">
-  // when the dom's ready
 
 	function set_open311(feed_id, url) {
 
@@ -29,38 +28,6 @@ if (!empty($load_open311)):
 
 	  service_requests = '';
 
-      // build a simple user object, in a real app this
-      // would probably come from a server somewhere.
-      // Otherwise hardcoding here is just silly.
-	
-	console.log('hello' + url);
-	
-	
-	
-	//	open311data = {
-	//	    "service_request_id": "101000865574",
-	//	    "token": "51c733cb0882cf637500053a",
-	//	    "status": "open",
-	//	    "service_name": "Other",
-	//	    "service_code": "4e658b2821ecf3e0a900003e",
-	//	    "description": "cars constantly blocking crosswalk, with police cruisers going by constantly",
-	//	    "requested_datetime": "2013-06-23T13:43:39-04:00",
-	//	    "updated_datetime": "2013-06-23T13:43:41-04:00",
-	//	    "address": "310 Bowdoin St Boston, MA 02125",
-	//	    "lat": 42.30796,
-	//	    "long": -71.065308,
-	//	    "media_url": "https://mayors24.cityofboston.gov/attachments/report/51c733cb0882cf637500053a/photo/Report.jpg"
-	//	}	
-	//	
-  	//	service_requests = ich.open311(open311data);
-    //	
-  	//	// append it to the list, tada!
-  	//	//Now go do something more useful with this.
-  	//	open311_id = '#' + feed_id;
-  	//	$(open311_id).append(service_requests);	
- 
-	
-	
 	$.getJSON(url, function(open311_data) {
 		
       // Here's all the magic.

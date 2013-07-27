@@ -29,8 +29,7 @@ class Demo extends CI_Controller {
 		
 		
 		$data['view'] = 'demo';
-		
-		
+		$data['options'] = array('show311' => $this->config->item('show311'));
 			
 		
 		// See if we have google analytics tracking code

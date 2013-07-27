@@ -109,25 +109,28 @@ foreach ($jurisdictions['jurisdictions'] as $jurisdiction) {
 		
 	}	
 	
-	if (!empty($jurisdiction['service_discovery'])) {		
-		foreach ($jurisdiction['service_discovery']['endpoints'] as $endpoint) {
-			if($endpoint['type'] == 'production') {
-				foreach($endpoint['formats'] as $format) {
-					if ($format == 'application/json') {
+	if ($options['show311']) {			
+		if (!empty($jurisdiction['service_discovery'])) {		
+			foreach ($jurisdiction['service_discovery']['endpoints'] as $endpoint) {
+				if($endpoint['type'] == 'production') {
+					foreach($endpoint['formats'] as $format) {
+						if ($format == 'application/json') {
 						
-						$open311_id = 'open311-' . $count311; $count311++;
-						$open311_url = '/context/service_requests?url=' . $endpoint['url'] . '/requests.json';
-						$load_open311[] = array('uid' => $open311_id, 'url' => $open311_url);
-						?>
+							$open311_id = 'open311-' . $count311; $count311++;
+							$open311_url = '/context/service_requests?url=' . $endpoint['url'] . '/requests.json';
+							$load_open311[] = array('uid' => $open311_id, 'url' => $open311_url);
+							?>
 						
-						<div id="<?php echo $open311_id ?>" class="open311feed"></div>						
+							<h5>Recent Service Requests</h5>
+							<div id="<?php echo $open311_id ?>" class="open311feed"></div>						
 						
-						<?php
+							<?php
+						}
 					}
 				}
 			}
-		}
 		
+		}
 	}
 	
 	$value = null;
