@@ -22,6 +22,7 @@ if (!empty($jurisdictions['jurisdictions'])) {
 	
 
 <?php
+$count311 = 1;
 foreach ($jurisdictions['jurisdictions'] as $jurisdiction) {
 ?>	
 
@@ -82,10 +83,10 @@ foreach ($jurisdictions['jurisdictions'] as $jurisdiction) {
 
 	// Set up the map if we have one
 	
+	$uid = 'type:' . $jurisdiction['type'] . '/level:' . $jurisdiction['level'] . '/id:' . $jurisdiction['id'];	
+	
 	if (!empty($jurisdiction['metadata'])) {
-		
-		$uid = 'type:' . $jurisdiction['type'] . '/level:' . $jurisdiction['level'] . '/id:' . $jurisdiction['id'];
-		
+				
 		foreach($jurisdiction['metadata'] as $metadata) {
 			if ($metadata['key'] == 'geojson') {
 				
@@ -105,10 +106,32 @@ foreach ($jurisdictions['jurisdictions'] as $jurisdiction) {
 				break;
 			}
 		}
-		$value = null;
-		$uid = null;
 		
 	}	
+	
+	if (!empty($jurisdiction['service_discovery'])) {		
+		foreach ($jurisdiction['service_discovery']['endpoints'] as $endpoint) {
+			if($endpoint['type'] == 'production') {
+				foreach($endpoint['formats'] as $format) {
+					if ($format == 'application/json') {
+						
+						$open311_id = 'open311-' . $count311; $count311++;
+						$open311_url = '/context/service_requests?url=' . $endpoint['url'] . '/requests.json';
+						$load_open311[] = array('uid' => $open311_id, 'url' => $open311_url);
+						?>
+						
+						<div id="<?php echo $open311_id ?>" class="open311feed"></div>						
+						
+						<?php
+					}
+				}
+			}
+		}
+		
+	}
+	
+	$value = null;
+	$uid = null;
 	
 	
 	if (!empty($jurisdiction['url'])):

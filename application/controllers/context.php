@@ -489,6 +489,22 @@ class Context extends REST_Controller {
 	}	
 	
 	
+	function service_requests_get($url = null) {	
+		
+		$url = $this->input->get('url', TRUE);
+		
+		if ($requests = curl_to_json($url)) {
+			header("Access-Control-Allow-Origin: *");
+			header('Content-type: application/json');	    
+			echo json_encode($requests);
+			return true;			
+		} else {
+			return false;
+		}
+
+	}
+	
+	
 	
 	
 	
