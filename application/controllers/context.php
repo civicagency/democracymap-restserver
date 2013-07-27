@@ -2200,7 +2200,7 @@ private function merge_custom($data) {
 
 					$this->db->order_by('last_updated', 'DESC');
 					$this->db->limit(1);
-					$query = $this->db->get_where('jurisdictions', array('uid' => $ocd_id));
+					$query = $this->db->get_where('edited_jurisdictions', array('uid' => $ocd_id));
 
 					foreach ($query->result() as $row) {
 							$custom_jurisdiction = $row;					

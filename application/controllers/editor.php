@@ -244,7 +244,7 @@ class Editor extends CI_Controller {
 																								
 			
 
-			if ( $this->db->insert('jurisdictions', $posted_jurisdiction) ) {		
+			if ( $this->db->insert('edited_jurisdictions', $posted_jurisdiction) ) {		
 				$this->session->set_flashdata('success_message', 'You successfully updated that jurisdiction');
 				redirect('dashboard');				
 			}
