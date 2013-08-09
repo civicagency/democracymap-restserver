@@ -106,7 +106,7 @@ class Geocoder_model extends CI_Model {
 	}
 	
 
-	function state_abbr($abbr) {
+	function state_abbr($abbr = null) {
 		
 	    $state["AL"] = "Alabama";
 	    $state["AK"] = "Alaska";
@@ -165,8 +165,13 @@ class Geocoder_model extends CI_Model {
 	    $state["WI"] = "Wisconsin";
 	    $state["WY"] = "Wyoming";	
 		
-		
-		return $state[$abbr];		
+		if(!empty($abbr)) {
+			return $state[$abbr];					
+		} else {
+			return $state;
+		}
+	
+
 	}
 	
 	
