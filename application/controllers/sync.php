@@ -123,11 +123,15 @@ class Sync extends CI_Controller {
 									// ensure we actually have the ocdid for this gov
 									if(!empty($ocdid[$gov_name])) {
 										
-										// get current data from db and merge
+										// check for current data from db to merge
 										
 										// add the ocdid to the object for the official
 										$official['meta_ocd_id'] = $ocdid[$gov_name];
 										
+										// remove temporary fields
+										unset($official['government_name']);
+										unset($official['government_level']);
+																				
 										// get existing entry
 										$this->db->select('*');		
 										$this->db->where('meta_ocd_id', $official['meta_ocd_id']);			
@@ -140,22 +144,123 @@ class Sync extends CI_Controller {
 										if ($query->num_rows() > 0) {
 										   $official_existing = $query->row(); 		
 										
+											// Existing entry found, run a comparison
+																				
+											// remove any existing fields not used in new copy as to only compare changes 
+											foreach ($official_existing as $field => $value) {												
+												if(empty($official[$field])) {
+													unset($official[$field]);													
+												}												
+											}
+											
+										
 											// check to see if there are any differences between existing and new data
-											
+											$diff = array_diff_assoc($official, $official_existing);
+																						
 											// if there are no differences, then skip
+											if(empty($diff)) {
+												
+												continue;
+												
+											// if there are differences
+											} else {
+												
+												// add conflicts from diff to conflicts field
+												if(!empty($official_existing['conflicting_data'])) {
+													
+													$conflicts = json_decode($official_existing['conflicting_data']);
+													
+													// check to see if any of these conflicts already exist													
+													foreach ($diff as $diff_field => $diff_value) {
+														
+														
+														$duplicate = array();
+														
+														foreach ($conflicts as $conflict) {
+
+															// see if this same key/value from the new data was already logged
+															if($diff_field == $conflict['field'] && $official[$diff_field] == $conflict['value'] ) {
+																$duplicate['new'] = true;
+															}
+															
+															// see if this same key/value from the old data was already logged															
+															if($diff_field == $conflict['field'] && $official_existing[$diff_field] == $conflict['value'] ) {
+																$duplicate['old'] = true;
+															}															
+															
+																											
+														}														
+														
+														// if the new value isn't already listed, add it
+														if(empty($duplicate['new'])) {
+															$conflicts[] = array(
+																				"field" => $diff_field,
+																				"value" => $official[$diff_field], 
+																				"source" => $official['source'],
+																				"timestamp" => gmdate("Y-m-d H:i:s")
+																				);																		
+																				
+														} 
+														
+														// if the old value isn't already listed, add it														
+														if(empty($duplicate['old'])) {
+															$conflicts[] = array(
+																				"field" => $diff_field,
+																				"value" => $official_existing[$diff_field], 
+																				"source" => NULL,
+																				"timestamp" => gmdate("Y-m-d H:i:s")
+																				);															
+														}														
+														
+														
+													}
+													
+
+													
+													
+												// otherwise create a fresh entry for conflicts	
+												} else {
+													
+													$conflicts = array();
+													
+													foreach($diff as $diff_field => $value) {
+														
+														$conflicts[] = array(
+																			"field" => $diff_field,
+																			"value" => $official[$diff_field], 
+																			"source" => $official['source'],
+																			"timestamp" => gmdate("Y-m-d H:i:s")
+																			);
+																			
+														$conflicts[] = array(
+																			"field" => $diff_field,
+																			"value" => $official_existing[$diff_field], 
+																			"timestamp" => gmdate("Y-m-d H:i:s")
+																			);														
+
+													}
+													
+												}												
+												
+												
+												// overwrite old values with new
+												foreach($diff as $diff_field => $value) {
+													$official_existing[$diff_field] = $value;
+												}
+												
+												$official_existing['conflicting_data'] = json_encode($conflicts);
+												
+												// add new source or update timestamp on existing entry
+												
+												// update db
 											
-											// if there are differences, check for conflicts, merge, and generate update for conflicts field
+											}
 											
-											// add new source or update timestamp on existing entry
+
 										
 										} else {
 											
-											// add as new entry in the database
-											
-											// remove temporary fields
-											unset($official['government_name']);
-											unset($official['government_level']);											
-											
+											// add as brand new entry in the database
 											$this->db->insert('scraped_officials', $official);
 											
 										}									
