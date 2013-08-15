@@ -82,7 +82,7 @@ class Sync extends CI_Controller {
 						
 						// total
 						$total = $tables['officials']['count'];
-						$count = 1;
+						$count = 0;
 						$pagesize = 1000;
 						
 						while (($count * $pagesize) <= $total) {
@@ -108,9 +108,13 @@ class Sync extends CI_Controller {
 									
 									// if we don't have an ocdid yet, get one
 									if(empty($ocdid[$gov_name])) {	
+											
+										// echo "looking up " . $official['government_name'] . '<br />';	
 																			
 										// Get the OCDID for this jurisdiction
 										$ocdid[$gov_name] = $this->determine_ocdid($official);										
+										
+										// echo "looked up " . $ocdid[$gov_name] . '<br />';
 										
 										// if the lookup failed, skip it
 										if ($ocdid[$gov_name] === false) {
@@ -130,7 +134,7 @@ class Sync extends CI_Controller {
 										
 										// remove temporary fields
 										unset($official['government_name']);
-										unset($official['government_level']);
+										unset($official['government_level']);																		
 																				
 										// get existing entry
 										$this->db->select('*');		
@@ -142,8 +146,8 @@ class Sync extends CI_Controller {
 
 										// If existing entry found, run a comparison
 										if ($query->num_rows() > 0) {
-										   $official_db = $query->row(); 		
-																				
+										   $official_db = $query->row_array(); 		
+																														
 											// remove any existing fields not used in new copy as to only compare changes 
 											foreach ($official_db as $field => $value) {												
 												if(empty($official[$field])) {
@@ -152,9 +156,10 @@ class Sync extends CI_Controller {
 											}
 											
 											// temporarily remove source field before comparison
-											$official_source = $official['source'];
-											unset($official['source']);
+											$official_source = $official['sources'];
+											unset($official['sources']);
 										
+								
 											// check to see if there are any differences between existing and new data
 											$diff = array_diff_assoc($official, $official_db);
 																						
@@ -278,7 +283,7 @@ class Sync extends CI_Controller {
 													if(!$duplicate) {
 														
 														// Set timestamp if not already
-														if(empty($official_source[0]['timestamp']) {
+														if(empty($official_source[0]['timestamp'])) {
 															$official_source[0]['timestamp'] =  gmdate("Y-m-d H:i:s");
 														} 
 														
@@ -296,6 +301,9 @@ class Sync extends CI_Controller {
 												
 												
 												// todo: insert/merge anything from the other_data field
+												
+												// set current timestamp
+												$official_db['last_updated'] = gmdate("Y-m-d H:i:s");
 																																			
 												// update db
 												$this->db->where('meta_ocd_id', $official_db['meta_ocd_id']);			
@@ -303,6 +311,8 @@ class Sync extends CI_Controller {
 												$this->db->where('title', $official_db['title']);																								
 												$this->db->update('officials_scraped', $official_db);												
 														
+												//echo "just updated " . $official_db['name_full'] . ' for ' . $official_db['meta_ocd_id'] . "<br />";
+											
 											
 											}
 											
@@ -311,9 +321,14 @@ class Sync extends CI_Controller {
 										} else {											
 											
 											// add as brand new entry in the database
+											
+											// set current timestamp
+											$official['last_updated'] = gmdate("Y-m-d H:i:s");																								
 																																										
 											// add to the db															
 											$this->db->insert('scraped_officials', $official);
+											
+											//echo "just added " . $official['name_full'] . ' for ' . $official['meta_ocd_id'] . "<br />";
 											
 										}									
 										
@@ -339,6 +354,7 @@ class Sync extends CI_Controller {
 					// scraper data not available. eg scraperwiki not responding to this api call
 
 					// log this error	
+					// echo "scraper data not available. eg scraperwiki not responding to this api call";
 				}					
 				
 						
@@ -389,9 +405,11 @@ class Sync extends CI_Controller {
 
 				$description = "Unable to lookup OCD ID for {$gov['level']} {$gov['name']} {$gov['address_region']}";
 
+				$sources = json_decode($gov['sources'], true);
+
 				// log this
 				$data = array (
-								'source' => $gov['source'],
+								'source' => $sources[0]['url'],
 								'type' => 'jurisdiction', 
 								'description' => $description,
 								'timestamp' => gmdate("Y-m-d H:i:s")								
