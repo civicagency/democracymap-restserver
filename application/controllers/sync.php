@@ -140,22 +140,23 @@ class Sync extends CI_Controller {
 
 										$query = $this->db->get('scraped_officials');
 
-
+										// If existing entry found, run a comparison
 										if ($query->num_rows() > 0) {
-										   $official_existing = $query->row(); 		
-										
-											// Existing entry found, run a comparison
+										   $official_db = $query->row(); 		
 																				
 											// remove any existing fields not used in new copy as to only compare changes 
-											foreach ($official_existing as $field => $value) {												
+											foreach ($official_db as $field => $value) {												
 												if(empty($official[$field])) {
 													unset($official[$field]);													
 												}												
 											}
 											
+											// temporarily remove source field before comparison
+											$official_source = $official['source'];
+											unset($official['source']);
 										
 											// check to see if there are any differences between existing and new data
-											$diff = array_diff_assoc($official, $official_existing);
+											$diff = array_diff_assoc($official, $official_db);
 																						
 											// if there are no differences, then skip
 											if(empty($diff)) {
@@ -166,9 +167,9 @@ class Sync extends CI_Controller {
 											} else {
 												
 												// add conflicts from diff to conflicts field
-												if(!empty($official_existing['conflicting_data'])) {
+												if(!empty($official_db['conflicting_data'])) {
 													
-													$conflicts = json_decode($official_existing['conflicting_data']);
+													$conflicts = json_decode($official_db['conflicting_data']);
 													
 													// check to see if any of these conflicts already exist													
 													foreach ($diff as $diff_field => $diff_value) {
@@ -184,7 +185,7 @@ class Sync extends CI_Controller {
 															}
 															
 															// see if this same key/value from the old data was already logged															
-															if($diff_field == $conflict['field'] && $official_existing[$diff_field] == $conflict['value'] ) {
+															if($diff_field == $conflict['field'] && $official_db[$diff_field] == $conflict['value'] ) {
 																$duplicate['old'] = true;
 															}															
 															
@@ -206,7 +207,7 @@ class Sync extends CI_Controller {
 														if(empty($duplicate['old'])) {
 															$conflicts[] = array(
 																				"field" => $diff_field,
-																				"value" => $official_existing[$diff_field], 
+																				"value" => $official_db[$diff_field], 
 																				"source" => NULL,
 																				"timestamp" => gmdate("Y-m-d H:i:s")
 																				);															
@@ -234,7 +235,7 @@ class Sync extends CI_Controller {
 																			
 														$conflicts[] = array(
 																			"field" => $diff_field,
-																			"value" => $official_existing[$diff_field], 
+																			"value" => $official_db[$diff_field], 
 																			"timestamp" => gmdate("Y-m-d H:i:s")
 																			);														
 
@@ -243,24 +244,75 @@ class Sync extends CI_Controller {
 												}												
 												
 												
-												// overwrite old values with new
+												// merge (really just overwrite) old values with new
 												foreach($diff as $diff_field => $value) {
-													$official_existing[$diff_field] = $value;
+													$official_db[$diff_field] = $value;
 												}
 												
-												$official_existing['conflicting_data'] = json_encode($conflicts);
-												
+												// add in conflicts field data
+												if(!empty($conflicts)) {
+													$official_db['conflicting_data'] = json_encode($conflicts);													
+												}
+
 												// add new source or update timestamp on existing entry
+												if(!empty($official_db['sources'])) {
+													
+													$official_source = json_decode($official_source);
+													
+													$output_sources = array();
+													$duplicate = false;
+													
+													foreach($official_db['sources'] as $source) {
+														
+														// if found and already listed, update timestamp
+														if($source['url'] == $official_source[0]['url']) {
+															$source['timestamp'] = gmdate("Y-m-d H:i:s");															
+															$output_sources[] = $source;
+															$duplicate = true;
+														} else {
+															$output_sources[] = $source;
+														}
+														
+													}
+													
+													if(!$duplicate) {
+														
+														// Set timestamp if not already
+														if(empty($official_source[0]['timestamp']) {
+															$official_source[0]['timestamp'] =  gmdate("Y-m-d H:i:s");
+														} 
+														
+														$output_sources[] = $official_source[0];
+													}
+													
+													$official_db['sources'] = json_encode($output_sources);
 												
+												// if no existing entries in sources field, just add what we have from scraper (this should never happen)	
+												} else {
+													
+													$official_db['sources'] = $official_source;
+													
+												}
+												
+												
+												// todo: insert/merge anything from the other_data field
+																																			
 												// update db
+												$this->db->where('meta_ocd_id', $official_db['meta_ocd_id']);			
+												$this->db->where('name_full', $official_db['name_full']);
+												$this->db->where('title', $official_db['title']);																								
+												$this->db->update('officials_scraped', $official_db);												
+														
 											
 											}
 											
 
 										
-										} else {
+										} else {											
 											
 											// add as brand new entry in the database
+																																										
+											// add to the db															
 											$this->db->insert('scraped_officials', $official);
 											
 										}									
