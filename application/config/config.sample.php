@@ -21,6 +21,9 @@ $config['ganalytics_id'] = '';
 $config['show311'] = false;
 
 $config['scraper_rate'] = 240; // rate in hours
+$config['sync_active'] = false;
+$config['initialize_active'] = false;
+
 
 
 /*

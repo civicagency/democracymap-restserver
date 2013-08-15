@@ -16,6 +16,14 @@ class Sync extends CI_Controller {
 		$this->load->helper('url');
 		
 
+		// if config != initialize mode then redirect otherwise run through init script. 
+		// todo password protect this process
+		
+		if(empty($this->config->item('sync_active'))) {
+			redirect('welcome');				
+		}
+
+
 		// Construct the Jurisdiction Model
 		//$this->load->model('democracymap_model', 'democracymap');
 		//$jurisdiction = $this->democracymap->jurisdictions[0];

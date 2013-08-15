@@ -15,6 +15,12 @@ class Initialize extends CI_Controller {
 		// if config != initialize mode then redirect otherwise run through init script. 
 		// todo password protect this process
 		
+		if(empty($this->config->item('initialize_active'))) {
+			redirect('welcome');				
+		}
+
+		
+		
 		// get GID data for states, counties, municipalities
 		// filter into scraped_jursidictions table
 
