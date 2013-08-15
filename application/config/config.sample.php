@@ -20,6 +20,7 @@ $config['ganalytics_id'] = '';
 
 $config['show311'] = false;
 
+$config['scraper_rate'] = 240; // rate in hours
 
 
 /*
