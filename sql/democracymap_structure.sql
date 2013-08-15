@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 08, 2013 at 10:39 PM
+-- Generation Time: Aug 15, 2013 at 12:31 AM
 -- Server version: 5.5.28
 -- PHP Version: 5.3.15
 
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `api_logs` (
   `time` int(11) NOT NULL,
   `authorized` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2335 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2336 ;
 
 -- --------------------------------------------------------
 
@@ -382,8 +382,10 @@ CREATE TABLE IF NOT EXISTS `scraped_officials` (
   `last_updated` datetime NOT NULL,
   `social_media` text,
   `other_data` text,
+  `conflicting_data` text NOT NULL,
+  `sources` text NOT NULL,
   PRIMARY KEY (`meta_internal_id`),
-  KEY `meta_ocd_id` (`meta_ocd_id`)
+  KEY `uid` (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -414,6 +416,7 @@ CREATE TABLE IF NOT EXISTS `sync_log` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `source` varchar(256) NOT NULL,
   `type` varchar(255) DEFAULT NULL,
+  `tag` varchar(256) DEFAULT NULL,
   `description` text,
   `timestamp` datetime NOT NULL,
   PRIMARY KEY (`id`)
@@ -429,10 +432,10 @@ CREATE TABLE IF NOT EXISTS `sync_scheduler` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `scraper_name` varchar(255) DEFAULT NULL,
   `description` text,
-  `url` varchar(255) DEFAULT NULL,
-  `last_run` datetime NOT NULL,
+  `scraperwiki_name` varchar(255) DEFAULT NULL,
+  `last_sync` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 

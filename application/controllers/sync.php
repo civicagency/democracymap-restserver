@@ -98,17 +98,21 @@ class Sync extends CI_Controller {
 
 								foreach($officials as $official) {
 									
+									// probably unneeded, but just to make array key names more accessible/consistent
 									$gov_name = urlify($official['government_name']);
 									
-									// if this gov has already failed and been logged, skip it
+									// if this gov's ocdid lookup has already failed and been logged, skip it
 									if(!empty($skip[$gov_name])) {
 										continue;
 									}										
 									
-									if(empty($ocdid[$gov_name])) {										
+									// if we don't have an ocdid yet, get one
+									if(empty($ocdid[$gov_name])) {	
+																			
 										// Get the OCDID for this jurisdiction
-										$ocdid[$gov_name] = $this->determine_ocdid($official['government_name'], $official['government_level'], $official['address_region']);										
-
+										$ocdid[$gov_name] = $this->determine_ocdid($official);										
+										
+										// if the lookup failed, skip it
 										if ($ocdid[$gov_name] === false) {
 											$skip[$gov_name] = true;
 											continue;
@@ -116,9 +120,50 @@ class Sync extends CI_Controller {
 
 									}
 									
-									
+									// ensure we actually have the ocdid for this gov
 									if(!empty($ocdid[$gov_name])) {
-										//
+										
+										// get current data from db and merge
+										
+										// add the ocdid to the object for the official
+										$official['meta_ocd_id'] = $ocdid[$gov_name];
+										
+										// get existing entry
+										$this->db->select('*');		
+										$this->db->where('meta_ocd_id', $official['meta_ocd_id']);			
+										$this->db->where('name_full', $official['name_full']);
+										$this->db->where('title', $official['title']);		
+
+										$query = $this->db->get('scraped_officials');
+
+
+										if ($query->num_rows() > 0) {
+										   $official_existing = $query->row(); 		
+										
+											// check to see if there are any differences between existing and new data
+											
+											// if there are no differences, then skip
+											
+											// if there are differences, check for conflicts, merge, and generate update for conflicts field
+											
+											// add new source or update timestamp on existing entry
+										
+										} else {
+											
+											// add as new entry in the database
+											
+											// remove temporary fields
+											unset($official['government_name']);
+											unset($official['government_level']);											
+											
+											$this->db->insert('scraped_officials', $official);
+											
+										}									
+										
+										
+
+										
+										
 									} 
 									
 									
@@ -134,7 +179,7 @@ class Sync extends CI_Controller {
 								
 
 				} else {
-					// scraper data not available
+					// scraper data not available. eg scraperwiki not responding to this api call
 
 					// log this error	
 				}					
@@ -153,20 +198,68 @@ class Sync extends CI_Controller {
 		}
 
 
+	
 		
 		
-		//https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=dmap2_city_representatives_-_california
-		//https://api.scraperwiki.com/api/1.0/scraper/getinfo?format=jsondict&name=dmap2_city_representatives_-_california&version=-1
+	}
+	
+	
+	function determine_ocdid($gov) {
+		
+		// make sure this works for officials and jurisdictions using slighty different field names (todo: possibly fix naming)
+		if((empty($gov['level']) && !empty($gov['government_level'])) && (empty($gov['name']) && !empty($gov['government_name']))) {			
+			$gov['level'] = $gov['government_level'];
+			$gov['name'] = $gov['government_name'];						
+		}
+		
+		if (!empty($gov['level']) && !empty($gov['name']) && !empty($gov['address_region'])) {
+
+			// lookup ocdid		
+
+			$this->db->select('ocd_id');		
+			$this->db->where('name', $gov['name']);			
+			$this->db->where('level', $gov['level']);
+			$this->db->where('address_region', $gov['address_region']);		
+
+			$query = $this->db->get('scraped_jurisdictions');
+
+			// if successful return ocdid
+			if ($query->num_rows() > 0) {
+			   $row = $query->row(); 		
+			   return $row->ocd_id;
+			// if lookup fails, log it
+			} else {
+
+				$description = "Unable to lookup OCD ID for {$gov['level']} {$gov['name']} {$gov['address_region']}";
+
+				// log this
+				$data = array (
+								'source' => $gov['source'],
+								'type' => 'jurisdiction', 
+								'description' => $description,
+								'timestamp' => gmdate("Y-m-d H:i:s")								
+								);
+
+				$this->db->insert('sync_log', $data);			
+
+
+				return false;
+			}			
+			
+			
+			
+		} else {
+			
+			// lookup failed
+			
+			// log this 'unable to lookup ocdid, not enough info. Supplied info was: level: $level, name: $name, address_region: $address_region'
+			
+			return false;
+		}
+		
 		
 
-		// make sure it's run since we last pulled it
-		
-		// if there's a jurisdiction table start there
-		
-		// officials table
-		
-		// paginate - 1000 at a time?
-		
+	
 		
 		
 	}
