@@ -32,7 +32,10 @@ class democracymap_model extends CI_Model {
 		$this->protected_fields_officials	= $this->restricted_officials();		
 			
 		$this->jurisdictions				= array($this->jurisdiction());
+		$this->jurisdiction					= $this->jurisdiction();
+				
 		$this->officials					= array($this->official());		
+		$this->official						= $this->official_new();
 
 	}
 	
@@ -140,7 +143,39 @@ class democracymap_model extends CI_Model {
 		
 		return $official;
 		
+	}
+	
+	public function official_new() {
+		
+		$official = array(
+			'type' 					=> NULL,                 		
+			'title' 				=> NULL,                		
+			'description' 			=> NULL,          		
+			'name_given' 			=> NULL,           		
+			'name_family' 			=> NULL,          			
+			'name_full' 			=> NULL,            			
+			'url' 					=> NULL,                  
+			'url_photo' 			=> NULL,            
+			'url_schedule' 			=> NULL,         
+			'url_contact' 			=> NULL,          
+			'email' 				=> NULL,                
+			'phone' 				=> NULL,                
+			'address_name' 			=> NULL,         
+			'address_1' 			=> NULL,            
+			'address_2' 			=> NULL,            
+			'address_locality' 		=> NULL,         
+			'address_region' 		=> NULL,        
+			'address_postcode' 		=> NULL,          
+			'current_term_enddate' 	=> NULL, 
+			'last_updated' 			=> NULL,         			
+			'social_media' 			=> NULL, 
+			'sources'				=> NULL         			
+		);
+		
+		return $official;
+		
 	}	
+		
 	
 	
 	public function service_discovery() {
