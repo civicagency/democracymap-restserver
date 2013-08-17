@@ -19,7 +19,9 @@ class Sync extends CI_Controller {
 		// if config != initialize mode then redirect otherwise run through init script. 
 		// todo password protect this process
 		
-		if(empty($this->config->item('sync_active'))) {
+		
+		
+		if(!$this->config->item('sync_active')) {
 			redirect('welcome');				
 		}
 
@@ -48,11 +50,12 @@ class Sync extends CI_Controller {
 
 		// get overdue scrapers
 		
-		$this->db->select('id, scraperwiki_name, last_sync');		
+		$this->db->select('id, scraperwiki_name, last_sync');	
+		$this->db->where('mode', 'enabled');			
 		$this->db->where('last_sync < ', $due_date);
 		
 		$query = $this->db->get('sync_scheduler');
-		
+			
 		if ($query->num_rows() > 0) {
 			return $query->result_array();
 		} else {
@@ -95,7 +98,7 @@ class Sync extends CI_Controller {
 						
 						while (($count * $pagesize) <= $total) {
 							$offset = $count * $pagesize;							
-							$url = 'https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=dmap2_city_representatives_-_california&query=select%20*%20from%20%60officials%60%20limit%20' . $offset . '%2C%20' . $pagesize;
+							$url = 'https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=' . $scraper['scraperwiki_name'] . '&query=select%20*%20from%20%60officials%60%20limit%20' . $offset . '%2C%20' . $pagesize;
 							
 							$officials = curl_to_json($url);
 							
@@ -164,7 +167,7 @@ class Sync extends CI_Controller {
 											}
 											
 											// temporarily remove source field before comparison
-											$official_source = $official['sources'];
+											$official_source = json_decode($official['sources'], true);										
 											unset($official['sources']);
 										
 								
@@ -182,7 +185,7 @@ class Sync extends CI_Controller {
 												// add conflicts from diff to conflicts field
 												if(!empty($official_db['conflicting_data'])) {
 													
-													$conflicts = json_decode($official_db['conflicting_data']);
+													$conflicts = json_decode($official_db['conflicting_data'], true);
 													
 													// check to see if any of these conflicts already exist													
 													foreach ($diff as $diff_field => $diff_value) {
@@ -210,7 +213,7 @@ class Sync extends CI_Controller {
 															$conflicts[] = array(
 																				"field" => $diff_field,
 																				"value" => $official[$diff_field], 
-																				"source" => $official['source'],
+																				"source" => $official_source[0]['url'],
 																				"timestamp" => gmdate("Y-m-d H:i:s")
 																				);																		
 																				
@@ -237,12 +240,14 @@ class Sync extends CI_Controller {
 													
 													$conflicts = array();
 													
+													
+													
 													foreach($diff as $diff_field => $value) {
 														
 														$conflicts[] = array(
 																			"field" => $diff_field,
 																			"value" => $official[$diff_field], 
-																			"source" => $official['source'],
+																			"source" => $official_source[0]['url'],
 																			"timestamp" => gmdate("Y-m-d H:i:s")
 																			);
 																			
@@ -270,8 +275,7 @@ class Sync extends CI_Controller {
 												// add new source or update timestamp on existing entry
 												if(!empty($official_db['sources'])) {
 													
-													$official_source = json_decode($official_source);
-													
+													$official_db['sources'] = json_decode($official_db['sources'], true);													
 													$output_sources = array();
 													$duplicate = false;
 													
@@ -303,7 +307,7 @@ class Sync extends CI_Controller {
 												// if no existing entries in sources field, just add what we have from scraper (this should never happen)	
 												} else {
 													
-													$official_db['sources'] = $official_source;
+													$official_db['sources'] = json_encode($official_source);
 													
 												}
 												
@@ -317,7 +321,7 @@ class Sync extends CI_Controller {
 												$this->db->where('meta_ocd_id', $official_db['meta_ocd_id']);			
 												$this->db->where('name_full', $official_db['name_full']);
 												$this->db->where('title', $official_db['title']);																								
-												$this->db->update('officials_scraped', $official_db);												
+												$this->db->update('scraped_officials', $official_db);												
 														
 												//echo "just updated " . $official_db['name_full'] . ' for ' . $official_db['meta_ocd_id'] . "<br />";
 											
