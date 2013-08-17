@@ -19,19 +19,26 @@ class Officials extends REST_Controller {
 		
 		$query_params = $this->input->get();
 				
-		// grab the officials model
-		$official_model = $this->democracymap->official;		
-		$meta_model = array("fields" => null, "limit" => null, "page" => null);
 		
-		// limit to the fields that can be used for an sql where clause (based on officials model)
-		$where_params = array_intersect_key($query_params, $official_model);
+		if(!empty($query_params)) {
+		
+			// grab the officials model
+			$official_model = $this->democracymap->official;		
+			$meta_model = array("fields" => null, "limit" => null, "page" => null);
 
-		// extract remaining fields
-		$diff = array_diff_key($query_params, $official_model);
-		
-		if(!empty($diff)) {			
-			$meta_params = array_intersect_key($diff, $meta_model);
+			// limit to the fields that can be used for an sql where clause (based on officials model)
+			$where_params = array_intersect_key($query_params, $official_model);
+
+			// extract remaining fields
+			$diff = array_diff_key($query_params, $official_model);
+
+			if(!empty($diff)) {			
+				$meta_params = array_intersect_key($diff, $meta_model);
+			}		
+			
 		}
+		
+
 		
 		
 		// sanitize the requested return fields
