@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 15, 2013 at 12:31 AM
+-- Generation Time: Aug 17, 2013 at 05:33 AM
 -- Server version: 5.5.28
 -- PHP Version: 5.3.15
 
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `api_logs` (
   `time` int(11) NOT NULL,
   `authorized` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2336 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2391 ;
 
 -- --------------------------------------------------------
 
@@ -386,7 +386,7 @@ CREATE TABLE IF NOT EXISTS `scraped_officials` (
   `sources` text NOT NULL,
   PRIMARY KEY (`meta_internal_id`),
   KEY `uid` (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22631 ;
 
 -- --------------------------------------------------------
 
@@ -420,7 +420,7 @@ CREATE TABLE IF NOT EXISTS `sync_log` (
   `description` text,
   `timestamp` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=145 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=218 ;
 
 -- --------------------------------------------------------
 
@@ -434,8 +434,9 @@ CREATE TABLE IF NOT EXISTS `sync_scheduler` (
   `description` text,
   `scraperwiki_name` varchar(255) DEFAULT NULL,
   `last_sync` datetime NOT NULL,
+  `mode` varchar(256) NOT NULL COMMENT 'enabled, disabled, etc',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
