@@ -15,6 +15,19 @@ class Sync extends CI_Controller {
 	{
 		$this->load->helper('url');
 		
+		// Determine the environment we're run from for debugging/output 
+		if (php_sapi_name() == 'cli') {   
+			if (isset($_SERVER['TERM'])) {   
+				$this->environment = 'terminal';  
+			} else {   
+				$this->environment = 'cron';
+			}   
+		} else { 
+			$this->environment = 'server';
+		}
+
+		// sometimes this takes a while, make sure it doesn't timeout
+		ini_set("max_execution_time", "1000");
 
 		// if config != initialize mode then redirect otherwise run through init script. 
 		// todo password protect this process
@@ -22,7 +35,7 @@ class Sync extends CI_Controller {
 		
 		
 		if(!$this->config->item('sync_active')) {
-			redirect('welcome');				
+			redirect('docs');				
 		}
 
 
@@ -177,6 +190,11 @@ class Sync extends CI_Controller {
 											// if there are no differences, then skip
 											if(empty($diff)) {
 												
+												// output for debugging
+												if ($this->environment == 'terminal') {
+													echo "skipping " . $official_db['name_full'] . ' for ' . $official_db['meta_ocd_id'] . PHP_EOL;
+												}												
+												
 												continue;
 												
 											// if there are differences
@@ -323,7 +341,11 @@ class Sync extends CI_Controller {
 												$this->db->where('title', $official_db['title']);																								
 												$this->db->update('scraped_officials', $official_db);												
 														
-												//echo "just updated " . $official_db['name_full'] . ' for ' . $official_db['meta_ocd_id'] . "<br />";
+											
+												// output for debugging
+												if ($this->environment == 'terminal') {
+													echo "just updated " . $official_db['name_full'] . ' for ' . $official_db['meta_ocd_id'] . PHP_EOL;
+												}											
 											
 											
 											}
@@ -340,7 +362,11 @@ class Sync extends CI_Controller {
 											// add to the db															
 											$this->db->insert('scraped_officials', $official);
 											
-											//echo "just added " . $official['name_full'] . ' for ' . $official['meta_ocd_id'] . "<br />";
+											// output for debugging
+											if ($this->environment == 'terminal') {
+												echo "just added " . $official['name_full'] . ' for ' . $official['meta_ocd_id'] . PHP_EOL;
+											}
+
 											
 										}									
 										
@@ -428,6 +454,11 @@ class Sync extends CI_Controller {
 								);
 
 				$this->db->insert('sync_log', $data);			
+
+				// output for debugging
+				if ($this->environment == 'terminal') {
+					echo $description . PHP_EOL;
+				}
 
 
 				return false;
