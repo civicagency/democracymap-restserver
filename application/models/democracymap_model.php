@@ -33,9 +33,12 @@ class democracymap_model extends CI_Model {
 			
 		$this->jurisdictions				= array($this->jurisdiction());
 		$this->jurisdiction					= $this->jurisdiction();
+		
+		$this->juris						= $this->jurisdiction_new(); // TODO: temporary until we refactor context code	
+				
 				
 		$this->officials					= array($this->official());		
-		$this->official						= $this->official_new();
+		$this->official						= $this->official_new(); // TODO: temporary until we refactor context code
 
 	}
 	
@@ -68,6 +71,40 @@ class democracymap_model extends CI_Model {
 		return $jurisdiction;
 		
 	}
+	
+	public function jurisdiction_new($other_data = null, $social_media = null, $service_discovery = null) {
+		
+		$jurisdiction = array(
+			'type' 		  			=> NULL,
+			'type_name' 	  		=> NULL,	  
+			'level' 		  		=> NULL,	  	
+			'level_name' 			=> NULL,	  	  	
+			'name' 		  			=> NULL,	  	
+			'id' 					=> NULL,	  	  	
+			'url' 		  			=> NULL,	  	
+			'url_contact'   		=> NULL,	  	
+			'email' 		  		=> NULL,	  	
+			'phone' 		  		=> NULL,	  	
+			'address_name'   		=> NULL,	  	
+			'address_1' 	  		=> NULL,	  	
+			'address_2' 	  		=> NULL,	  				
+			'address_locality' 		=> NULL,         
+			'address_region' 		=> NULL,        
+			'address_postcode' 		=> NULL,   
+			'address_country' 		=> NULL,
+			'service_discovery'     => $service_discovery,
+			'last_updated'   		=> NULL,	  	
+			'social_media' 			=> $social_media, 
+			'other_data' 			=> $other_data, 
+			'conflicting_data'		=> NULL, 
+			'sources'				=> NULL
+		);
+
+		return $jurisdiction;
+		
+	}	
+	
+	
 	
 	// ########################################################
 	// Starting with some empty scaffolding 
@@ -165,10 +202,13 @@ class democracymap_model extends CI_Model {
 			'address_2' 			=> NULL,            
 			'address_locality' 		=> NULL,         
 			'address_region' 		=> NULL,        
-			'address_postcode' 		=> NULL,          
+			'address_postcode' 		=> NULL,   
+			'address_country' 		=> NULL,        			       
 			'current_term_enddate' 	=> NULL, 
 			'last_updated' 			=> NULL,         			
 			'social_media' 			=> NULL, 
+			'other_data' 			=> NULL, 
+			'conflicting_data'		=> NULL, 
 			'sources'				=> NULL         			
 		);
 		
