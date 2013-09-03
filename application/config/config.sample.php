@@ -6,10 +6,6 @@ $config['democracymap_root'] = 'http://localhost';
 // Default caching timeout
 $config['cache_ttl'] = '604800'; // 604800s = 1 week
 
-// See http://developer.yahoo.com/boss/geo/
-$config['yahoo_oauth_key'] = '*********';
-$config['yahoo_oauth_secret'] = '*********';
-
 // See http://services.sunlightlabs.com/
 $config['sunlight_api_key'] = '*********';
 
@@ -24,6 +20,19 @@ $config['scraper_rate'] = 240; // rate in hours
 $config['sync_active'] = false;
 $config['initialize_active'] = false;
 
+
+// There's a choice of more than one geocoder
+// Please specify the geocoder you'd like to use and provide credentials for it
+
+// Choose a geocoder 
+$config['geocoder'] = 'mapquest'; // either 'yahoo' or 'mapquest'
+
+// Yahoo geocoder credentials - See http://developer.yahoo.com/boss/geo/
+$config['yahoo_oauth_key'] = '*********';
+$config['yahoo_oauth_secret'] = '*********';
+
+// MapQuest geocoder credentials  - See http://www.mapquestapi.com/geocoding/ and http://developer.mapquest.com/web/info/account/app-keys
+$config['mapquest_api_key'] = '*********';
 
 
 /*
