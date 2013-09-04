@@ -8,14 +8,39 @@ class Initialize extends CI_Controller {
 				
 	}
 
-	function index()
+	function index($level = null)
 	{
+		
+		// Determine the environment we're run from for debugging/output 
+		if (php_sapi_name() == 'cli') {   
+			if (isset($_SERVER['TERM'])) {   
+				$this->environment = 'terminal';  
+			} else {   
+				$this->environment = 'cron';
+			}   
+		} else { 
+			$this->environment = 'server';
+		}
+		
+		
+		
+		// Specify which level of jursidictions we want to initialize - basically either municipal or county
+		if(empty($level)) {
+			$query_params = $this->input->get();
+			
+			if (!empty($query_params['level'])) {
+				$level = $query_params['level'];
+			} else {
+				$level = 'municipal';
+			}
+		}
+			
 		$this->load->helper('url');
 
 		// if config != initialize mode then redirect otherwise run through init script. 
 		// todo password protect this process
 		
-		if(empty($this->config->item('initialize_active'))) {
+		if(!$this->config->item('initialize_active')) {
 			redirect('welcome');				
 		}
 
@@ -24,7 +49,9 @@ class Initialize extends CI_Controller {
 		// get GID data for states, counties, municipalities
 		// filter into scraped_jursidictions table
 
-		$query = $this->db->query('SELECT COUNT( * ) AS count FROM municipalities');			
+		$sql = "SELECT COUNT( * ) AS count FROM $level";
+
+		$query = $this->db->query($sql);			
 		if ($query->num_rows() > 0) {
 		   $row = $query->row(); 		
 		   $total_rows = $row->count;
@@ -34,43 +61,44 @@ class Initialize extends CI_Controller {
 		$sources = array(array('description' => 'US Census 2007 Governments Integrated Directory', 'url' => 'http://harvester.census.gov/gid/gid_07/options.html'));
 		$sources = json_encode($sources);
 
-		$city_query ='SELECT 
+		$jurisdiction_query ="SELECT 
 						ocd.OCDID as ocd_id,
 						ocd.GEOID as uid,
-						municipalities.GOVERNMENT_NAME AS name,
-						"government" as type,
-						municipalities.POLITICAL_DESCRIPTION AS type_name,
-						"municipal" as level,
-						municipalities.POLITICAL_DESCRIPTION AS level_name,
-						municipalities.CITY AS address_locality, 
-						municipalities.TITLE AS address_name,
-						municipalities.ADDRESS1 AS address_1,
-						municipalities.ADDRESS2 AS address_2,
-						"USA" AS address_country,
-						municipalities.STATE_ABBR AS address_region,
-						municipalities.ZIP + "-" + municipalities.ZIP4 AS address_postcode,
-						municipalities.WEB_ADDRESS AS url 
-						FROM municipalities 
-						JOIN ocd ON municipalities.GEOID = ocd.GEOID';
+						$level.GOVERNMENT_NAME AS name,
+						\"government\" as type,
+						$level.POLITICAL_DESCRIPTION AS type_name,
+						\"$level\" as level,
+						$level.POLITICAL_DESCRIPTION AS level_name,
+						$level.CITY AS address_locality, 
+						$level.TITLE AS address_name,
+						$level.ADDRESS1 AS address_1,
+						$level.ADDRESS2 AS address_2,
+						\"USA\" AS address_country,
+						$level.STATE_ABBR AS address_region,
+						$level.ZIP + \"-\" + $level.ZIP4 AS address_postcode,
+						$level.WEB_ADDRESS AS url 
+						FROM $level 
+						JOIN ocd ON $level.GEOID = ocd.GEOID 
+						ORDER BY GOVERNMENT_NAME, STATE_ABBR DESC";
 
 
 
 	
-		$query_count = 1;
+		$query_count = 0;
 		$limit = 100;
 		$offset = 0;					
 		
-		$total_rows = 55;
+		//$total_rows = 2;
 		
 		while($offset < $total_rows) {
 			
 			$output = array();
 			
-			if($query_count > 1) {
+			if($query_count > 0) {
 				$offset = $query_count * $limit;
-				$complete_query = $city_query . " LIMIT $offset, $limit ";				
+				$complete_query = $jurisdiction_query . " LIMIT $offset, $limit ";				
 			} else {
-				$complete_query = $city_query . " LIMIT $limit";
+				$complete_query = $jurisdiction_query . " LIMIT $limit";
 			}
 			
 			$query = $this->db->query($complete_query);			
@@ -79,16 +107,20 @@ class Initialize extends CI_Controller {
 			{
 			   foreach ($query->result() as $row)
 			   {
+				
+				$row = (array) $row;
 				 
-				$row->name 			   = ucwords(strtolower($row->name));	
-				$row->type_name        = ucwords(strtolower($row->type_name));
-				$row->level_name       = ucwords(strtolower($row->level_name));
-				$row->address_locality = ucwords(strtolower($row->address_locality)); 
-				$row->address_name     = ucwords(strtolower($row->address_name));
-				$row->address_1        = ucwords(strtolower($row->address_1));
-				$row->address_2	       = ucwords(strtolower($row->address_2));				
-				$row->sources			= $sources;
-				$row->last_updated		= gmdate("Y-m-d H:i:s");
+				$row['name'] 			   	= ucwords(strtolower($row['name']));	
+				$row['type_name']        	= ucwords(strtolower($row['type_name']));
+				$row['level_name']       	= ucwords(strtolower($row['level_name']));
+				$row['address_locality'] 	= ucwords(strtolower($row['address_locality'])); 
+				$row['address_name']     	= ucwords(strtolower($row['address_name']));
+				$row['address_1']        	= ucwords(strtolower($row['address_1']));
+				$row['address_2']	       	= ucwords(strtolower($row['address_2']));				
+				$row['sources']				= $sources;
+				$row['last_updated']		= gmdate("Y-m-d H:i:s");
+				$row['other_data']			= null;
+				$row['conflicting_data']	= null;				
 				
 				// this should be done with batch inserts instead - $this->db->insert_batch();
 				//$this->db->insert('scraped_jurisdictions', $row); 
@@ -97,6 +129,16 @@ class Initialize extends CI_Controller {
 				
 			   }
 			}
+			
+					
+			// output for debugging
+			$max = count($output) - 1;
+			$description = "Inserting {$output[0]['name']} {$output[0]['address_region']} thru {$output[$max]['name']} {$output[$max]['address_region']}";
+			
+			if ($this->environment == 'terminal') {
+				echo $description . PHP_EOL;
+			}			
+			
 			
 			// insert batch
 			$this->db->insert_batch('scraped_jurisdictions', $output); 
