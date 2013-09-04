@@ -136,6 +136,11 @@ class Represents extends REST_Controller {
 		}
         
 		
+		// Add to where clause with provided parameters		
+		if(!empty($where_params)) {
+			$this->db->where($where_params);
+		}		
+		
 		
 		// if we geocoded, base the query on that
 		if (!empty($ocd_ids)) {
@@ -154,10 +159,7 @@ class Represents extends REST_Controller {
 			
 		} else {
 		
-			// Otherwise construct the where clause with provided parameters		
-			if(!empty($where_params)) {
-				$this->db->like($where_params);
-			}		
+		
 			
 		}
 		
