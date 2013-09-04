@@ -75,6 +75,8 @@ class democracymap_model extends CI_Model {
 	public function jurisdiction_new($other_data = null, $social_media = null, $service_discovery = null) {
 		
 		$jurisdiction = array(
+			'ocd_id'				=> NULL,
+			'uid'					=> NULL,
 			'type' 		  			=> NULL,
 			'type_name' 	  		=> NULL,	  
 			'level' 		  		=> NULL,	  	
@@ -185,6 +187,8 @@ class democracymap_model extends CI_Model {
 	public function official_new() {
 		
 		$official = array(
+			'meta_ocd_id'			=> NULL,
+			'uid'					=> NULL,			
 			'type' 					=> NULL,                 		
 			'title' 				=> NULL,                		
 			'description' 			=> NULL,          		

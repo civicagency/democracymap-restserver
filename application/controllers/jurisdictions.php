@@ -22,8 +22,8 @@ class Jurisdictions extends REST_Controller {
 		
 		if(!empty($query_params)) {
 		
-			// grab the officials model
-			$jurisdiction_model = $this->democracymap->jurisdiction;		
+			// grab the jurisdiction model
+			$jurisdiction_model = $this->democracymap->juris; // temporary alternative model name;		
 			$meta_model = array("fields" => null, "limit" => null, "page" => null);
 
 			// limit to the fields that can be used for an sql where clause (based on officials model)

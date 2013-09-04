@@ -6,6 +6,18 @@ class Geocoder_model extends CI_Model {
 
 	public function __construct(){
 		parent::__construct();
+		
+		// State name - initialize because this can come from several possible sources.
+		$this->region_name 	= null;
+		
+		// Placeholders for lat/long
+		$this->latitude 	= null;
+		$this->longitude 	= null;
+		
+		$this->latlong 		= null;
+		
+		// to store all raw data from the geocoder
+		$this->metadata		= null;
 	}
 
 	
@@ -173,6 +185,72 @@ class Geocoder_model extends CI_Model {
 	
 
 	}
+	
+	
+	function test_latlong($query) {
+
+		$result = explode(",", $query);  // Split the string by commas
+		if (count($result) > 1) {
+			$lat = trim($result[0]);         // Clean whitespace
+			$lon = trim($result[1]);         // Clean whitespace
+
+			if ((is_numeric($lat)) and (is_numeric($lon))) {
+				$response = array('latitude' => $lat, 'longitude' => $lon);
+				return $response;
+			} else {
+				return false;
+			}		
+
+		} else {
+			return false;
+		}
+
+
+	}	
+	
+	
+	public function ocd_from_geoid($geoid){
+		
+		$query = $this->db->get_where('ocd', array('GEOID' => $geoid));
+		
+		if ($query->num_rows() > 0) {
+		   $row = $query->row(); 		
+		   return $row->OCDID; 
+		} else {
+			return false;
+		}
+		
+				
+		
+	}
+	
+	
+	public function county_geo($lat, $long) {	
+
+
+		$url = "http://tigerweb.geo.census.gov/ArcGIS/rest/services/Census2010/tigerWMS/MapServer/115/query?text=&geometry=$long%2C$lat&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&objectIds=&where=&time=&returnCountOnly=false&returnIdsOnly=false&returnGeometry=false&maxAllowableOffset=&outSR=&outFields=COUNTY,BASENAME,NAME,STATE,COUNTYNS,GEOID&f=json";	
+
+			$feature_data = curl_to_json($url);
+
+			if(!empty($feature_data['features'])) { 
+				return $feature_data['features'][0]['attributes'];			
+			}
+
+	}	
+	
+	function city_geo($lat, $long) {	
+		
+		$url = "http://tigerweb.geo.census.gov/ArcGIS/rest/services/Census2010/tigerWMS/MapServer/58/query?text=&geometry=$long%2C$lat&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&objectIds=&where=&time=&returnCountOnly=false&returnIdsOnly=false&returnGeometry=false&maxAllowableOffset=&outSR=&outFields=*&f=json";
+
+			$feature_data = curl_to_json($url);
+
+			if(!empty($feature_data['features'])) { 
+				return $feature_data['features'][0]['attributes'];			
+			}
+	}	
+	
+	
+	
 	
 	
 
