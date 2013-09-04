@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 17, 2013 at 05:33 AM
+-- Generation Time: Sep 03, 2013 at 08:46 PM
 -- Server version: 5.5.28
 -- PHP Version: 5.3.15
 
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `api_logs` (
   `time` int(11) NOT NULL,
   `authorized` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2391 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2406 ;
 
 -- --------------------------------------------------------
 
@@ -129,29 +129,30 @@ CREATE TABLE IF NOT EXISTS `council_districts` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `counties`
+-- Table structure for table `county`
 --
 
-CREATE TABLE IF NOT EXISTS `counties` (
-  `state_id` int(2) NOT NULL,
-  `type_id` int(1) NOT NULL,
-  `county_id` int(3) NOT NULL,
-  `unit_id` int(3) NOT NULL,
-  `supplement` int(3) NOT NULL,
-  `sub_code` int(2) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `political_description` varchar(255) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `address1` varchar(255) NOT NULL,
-  `address2` varchar(255) NOT NULL,
-  `city` varchar(255) NOT NULL,
-  `state` varchar(2) NOT NULL,
-  `zip` int(5) NOT NULL,
-  `zip4` int(4) NOT NULL,
-  `website_url` varchar(255) NOT NULL,
-  `population_2006` int(10) NOT NULL,
-  `fips_state` int(2) NOT NULL,
-  `fips_county` int(3) NOT NULL
+CREATE TABLE IF NOT EXISTS `county` (
+  `STATE_ID` int(2) NOT NULL,
+  `TYPE_ID` int(1) NOT NULL,
+  `COUNT_ID` int(3) NOT NULL,
+  `UNIT_ID` int(3) NOT NULL,
+  `SUPPLEMENT` int(3) NOT NULL,
+  `SUB_CODE` int(2) NOT NULL,
+  `GOVERNMENT_NAME` varchar(255) NOT NULL,
+  `POLITICAL_DESCRIPTION` varchar(255) NOT NULL,
+  `TITLE` varchar(255) NOT NULL,
+  `ADDRESS1` varchar(255) NOT NULL,
+  `ADDRESS2` varchar(255) NOT NULL,
+  `CITY` varchar(255) NOT NULL,
+  `STATE_ABBR` varchar(2) NOT NULL,
+  `ZIP` int(5) NOT NULL,
+  `ZIP4` int(4) NOT NULL,
+  `WEB_ADDRESS` varchar(255) NOT NULL,
+  `POPULATION_2006` int(10) NOT NULL,
+  `FIPS_STATE` int(2) NOT NULL,
+  `FIPS_COUNTY` int(3) NOT NULL,
+  `GEOID` varchar(255) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
@@ -256,10 +257,10 @@ CREATE TABLE IF NOT EXISTS `gnis` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `municipalities`
+-- Table structure for table `municipal`
 --
 
-CREATE TABLE IF NOT EXISTS `municipalities` (
+CREATE TABLE IF NOT EXISTS `municipal` (
   `STATE` int(2) NOT NULL,
   `TYPE` int(1) NOT NULL,
   `COUNTY` int(3) NOT NULL,
@@ -342,12 +343,13 @@ CREATE TABLE IF NOT EXISTS `scraped_jurisdictions` (
   `address_country` varchar(255) DEFAULT NULL,
   `service_discovery` varchar(255) NOT NULL,
   `last_updated` datetime NOT NULL,
+  `social_media` text,
   `other_data` text,
   `conflicting_data` text NOT NULL,
   `sources` text NOT NULL,
   PRIMARY KEY (`meta_internal_id`),
   KEY `uid` (`uid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19441 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22734 ;
 
 -- --------------------------------------------------------
 
@@ -386,7 +388,7 @@ CREATE TABLE IF NOT EXISTS `scraped_officials` (
   `sources` text NOT NULL,
   PRIMARY KEY (`meta_internal_id`),
   KEY `uid` (`uid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22631 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27231 ;
 
 -- --------------------------------------------------------
 
@@ -420,7 +422,7 @@ CREATE TABLE IF NOT EXISTS `sync_log` (
   `description` text,
   `timestamp` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=218 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=274 ;
 
 -- --------------------------------------------------------
 
