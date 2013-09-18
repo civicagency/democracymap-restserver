@@ -2,12 +2,19 @@
 
 class Sync extends CI_Controller {
 
+	public $nameUtil = null;
+
 	function __construct()
 	{
 		parent::__construct();
 		
 		// Load the Library
-		$this->load->library(array('user', 'user_manager'));
+		// $this->load->library(array('user', 'user_manager'));
+		
+		
+	   	$this->load->helper('names/nameutil');			
+		$this->nameUtil = new HumanNameParser_Parser();
+	   	
 				
 	}
 
@@ -158,15 +165,24 @@ class Sync extends CI_Controller {
 										
 										// remove temporary fields
 										unset($official['government_name']);
-										unset($official['government_level']);																		
-																				
+										unset($official['government_level']);
+										
+										// split up the name
+										// nameUtil keys: leadingInit, first, nicknames, middle, last, suffix
+										$names = null;
+										$this->nameUtil->setName($official['name_full']);
+										$names = $this->nameUtil->getArray();										
+																				 																																					
 										// get existing entry
 										$this->db->select('*');		
 										$this->db->where('meta_ocd_id', $official['meta_ocd_id']);			
-										$this->db->where('name_full', $official['name_full']);
 										$this->db->where('title', $official['title']);		
+										//$this->db->where('name_full', $official['name_full']);
+										
+										$this->db->like('name_full', $names['first']);
+										$this->db->like('name_full', $names['last']);									
 
-										$query = $this->db->get('scraped_officials');
+										$query = $this->db->get('scraped_officials');									
 
 										// If existing entry found, run a comparison
 										if ($query->num_rows() > 0) {
@@ -183,7 +199,13 @@ class Sync extends CI_Controller {
 											$official_source = json_decode($official['sources'], true);										
 											unset($official['sources']);
 										
-								
+											// temporarily remove other_data field before comparison (currently just adding any other_data fields, not comparing)
+											if(!empty($official['other_data'])) $official_other_data = json_decode($official['other_data'], true);																						
+											unset($official['other_data']);
+											
+											if(!empty($official_db['other_data'])) $official_db_other_data = json_decode($official_db['other_data'], true);																						
+											unset($official_db['other_data']);
+																		
 											// check to see if there are any differences between existing and new data
 											$diff = array_diff_assoc($official, $official_db);
 																						
@@ -226,26 +248,33 @@ class Sync extends CI_Controller {
 																											
 														}														
 														
-														// if the new value isn't already listed, add it
-														if(empty($duplicate['new'])) {
-															$conflicts[] = array(
-																				"field" => $diff_field,
-																				"value" => $official[$diff_field], 
-																				"source" => $official_source[0]['url'],
-																				"timestamp" => gmdate("Y-m-d H:i:s")
-																				);																		
-																				
-														} 
+														// only add diffs if neither of them was empty/null
+														if(!empty($official[$diff_field]) && !empty($official_db[$diff_field])) {
+																														
+															// if the new value isn't already listed, add it
+															if(empty($duplicate['new'])) {
+																$conflicts[] = array(
+																					"field" => $diff_field,
+																					"value" => $official[$diff_field], 
+																					"source" => $official_source[0]['url'],
+																					"timestamp" => gmdate("Y-m-d H:i:s")
+																					);																		
+
+															} 
+
+															// if the old value isn't already listed, add it														
+															if(empty($duplicate['old'])) {
+																$conflicts[] = array(
+																					"field" => $diff_field,
+																					"value" => $official_db[$diff_field], 
+																					"source" => NULL,
+																					"timestamp" => gmdate("Y-m-d H:i:s")
+																					);															
+															}															
+															
+														}
 														
-														// if the old value isn't already listed, add it														
-														if(empty($duplicate['old'])) {
-															$conflicts[] = array(
-																				"field" => $diff_field,
-																				"value" => $official_db[$diff_field], 
-																				"source" => NULL,
-																				"timestamp" => gmdate("Y-m-d H:i:s")
-																				);															
-														}														
+														
 														
 														
 													}
@@ -257,24 +286,26 @@ class Sync extends CI_Controller {
 												} else {
 													
 													$conflicts = array();
-													
-													
-													
+																																							
 													foreach($diff as $diff_field => $value) {
 														
-														$conflicts[] = array(
-																			"field" => $diff_field,
-																			"value" => $official[$diff_field], 
-																			"source" => $official_source[0]['url'],
-																			"timestamp" => gmdate("Y-m-d H:i:s")
-																			);
-																			
-														$conflicts[] = array(
-																			"field" => $diff_field,
-																			"value" => $official_db[$diff_field], 
-																			"timestamp" => gmdate("Y-m-d H:i:s")
-																			);														
+														if(!empty($official[$diff_field]) && !empty($official_db[$diff_field])) {
 
+															$conflicts[] = array(
+																				"field" => $diff_field,
+																				"value" => $official[$diff_field], 
+																				"source" => $official_source[0]['url'],
+																				"timestamp" => gmdate("Y-m-d H:i:s")
+																				);
+
+															$conflicts[] = array(
+																				"field" => $diff_field,
+																				"value" => $official_db[$diff_field], 
+																				"timestamp" => gmdate("Y-m-d H:i:s")
+																				);																												
+															
+														}
+														
 													}
 													
 												}												
@@ -283,6 +314,19 @@ class Sync extends CI_Controller {
 												// merge (really just overwrite) old values with new
 												foreach($diff as $diff_field => $value) {
 													$official_db[$diff_field] = $value;
+												}
+												
+												// combine or re-insert other_data
+												// TODO: if we're really smart we'd also compare within other_data
+												if(!empty($official_db_other_data) && !empty($official_other_data)) {
+													$official_db['other_data'] = array_merge($official_db_other_data, $official_other_data);
+													$official_db['other_data'] = json_encode($official_db['other_data']);
+												} else if (!empty($official_other_data)) {
+													$official_db['other_data'] = json_encode($official_other_data);
+												} else if (!empty($official_db_other_data)) {
+													$official_db['other_data'] = json_encode($official_db_other_data);													
+												} else {
+													$official_db['other_data'] = null;
 												}
 												
 												// add in conflicts field data
@@ -334,14 +378,28 @@ class Sync extends CI_Controller {
 												
 												// set current timestamp
 												$official_db['last_updated'] = gmdate("Y-m-d H:i:s");
+															
+												// unset internal id
+												unset($official_db['meta_internal_id']);
 																																			
 												// update db
-												$this->db->where('meta_ocd_id', $official_db['meta_ocd_id']);			
-												$this->db->where('name_full', $official_db['name_full']);
 												$this->db->where('title', $official_db['title']);																								
+												$this->db->where('meta_ocd_id', $official_db['meta_ocd_id']);
+																		
+												// unfortunately this simpler syntax is not supported in the current version of CI													
+												//$this->db->like('name_full', $names['first']);
+												//$this->db->like('name_full', $names['last']);																										
+												
+												$where = $this->db->escape_like_str($names['first']);
+											 	$where = "name_full LIKE '%$where%'";
+											   	$this->db->where($where);												
+												
+												$where = $this->db->escape_like_str($names['last']);
+											 	$where = "name_full LIKE '%$where%'";
+											   	$this->db->where($where);												
+												
 												$this->db->update('scraped_officials', $official_db);												
 														
-											
 												// output for debugging
 												if ($this->environment == 'terminal') {
 													echo "just updated " . $official_db['name_full'] . ' for ' . $official_db['meta_ocd_id'] . PHP_EOL;
