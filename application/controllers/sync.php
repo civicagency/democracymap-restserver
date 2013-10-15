@@ -90,20 +90,51 @@ class Sync extends CI_Controller {
 		$this->load->helper('api');
 		
 		// get scraper metadata, tables, number of rows, last run date		
-		$metadata = 'https://api.scraperwiki.com/api/1.0/scraper/getinfo?format=jsondict&name=' . $scraper['scraperwiki_name'] . '&version=-1';		
-		$metadata = curl_to_json($metadata);
+		// This used to be so easy: $metadata = 'https://api.scraperwiki.com/api/1.0/scraper/getinfo?format=jsondict&name=' . $scraper['scraperwiki_name'] . '&version=-1';		
+		
+		// baseline metadata from scraperwiki new
+		$query = 'https://premium.scraperwiki.com/' . $scraper['scraperwiki_name'] . '/sql/meta';		
+		$metadata = curl_to_json($query);
+
+		// custom metadata from scraperwiki new		
+		$query = 'https://premium.scraperwiki.com/' . $scraper['scraperwiki_name'] . '/sql/?q=' . urlencode('select "name", "value_blob" from swvariables where name = "last_finish" or name = "last_start"');
+		$metadata_custom = curl_to_json($query);
+		
+		if(!empty($metadata_custom)) {			
+			foreach($metadata_custom as $data) {
+				$metadata[$data['name']] = $data['value_blob'];
+			}			
+		}
+
 		
 		if(!empty($metadata)) {
 
-			$last_run = $metadata[0]['last_run'] . 'Z';
-
-			// make sure it's run since we last pulled it
-			if (date(strtotime($scraper['last_sync'])) < date(strtotime($last_run))) {
-			
+			// make sure the last start date is earlier than the last finish date. Anything otherwise indicates it failed to complete a full run. 
+			// TODO: this needs to be reconciled with scrapers that allow graceful partial runs. 
+			if ( date(strtotime($metadata['last_finish'])) < date(strtotime($metadata['last_start'])) ) {
 				
-				if(!empty($metadata[0]['datasummary']['tables'])) {
+				// log this
+				$description = "Scraper didn't complete last run, not syncing";
+				$sources = 'https://premium.scraperwiki.com/' . $scraper['scraperwiki_name'];
+				$data = array (
+								'source' => $sources,
+								'type' => 'scraper', 
+								'description' => $description,
+								'timestamp' => gmdate("Y-m-d\TH:i:s\Z")
+								);
 
-					$tables = $metadata[0]['datasummary']['tables'];	
+				$this->db->insert('sync_log', $data);				
+								
+				return false;
+			}
+			
+			
+			// make sure it's run since we last pulled it
+			if (date(strtotime($scraper['last_sync'])) < date(strtotime($metadata['last_finish']))) {
+				
+				if(!empty($metadata['table'])) {
+
+					$tables = $metadata['table'];
 
 					// if(!empty($tables['jurisdictions'])) 
 					
@@ -111,15 +142,23 @@ class Sync extends CI_Controller {
 						
 						// Construct API call to scraper datastore with pagination
 						
+						// get total rows
+						$query = 'https://premium.scraperwiki.com/' . $scraper['scraperwiki_name'] . '/sql/?q=' . urlencode('select count(*) as total_rows from "officials"');
+						$metadata_custom = curl_to_json($query);		
+												
 						// total
-						$total = $tables['officials']['count'];
+						$total = $metadata_custom[0]['total_rows'];						
 						$count = 0;
 						$pagesize = 1000;
 						
 						while (($count * $pagesize) <= $total) {
 							$offset = $count * $pagesize;							
-							$url = 'https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=' . $scraper['scraperwiki_name'] . '&query=select%20*%20from%20%60officials%60%20limit%20' . $offset . '%2C%20' . $pagesize;
-							
+							$url = 'https://premium.scraperwiki.com/' . $scraper['scraperwiki_name'] . '/sql/?q=select%20*%20from%20%60officials%60%20limit%20' . $offset . '%2C%20' . $pagesize;						
+														
+							if ($this->environment == 'terminal') {
+								echo 'Calling ' . $url . PHP_EOL;
+							}							
+																												
 							$officials = curl_to_json($url);
 							
 							if(!empty($officials)) {
@@ -127,7 +166,14 @@ class Sync extends CI_Controller {
 								$ocdid = array();
 								$skip = array();	
 
+								if ($this->environment == 'terminal') {
+									echo "Syncing " . count($officials) . ' officials' . PHP_EOL;	
+								}
+
 								foreach($officials as $official) {
+									
+									
+									unset($official['id']);
 									
 									// probably unneeded, but just to make array key names more accessible/consistent
 									$gov_name = urlify($official['government_name']);
@@ -139,13 +185,21 @@ class Sync extends CI_Controller {
 									
 									// if we don't have an ocdid yet, get one
 									if(empty($ocdid[$gov_name])) {	
-											
-										// echo "looking up " . $official['government_name'] . '<br />';	
+										
+										
+										if ($this->environment == 'terminal') {
+											echo "looking up " . $official['government_name'] . PHP_EOL;	
+										}										
+										
 																			
 										// Get the OCDID for this jurisdiction
 										$ocdid[$gov_name] = $this->determine_ocdid($official);										
 										
-										// echo "looked up " . $ocdid[$gov_name] . '<br />';
+										
+										if ($this->environment == 'terminal') {
+											echo "looked up " . $ocdid[$gov_name] .  PHP_EOL;	
+										}										
+										
 										
 										// if the lookup failed, skip it
 										if ($ocdid[$gov_name] === false) {
@@ -166,12 +220,33 @@ class Sync extends CI_Controller {
 										// remove temporary fields
 										unset($official['government_name']);
 										unset($official['government_level']);
-										
+																				
 										// split up the name
 										// nameUtil keys: leadingInit, first, nicknames, middle, last, suffix
-										$names = null;
-										$this->nameUtil->setName($official['name_full']);
-										$names = $this->nameUtil->getArray();										
+
+										$names = null;										
+										
+										try {
+											$this->nameUtil->setName($official['name_full']);
+											$names = $this->nameUtil->getArray();											
+										} 
+										catch (Exception $e) {
+											// report / log this
+											if ($this->environment == 'terminal') {
+												echo "Failed parsing name: " . PHP_EOL;
+											}											
+										}
+										
+										if(empty($names)) {
+											$names = array();
+											$names['first'] = $official['name_full'];
+											$names['last'] = '';											
+										}
+										
+										
+										if ($this->environment == 'terminal') {
+											echo "Attempting lookup of existing data for " . $official['name_full'] . PHP_EOL;
+										}									
 																				 																																					
 										// get existing entry
 										$this->db->select('*');		
