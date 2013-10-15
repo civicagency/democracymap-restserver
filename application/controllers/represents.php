@@ -169,13 +169,14 @@ class Represents extends REST_Controller {
 		
 		$default_limit = 10; // this should be in configuration
 		$max_limit = 100; // this should be in configuration
-		
-		if(!empty($meta_params['limit'])) {				
-			
+				
+		if(!empty($meta_params['limit'])) {							
 			$limit = ($meta_params['limit'] < $max_limit) ? $meta_params['limit'] : $max_limit;					
-			$this->db->limit($limit);		
-		} else {
-			$this->db->limit($default_limit);	
+			$offset = (!empty($meta_params['page'])) ? $limit * $meta_params['page'] : 0;			
+			$this->db->limit($limit, $offset);		
+		} else {			
+			$offset = (!empty($meta_params['page'])) ? $default_limit * $meta_params['page'] : 0;									
+			$this->db->limit($default_limit, $offset);	
 		}
         
 		
