@@ -82,7 +82,6 @@ class democracymap_model extends CI_Model {
 			'level' 		  		=> NULL,	  	
 			'level_name' 			=> NULL,	  	  	
 			'name' 		  			=> NULL,	  	
-			'id' 					=> NULL,	  	  	
 			'url' 		  			=> NULL,	  	
 			'url_contact'   		=> NULL,	  	
 			'email' 		  		=> NULL,	  	
