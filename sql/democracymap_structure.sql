@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 03, 2013 at 08:46 PM
+-- Generation Time: Oct 18, 2013 at 06:46 PM
 -- Server version: 5.5.28
--- PHP Version: 5.3.15
+-- PHP Version: 5.3.26
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `api_logs` (
   `time` int(11) NOT NULL,
   `authorized` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2406 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2438 ;
 
 -- --------------------------------------------------------
 
@@ -125,6 +125,34 @@ CREATE TABLE IF NOT EXISTS `council_districts` (
   `facebook_url` text,
   KEY `district` (`district`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `counties`
+--
+
+CREATE TABLE IF NOT EXISTS `counties` (
+  `state_id` int(2) NOT NULL,
+  `type_id` int(1) NOT NULL,
+  `county_id` int(3) NOT NULL,
+  `unit_id` int(3) NOT NULL,
+  `supplement` int(3) NOT NULL,
+  `sub_code` int(2) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `political_description` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `address1` varchar(255) NOT NULL,
+  `address2` varchar(255) NOT NULL,
+  `city` varchar(255) NOT NULL,
+  `state` varchar(2) NOT NULL,
+  `zip` int(5) NOT NULL,
+  `zip4` int(4) NOT NULL,
+  `website_url` varchar(255) NOT NULL,
+  `population_2006` int(10) NOT NULL,
+  `fips_state` int(2) NOT NULL,
+  `fips_county` int(3) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
 
@@ -290,6 +318,39 @@ CREATE TABLE IF NOT EXISTS `municipal` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `municipalities`
+--
+
+CREATE TABLE IF NOT EXISTS `municipalities` (
+  `STATE` int(2) NOT NULL,
+  `TYPE` int(1) NOT NULL,
+  `COUNTY` int(3) NOT NULL,
+  `UNIT` int(3) NOT NULL,
+  `SUPPLEMENT` int(3) NOT NULL,
+  `SUB_CODE` int(2) NOT NULL,
+  `GOVERNMENT_NAME` varchar(255) NOT NULL,
+  `POLITICAL_DESCRIPTION` varchar(255) NOT NULL,
+  `TITLE` varchar(255) NOT NULL,
+  `ADDRESS1` varchar(255) NOT NULL,
+  `ADDRESS2` varchar(255) NOT NULL,
+  `CITY` varchar(255) NOT NULL,
+  `STATE_ABBR` varchar(2) NOT NULL,
+  `ZIP` varchar(255) NOT NULL,
+  `ZIP4` varchar(255) NOT NULL,
+  `WEB_ADDRESS` varchar(255) NOT NULL,
+  `POPULATION_2005` int(10) NOT NULL,
+  `FIPS_STATE` int(2) NOT NULL,
+  `FIPS_COUNTY` int(3) NOT NULL,
+  `FIPS_PLACE` int(5) NOT NULL,
+  `COUNTY_AREA_NAME` varchar(255) NOT NULL,
+  `COUNTY_AREA_TYPE` varchar(255) NOT NULL,
+  `SERVICE_DISCOVERY` varchar(255) NOT NULL,
+  `GEOID` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `ocd`
 --
 
@@ -384,11 +445,11 @@ CREATE TABLE IF NOT EXISTS `scraped_officials` (
   `last_updated` datetime NOT NULL,
   `social_media` text,
   `other_data` text,
-  `conflicting_data` text NOT NULL,
+  `conflicting_data` text,
   `sources` text NOT NULL,
   PRIMARY KEY (`meta_internal_id`),
   KEY `uid` (`uid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27231 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=31487 ;
 
 -- --------------------------------------------------------
 
@@ -422,7 +483,7 @@ CREATE TABLE IF NOT EXISTS `sync_log` (
   `description` text,
   `timestamp` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=274 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=557 ;
 
 -- --------------------------------------------------------
 
@@ -438,7 +499,7 @@ CREATE TABLE IF NOT EXISTS `sync_scheduler` (
   `last_sync` datetime NOT NULL,
   `mode` varchar(256) NOT NULL COMMENT 'enabled, disabled, etc',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
