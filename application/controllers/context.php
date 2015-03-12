@@ -15,8 +15,11 @@ class Context extends REST_Controller {
 	
 		$this->load->model('geocoder_model', 'geocoder');	
 			
-		
-	    $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
+		if($this->config->item('cache_type') == 'apc') {		
+	    	$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
+	    } else {
+	    	$this->load->driver('cache', array('adapter' => 'file'));
+	    }
 	}
 
 	public function index_get()	{

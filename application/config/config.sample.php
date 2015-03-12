@@ -3,6 +3,11 @@
 // Main URL for this website
 $config['democracymap_root'] = 'http://localhost';
 
+// Default caching type - either apc or file
+// Note that apc isn't available for versions of PHP above 5.4
+// See https://ellislab.com/codeigniter/user-guide/libraries/caching.html
+$config['cache_type'] = 'file'; // either "apc" or "file" - defaults to "file"
+
 // Default caching timeout
 $config['cache_ttl'] = '604800'; // 604800s = 1 week
 
