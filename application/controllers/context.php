@@ -314,7 +314,7 @@ class Context extends REST_Controller {
 				
 				$data['city_smd'] = $this->get_dc_smd($data['latitude'], $data['longitude']); 
 
-				if(!empty($data['city_smd']['external_id'])) {
+				if(!empty($data['city_smd']['external_id']) && !empty($data['anc_reps'])) {
 					foreach ($data['anc_reps'] as $smd_rep) {
 						if($smd_rep['smd'] == $data['city_smd']['external_id']) {
 							$data['smd_rep'] = $smd_rep;
