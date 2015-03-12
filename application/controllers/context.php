@@ -767,7 +767,7 @@ function get_dc_councilmembers($ward)	{
 	$key = md5( serialize( $ward )) . '_dc_ward_members';
 	
 	// Check in cache
-	if ( $cache = $this->cache->get( $key ) ) {
+	if (isset($this->cache) && $cache = $this->cache->get( $key ) ) {
 		return $cache;
 	}	
 	
@@ -784,8 +784,10 @@ function get_dc_councilmembers($ward)	{
 	$response['at_large'] = curl_to_json($url);
 
 	// Save to cache
-	$this->cache->save( $key, $response, $this->ttl);
-
+	if(isset($this->cache)) {
+		$this->cache->save( $key, $response, $this->ttl);
+	}
+	
 	return $response;	
 	
 }
@@ -797,7 +799,7 @@ function get_dc_anc_members($anc)	{
 	$key = md5( serialize( $anc )) . '_dc_anc_members';
 	
 	// Check in cache
-	if ( $cache = $this->cache->get( $key ) ) {
+	if (isset($this->cache) && $cache = $this->cache->get( $key ) ) {
 		return $cache;
 	}	
 	
@@ -810,7 +812,9 @@ function get_dc_anc_members($anc)	{
 	$response = curl_to_json($url);
 
 	// Save to cache
-	$this->cache->save( $key, $response, $this->ttl);
+	if(isset($this->cache)) {
+		$this->cache->save( $key, $response, $this->ttl);
+	}
 
 	return $response;	
 	
