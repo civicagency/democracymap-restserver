@@ -17,9 +17,7 @@ class Context extends REST_Controller {
 			
 		if($this->config->item('cache_type') == 'apc') {		
 	    	$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
-	    } else {
-	    	$this->load->driver('cache', array('adapter' => 'file'));
-	    }
+	    } 
 	}
 
 	public function index_get()	{
@@ -117,8 +115,7 @@ class Context extends REST_Controller {
 							
 				$data['census_city']			= $this->get_city($data['latitude'], $data['longitude']);
 				
-				
-
+								
 				if (!empty($data['census_city'])) {
 										
 						$data['state_id'] 	   		= 	$data['census_city']['STATE'];				
@@ -401,7 +398,7 @@ class Context extends REST_Controller {
 			}
 				
 			// Save to cache	
-			if (!empty($latlong)) {				
+			if (isset($this->cache) && !empty($latlong)) {				
 				$this->cache->save( $key, $new_data, $this->ttl);
 			}
 				
@@ -462,7 +459,7 @@ class Context extends REST_Controller {
 		$key = md5( serialize( "$city, $state" )) . '_city_links';
 		
 		// Check in cache
-		if ( $cache = $this->cache->get( $key ) ) {
+		if (isset($this->cache) && $cache = $this->cache->get( $key ) ) {
 			return $cache;
 		}		
 			
@@ -475,8 +472,10 @@ class Context extends REST_Controller {
 		$data = curl_to_json($url);	
 		
 		// Save to cache
-		$this->cache->save( $key, $data, $this->ttl);
-
+		if(isset($this->cache)) {
+			$this->cache->save( $key, $data, $this->ttl);	
+		}
+		
 		return $data;
 
 	}	
@@ -516,7 +515,7 @@ class Context extends REST_Controller {
 		$key = md5( serialize( "$city, $state" )) . '_city_mayor';
 		
 		// Check in cache
-		if ( $cache = $this->cache->get( $key ) ) {
+		if (isset($this->cache) && $cache = $this->cache->get( $key ) ) {
 			return $cache;
 		}		
 		
@@ -826,7 +825,7 @@ function get_dc_anc_members($anc)	{
 		$key = $state . '_state_data';
 
 		// Check in cache
-		if ( $cache = $this->cache->get( $key ) ) {
+		if (isset($this->cache) && $cache = $this->cache->get( $key ) ) {
 			return $cache;
 		}		
 		
@@ -857,7 +856,7 @@ function get_dc_anc_members($anc)	{
 		$key = $state . '_state_governor';		
 		
 		// Check in cache
-		if ( $cache = $this->cache->get( $key ) ) {
+		if (isset($this->cache) && $cache = $this->cache->get( $key ) ) {
 			return $cache;
 		}		
 		
@@ -888,7 +887,7 @@ function get_dc_anc_members($anc)	{
 		$key = $state . '_state_governor_sm';				
 		
 		// Check in cache
-		if ( $cache = $this->cache->get( $key ) ) {
+		if (isset($this->cache) && $cache = $this->cache->get( $key ) ) {
 			return $cache;
 		}		
 		
@@ -1658,7 +1657,7 @@ if (!empty($data['city_reps'])) {
 
 
 // NYC Specific
-if(!empty($data['nyc_officials'])) {
+if(!empty($data['nyc_officials']) && is_array($elected)) {
 
 	$elected =  array_merge($elected, $data['nyc_officials']);
 	
@@ -2233,10 +2232,10 @@ private function merge_custom($data) {
 					$key = 'ocdid_' . $ocd_id;
 					
 					// probably only need a conditional to only save for mashed_jurisdictions
-					//if ( !$this->cache->get( $key )) {
+					if (isset($this->cache)) {
 						$save = ($mashed_jurisdiction) ? $mashed_jurisdiction : $jurisdiction;
 						$this->cache->save( $key, $save, $this->ttl);	
-					//}					
+					}					
 					
 					
 					break;					
