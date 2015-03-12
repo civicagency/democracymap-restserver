@@ -49,7 +49,7 @@ class Context extends REST_Controller {
 			if (!$this->test_latlong($data['input'])) {
 				
 				// Check in cache		
-				if ( $cache = $this->cache->get( $key )) {
+				if (isset($this->cache) && $cache = $this->cache->get( $key )) {
 					$this->response($cache, 200);
 				}				
 				
@@ -547,7 +547,7 @@ class Context extends REST_Controller {
 		$key = md5( serialize( $city )) . '_city_mayor_sm';
 		
 		// Check in cache
-		if ( $cache = $this->cache->get( $key ) ) {
+		if (isset($this->cache) && $cache = $this->cache->get( $key ) ) {
 			return $cache;
 		}		
 		
@@ -582,7 +582,7 @@ function get_city_reps($cities_by_state, $city, $state) {
 	$key = md5( serialize("$city $state")) . '_city_reps';
 
 	// Check in cache
-	if ( $cache = $this->cache->get( $key ) ) {
+	if (isset($this->cache) && $cache = $this->cache->get( $key ) ) {
 		return $cache;
 	} 		
 	
@@ -625,7 +625,7 @@ function dc_ward_boundary_get($id) {
 	$key = md5( serialize("$id")) . '_dc_ward_boundary';
 
 	// Check in cache
-	if ( $cache = $this->cache->get( $key ) ) {
+	if (isset($this->cache) && $cache = $this->cache->get( $key ) ) {
 		return $cache;
 	}
 
@@ -676,7 +676,7 @@ function dc_anc_boundary_get($id) {
 	$key = md5( serialize("$id")) . '_dc_anc_boundary';
 
 	// Check in cache
-	if ( $cache = $this->cache->get( $key ) ) {
+	if (isset($this->cache) && $cache = $this->cache->get( $key ) ) {
 		return $cache;
 	}
 
@@ -726,7 +726,7 @@ function dc_smd_boundary_get($id) {
 	$key = md5( serialize("$id")) . '_dc_smd_boundary';
 
 	// Check in cache
-	if ( $cache = $this->cache->get( $key ) ) {
+	if (isset($this->cache) && $cache = $this->cache->get( $key ) ) {
 		return $cache;
 	}
 
@@ -935,7 +935,7 @@ function get_dc_anc_members($anc)	{
 		$key = md5( serialize("$id")) . '_state_leg_district';
 
 		// Check in cache
-		if ( $cache = $this->cache->get( $key ) ) {
+		if (isset($this->cache) && $cache = $this->cache->get( $key ) ) {
 			return $cache;
 		}			
 			
@@ -974,7 +974,7 @@ function get_dc_anc_members($anc)	{
 		$key = md5( serialize("$state")) . '_state_boundary';
 
 		// Check in cache
-		if ( $cache = $this->cache->get( $key ) ) {
+		if (isset($this->cache) && $cache = $this->cache->get( $key ) ) {
 			return $cache;
 		}	
 	
@@ -1013,7 +1013,7 @@ function get_dc_anc_members($anc)	{
 		$key = md5( serialize("$id")) . '_congressional_boundary';
 
 		// Check in cache
-		if ( $cache = $this->cache->get( $key ) ) {
+		if (isset($this->cache) && $cache = $this->cache->get( $key ) ) {
 			return $cache;
 		}
 	
@@ -1049,7 +1049,7 @@ function get_dc_anc_members($anc)	{
 	   $key = md5( serialize("$placens")) . '_city_boundary';
        
 	   // Check in cache
-	   if ( $cache = $this->cache->get( $key ) ) {
+	   if (isset($this->cache) && $cache = $this->cache->get( $key ) ) {
 	   	return $cache;
 	   }
 	
@@ -1093,7 +1093,7 @@ function get_dc_anc_members($anc)	{
 	   $key = md5( serialize("$placens")) . '_county_boundary';
        
 	   // Check in cache
-	   if ( $cache = $this->cache->get( $key ) ) {
+	   if (isset($this->cache) && $cache = $this->cache->get( $key ) ) {
 	   	return $cache;
 	   }
 	
@@ -1136,7 +1136,7 @@ function get_dc_anc_members($anc)	{
 		$key = $state . '_' . $chamber . '_state_boundaries';
 		
 		// Check in cache
-		if ( $cache = $this->cache->get( $key ) ) {
+		if (isset($this->cache) && $cache = $this->cache->get( $key ) ) {
 			return $cache;
 		}		
 		
