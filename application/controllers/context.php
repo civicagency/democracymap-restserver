@@ -431,7 +431,7 @@ class Context extends REST_Controller {
 	
 	function get_city($lat, $long) {	
 		
-		$url = "http://tigerweb.geo.census.gov/ArcGIS/rest/services/Census2010/tigerWMS_Census2010/MapServer/58/query?text=&geometry=$long%2C$lat&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&objectIds=&where=&time=&returnCountOnly=false&returnIdsOnly=false&returnGeometry=false&maxAllowableOffset=&outSR=&outFields=*&f=json";
+		$url = "http://tigerweb.geo.census.gov/ArcGIS/rest/services/Census2010/tigerWMS_Census2010/MapServer/30/query?text=&geometry=$long%2C$lat&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&objectIds=&where=&time=&returnCountOnly=false&returnIdsOnly=false&returnGeometry=false&maxAllowableOffset=&outSR=&outFields=*&f=json";
 
 			$feature_data = curl_to_json($url);
 
