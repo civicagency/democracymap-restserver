@@ -42,8 +42,8 @@ class Geocoder_model extends CI_Model {
 		
 		//$input = urlencode($input);
 
-		$url = 'http://www.mapquestapi.com/geocoding/v1/address?key=' . $this->config->item('mapquest_api_key') . '&inFormat=kvp&outFormat=json&maxResults=3&location=' . $input;		
-    
+		$url = 'http://open.mapquestapi.com/geocoding/v1/address?key=' . $this->config->item('mapquest_api_key') . '&inFormat=kvp&outFormat=json&maxResults=3&location=' . $input;		
+
 		$location = curl_to_json($url);	
 		
 		if(!empty($location['results'][0]['locations'][0])) {
