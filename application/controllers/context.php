@@ -1282,10 +1282,10 @@ function process_state_legislators($representatives) {
 	
 function national_legislators($lat, $long) {
 
-	$url = "http://services.sunlightlabs.com/api/legislators.allForLatLong.json?latitude=" . $lat . "&longitude=" . $long . "&apikey=" . $this->config->item('sunlight_api_key');
+	$url = "https://congress.api.sunlightfoundation.com/legislators/locate?latitude=" . $lat . "&longitude=" . $long . "&apikey=" . $this->config->item('sunlight_api_key');
 
 	$legislators = curl_to_json($url);
-	$legislators = $legislators['response']['legislators'];
+	$legislators = $legislators['results'];
 
 	return $legislators;	
 
@@ -1295,14 +1295,12 @@ function national_legislators($lat, $long) {
 	
 function process_nat_legislators($representatives) {
 	
-
 	
 		// Clean up data model
 		foreach($representatives as $repdata){
 			
-			$repdata = $repdata['legislator'];
 			
-			$full_name = $repdata['firstname'] . ' ' . $repdata['lastname'];
+			$full_name = $repdata['first_name'] . ' ' . $repdata['last_name'];
 			
 			if ($repdata['phone']) {
 				$phone = $this->format_phone($repdata['phone']);
@@ -1312,20 +1310,20 @@ function process_nat_legislators($representatives) {
 			
 		
 				$rep = array(
-							'district' 		=> $repdata['district'], 
-							'full_name' 	=> $full_name, 
-							'name_given' 	=> $repdata['firstname'], 
-							'name_family' 	=> 	$repdata['lastname'], 
-							'bioguide_id' 	=> $repdata['bioguide_id'], 
-							'website' 		=> $repdata['website'], 
-							'url_contact' 		=> $repdata['webform'], 							
-							'title' 	=> $repdata['title'],								
-							'phone' 	=> $phone, 
-							'twitter_id' 	=> $repdata['twitter_id'],
-							'youtube_url' 	=> $repdata['youtube_url'],																					
-							'congress_office' 		=> $repdata['congress_office'], 
-							'facebook_id' 	=> $repdata['facebook_id'], 
-							'email' 	=> $repdata['email']														
+							'district' 			=> $repdata['district'], 
+							'full_name' 		=> $full_name, 
+							'name_given' 		=> $repdata['first_name'], 
+							'name_family' 		=> $repdata['last_name'], 
+							'bioguide_id' 		=> $repdata['bioguide_id'], 
+							'website' 			=> $repdata['website'], 
+							'url_contact' 		=> $repdata['contact_form'], 							
+							'title' 			=> $repdata['title'],								
+							'phone' 			=> $phone, 
+							'twitter_id' 		=> $repdata['twitter_id'],
+							'youtube_url' 		=> 'https://www.youtube.com/user/' . $repdata['youtube_id'],																					
+							'congress_office' 	=> $repdata['office'], 
+							'facebook_id' 		=> $repdata['facebook_id'], 
+							'email' 			=> $repdata['oc_email']														
 							);
 	
 				$chamber = $repdata['chamber'];
