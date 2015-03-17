@@ -12,7 +12,7 @@ class County_model extends CI_Model {
 	public function get_county_geo($lat, $long) {	
 
 
-		$url = "http://tigerweb.geo.census.gov/ArcGIS/rest/services/Census2010/tigerWMS/MapServer/115/query?text=&geometry=$long%2C$lat&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&objectIds=&where=&time=&returnCountOnly=false&returnIdsOnly=false&returnGeometry=false&maxAllowableOffset=&outSR=&outFields=COUNTY,BASENAME,NAME,STATE,COUNTYNS&f=json";	
+		$url = "http://tigerweb.geo.census.gov/ArcGIS/rest/services/Census2010/tigerWMS_Census2010/MapServer/90/query?text=&geometry=$long%2C$lat&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&objectIds=&where=&time=&returnCountOnly=false&returnIdsOnly=false&returnGeometry=false&maxAllowableOffset=&outSR=&outFields=COUNTY,BASENAME,NAME,STATE,COUNTYNS&f=json";	
 
 			$feature_data = curl_to_json($url);
 
@@ -27,7 +27,6 @@ class County_model extends CI_Model {
 		$sql = "SELECT * FROM counties
 				WHERE fips_county = '$county' and fips_state = '$state'";
 				
-	
 		$query = $this->db->query($sql);				
 			
 		if ($query->num_rows() > 0) {
@@ -82,7 +81,7 @@ class County_model extends CI_Model {
 		$key = md5( serialize( "$state$county" )) . '_county_rep';
 		
 		// Check in cache
-		if ( $cache = $this->cache->get( $key ) ) {
+		if (!empty($this->cache) && $cache = $this->cache->get( $key ) ) {
 			return $cache;
 		}		
 		
@@ -98,8 +97,10 @@ class County_model extends CI_Model {
 				
 		if(!empty($county_reps)) {
 			
-			// Save to cache
-			$this->cache->save( $key, $county_reps, $this->ttl);
+			if(empty($this->cache)) {
+				// Save to cache
+				$this->cache->save( $key, $county_reps, $this->ttl);
+			}
 			
 			return $county_reps;			
 		}		

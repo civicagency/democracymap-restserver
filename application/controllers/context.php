@@ -1098,7 +1098,7 @@ function get_dc_anc_members($anc)	{
 	   }
 	
 	
-		$url = "http://tigerweb.geo.census.gov/ArcGIS/rest/services/Census2010/tigerWMS/MapServer/115/query?text=&geometry=&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&objectIds=&where=COUNTYNS=$placens&time=&returnCountOnly=false&returnIdsOnly=false&returnGeometry=true&maxAllowableOffset=&outSR=4326&outFields=&f=json";
+		$url = "http://tigerweb.geo.census.gov/ArcGIS/rest/services/Census2010/tigerWMS_Census2010/MapServer/90/query?text=&geometry=&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&objectIds=&where=COUNTYNS=$placens&time=&returnCountOnly=false&returnIdsOnly=false&returnGeometry=true&maxAllowableOffset=&outSR=4326&outFields=&f=json";
 		
 		$geometry = curl_to_json($url);	
 		$geometry = $geometry['features'][0]['geometry']['rings']; 
