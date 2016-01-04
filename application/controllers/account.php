@@ -60,18 +60,24 @@ class Account extends CI_Controller {
 	
 
 	
-	function register() {
+	function register($name, $email, $password) {
 		
 		// Redirect to dashboard if they're already logged in
 		if ($this->session->userdata('login')) {
 			redirect('dashboard');		
 		}		
-		
-		if($this->input->post('email', TRUE)) {
-			$user_form = $this->input->post();
+
+		if($this->input->post('email', TRUE) OR (!empty($name) && !empty($email) && !empty($password)) ) {
+			
+			if ($this->input->post('email', TRUE)) {
+				$user_form = $this->input->post();
+			} else {
+				$user_form = array('name' => $name, 'email' => $email, 'password' => $password);
+			}
 			
 			$fullname 		= $user_form['name'];
 			$login 			= $user_form['email'];
+			$email 			= $user_form['email'];
 			$password 		= $user_form['password'];
 			$active 		= true;
 			$permissions 	= array(1, 3);
@@ -82,7 +88,7 @@ class Account extends CI_Controller {
 			
 			// If they're not add them				 	
 			
-			$new_user_id 	= $this->user_manager->save_user($fullname, $login, $password, $active, $permissions);						
+			$new_user_id 	= $this->user_manager->save_user($fullname, $login, $password, $email, $active, $permissions);						
 			
 			// Success
 			if($new_user_id) {
