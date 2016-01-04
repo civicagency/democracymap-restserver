@@ -522,17 +522,18 @@ class Context extends REST_Controller {
 		$city = ucwords($city);
 		$state = strtoupper($state);		
 		
-		$query = "select * from `swdata` where city = '$city' and state = '$state' limit 1";		
+		$query = "select * from `officials` where government_name = '$city' and address_region = '$state' limit 1";		
 		$query = urlencode($query);
 		
-		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=us_mayors&query=$query";		
+		$api_key = urlencode($this->config->item('morphio_apikey'));
+		$url = 'https://api.morph.io/philipashlock/DemocracyMap_US_Mayors/data.json?key=' . $api_key . '&query=' . $query;
 
 		$mayors = curl_to_json($url);
 
 		if(!empty($mayors)) {
 			
 			// Save to cache
-			$this->cache->save( $key, $mayors[0], $this->ttl);
+			//$this->cache->save( $key, $mayors[0], $this->ttl);
 			
 			return $mayors[0];			
 		}
@@ -1588,8 +1589,8 @@ if (!empty($data['mayor_data'])) {
 		$social_media = null;
 	}
 
-	$mayor_name_full 			= isset($data['mayor_data']['name']) ? $data['mayor_data']['name'] : null;	
-	$mayor_url 					= isset($data['mayor_data']['bio_url']) ? $data['mayor_data']['bio_url'] : $data['place_url_updated']; // the bio url isn't exactly what we want here, but it's close enough. Usually the bio is one page of the mayor's section of the website. Really we just want the main mayor section
+	$mayor_name_full 			= isset($data['mayor_data']['name_full']) ? $data['mayor_data']['name_full'] : null;	
+	$mayor_url 					= isset($data['mayor_data']['url']) ? $data['mayor_data']['url'] : $data['place_url_updated']; // the bio url isn't exactly what we want here, but it's close enough. Usually the bio is one page of the mayor's section of the website. Really we just want the main mayor section
 	//$mayor_url 					= $data['place_url_updated']; 	// We're assuming that the place_url_updated will always match the mayor url, but be more updated. Hopefully this is a safe assumption. 	
 	$mayor_url_photo 			= isset($data['mayor_data']['url_photo']) ? $data['mayor_data']['url_photo'] : null;
 	$mayor_email 				= isset($data['mayor_data']['email']) ? $data['mayor_data']['email'] : null;
