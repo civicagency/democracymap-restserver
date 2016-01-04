@@ -1697,7 +1697,7 @@ if (!empty($data['counties'])) {
 		
 		foreach ($data['county_reps'] as $co_rep) {
 
-			$elected[] = $this->elected_official_model('administrative', $co_rep['rep_position'], null, null, null, $co_rep['rep'], null, null, null, null, $co_rep['rep_email'], null, null, null, null, null, null, null, null, null, null);
+			$elected[] = $this->elected_official_model('administrative', $co_rep['position'], null, null, null, $co_rep['name'], null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 
 		}		
 		

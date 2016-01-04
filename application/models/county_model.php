@@ -88,10 +88,12 @@ class County_model extends CI_Model {
 		$county = ucwords($county);	
 		$state = strtoupper($state);	
 				
-		$query = "select rep, rep_email, rep_position from `swdata` where county = '$county' and state = '$state'";		
+		$query = "select name, position from `officials` where government_name = '$county County' and state = '$state'";		
 		$query = urlencode($query);
 							
-		$url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=jsondict&name=us_county_representatives&query=$query";		
+
+		$api_key = urlencode($this->config->item('morphio_apikey'));
+		$url = 'https://api.morph.io/philipashlock/DemocracyMap_US_Counties/data.json?key=' . $api_key . '&query=' . $query;
 
 		$county_reps = curl_to_json($url);
 				
@@ -99,7 +101,7 @@ class County_model extends CI_Model {
 			
 			if(empty($this->cache)) {
 				// Save to cache
-				$this->cache->save( $key, $county_reps, $this->ttl);
+				//$this->cache->save( $key, $county_reps, $this->ttl);
 			}
 			
 			return $county_reps;			
